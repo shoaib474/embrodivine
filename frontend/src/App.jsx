@@ -7,6 +7,8 @@ import NotFound from "./pages/NotFound";
 import Services from "./pages/Services";
 import AllDesign from "./pages/AllDesign"
 import Contact from "./pages/contact";
+import Collection from "./pages/New";
+import NewCollectionPage from "./Collection";
 
 function App() {
   const router = createBrowserRouter([
@@ -17,7 +19,9 @@ function App() {
       children: [
         { index: true, element: <Home /> },
         { path: "services", element: <Services /> },
+        { path: "new", element: <Collection /> },
         { path: "alldesign", element: <AllDesign /> },
+        { path: "newcollection", element: <NewCollectionPage /> },
         { path: "contact", element: <Contact /> },
         { path: "*", element: <NotFound /> },
       ],
