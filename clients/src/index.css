@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.6s ease-out;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* ===============================
+   Luxury Gold Scrollbar
+   Theme: #101010 / #1A1A1A / #D4AF37
+================================ */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #0e0e0e, #1a1a1a);
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(212, 175, 55, 0.9),
+    rgba(168, 137, 45, 0.9)
+  );
+  border-radius: 12px;
+  border: 2px solid #101010;
+  box-shadow:
+    inset 0 0 6px rgba(255, 215, 128, 0.4),
+    0 0 10px rgba(212, 175, 55, 0.25);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #e8d7b5, #d4af37);
+  box-shadow:
+    0 0 15px rgba(212, 175, 55, 0.5),
+    inset 0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d4af37 #1a1a1a;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes shimmer {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
+}
