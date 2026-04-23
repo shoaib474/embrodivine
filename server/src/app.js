@@ -24,7 +24,7 @@ app.use(
   }),
 );
 
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
 app.use("/api/user/cart", cartRouter);
 app.use("/api/orders", orderRouter);
