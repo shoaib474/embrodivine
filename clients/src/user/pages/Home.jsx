@@ -86,9 +86,9 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#E8D7B5] mb-4">
-              Our Service
+              Our Services
             </h2>
-            <p className="text-lg text-wh/70 max-w-2xl mx-auto">
+            <p className="text-lg text-[#E8D7B5]/70 max-w-2xl mx-auto">
               Professional digitizing services tailored to your embroidery needs
             </p>
           </div>

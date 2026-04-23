@@ -94,6 +94,7 @@
 
 // export default Hero;
 
+
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -124,8 +125,8 @@ const Hero = () => {
         className="relative max-w-3xl text-center"
       >
         <div className="inline-block border border-[#D4AF37] text-[#D4AF37] px-4 py-2 rounded-full text-sm font-semibold mb-6">
-          Trusted by 1000+ Businesses
-        </div>
+          ✨ Trusted by 1000+ Businesses
+        </div> 
 
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
           Professional Embroidery{" "}
