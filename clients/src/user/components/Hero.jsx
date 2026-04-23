@@ -133,7 +133,7 @@ const Hero = () => {
           <span className="text-[#D4AF37]">Digitizing</span>
         </h1>
 
-        <p className="text-lg md:text-xl text-[#E8D7B5] mb-8 leading-relaxed">
+        <p className="text-lg md:text-xl text-white mb-8 leading-relaxed">
           Transform your designs into flawless, machine-ready embroidery files.
           Expert digitizing with 24-hour turnaround and unlimited revisions.
         </p>
