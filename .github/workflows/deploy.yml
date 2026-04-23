@@ -1,4 +1,4 @@
-name: Deploy on VPS
+name: Deploy to Hostinger VPS
 
 on:
   push:
@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -19,7 +19,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
           script: |
-            cd /root/embrodivine
-            git pull
-            docker compose up -d --build
+            cd /var/www/embrodivine
+            git pull origin main
+            docker-compose down
+            docker-compose up --build -d
