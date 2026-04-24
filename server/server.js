@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 5000;
 
 Connection();
 
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello from the other side." });
 });
 
