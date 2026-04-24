@@ -9,8 +9,6 @@ const Favorites = () => {
   const { data: favData, isLoading } = useFavorites();
   const { mutate: toggleFavorite, isPending } = useToggleFavorite();
 
-  console.log("favourite", favData?.favorites);
-
   const favorites =
     favData?.favorites
       ?.filter((f) => f.product) // remove null products
@@ -21,7 +19,6 @@ const Favorites = () => {
         rating: f.product.rating || 0,
         image: f.product.image?.url || f.product.image || "",
       })) || [];
-  console.log("favorite product IDs", favorites);
 
   const isFavorite = (productId) => {
     return favorites.some((item) => item._id === productId);

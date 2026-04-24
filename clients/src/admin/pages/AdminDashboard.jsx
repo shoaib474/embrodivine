@@ -44,7 +44,6 @@ const AdminDashboard = () => {
 
   const orders = data?.orders || data || [];
   const products = productsData?.products || productsData || [];
-  // console.log(orders);
 
   const stats = [
     {

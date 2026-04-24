@@ -84,7 +84,6 @@ const Categories = () => {
   ];
 
   const handleCategoryClick = (slug) => {
-    console.log(`Navigating to /category/${slug}`);
     navigate(`/category/${slug}`);
   };
 

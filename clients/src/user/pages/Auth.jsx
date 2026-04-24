@@ -61,7 +61,6 @@ const Auth = () => {
           navigate("/dashboard");
         }
 
-        console.log("Signup Success:", res);
       },
     });
   };

@@ -40,8 +40,6 @@ const Profile = ({ userData, onSave }) => {
     if (onSave) {
       onSave({ ...data, avatar: profileImage });
     }
-    // Optionally call your API here to save
-    console.log("Saved data:", { ...data, avatar: profileImage });
   };
 
   const handleImageUpload = (e) => {

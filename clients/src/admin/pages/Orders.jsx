@@ -44,7 +44,6 @@ const AdminOrders = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
 
   const orders = data?.orders || data || [];
-  console.log(orders);
 
   const stats = [
     {

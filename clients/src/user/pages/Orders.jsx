@@ -7,7 +7,6 @@ const API = import.meta.env.VITE_API_URL;
 
 const Orders = () => {
   const { data, isLoading } = useMyOrders();
-  console.log(data);
 
   const orders = data?.orders || data || [];
 
