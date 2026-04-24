@@ -52,7 +52,7 @@ const BillingForm = ({ onSubmit }) => {
           <h2 className="text-2xl font-bold text-[#E8D7B5]">Billing details</h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="block text-[#E8D7B5] font-semibold mb-2 text-sm">
               Full Name *
