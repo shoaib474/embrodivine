@@ -2,6 +2,12 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import nodemailer from "nodemailer";
+import helmet from "helmet";
+import morgan from "morgan";
+import mongoSanitize from "express-mongo-sanitize";
+import rateLimit from "express-rate-limit";
+import xss from "xss-clean";
+import hpp from "hpp";
 
 import authRouter from "./routes/auth.routes.js";
 import productRouter from "./routes/product.routes.js";
@@ -15,14 +21,47 @@ import profileRouter from "./routes/profile.routes.js";
 
 const app = express();
 
-app.use(express.json());
+app.set("trust proxy", 1);
+app.disable("x-powered-by");
+app.disable("etag");
+
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
+app.use(morgan("combined"));
 app.use(cookieParser());
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.CLIENT_URL_2,
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.warn("Blocked CORS:", origin);
+        callback(null, false);
+      }
+    },
     credentials: true,
   }),
 );
+
+app.use(express.json({ limit: "10kb" }));
+
+app.use(mongoSanitize());
+app.use(xss());
+app.use(hpp());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+app.use(limiter); // global protection
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
@@ -33,15 +72,24 @@ app.use("/api/quotes", quoteRouter);
 app.use("/api/paypal", paypalRouter);
 app.use("/api", notifyRouter);
 app.use("/api/profile", profileRouter);
-app.post("/send-email", async (req, res) => {
+
+const emailLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  message: "Too many emails sent",
+});
+
+app.post("/api/send-email", emailLimiter, async (req, res) => {
   const { name, email, phone, company, subject, message } = req.body;
 
   // create transporter
   let transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS, 
+      pass: process.env.EMAIL_PASS,
     },
   });
 
@@ -74,6 +122,5 @@ app.post("/send-email", async (req, res) => {
     res.status(500).json({ success: false, error });
   }
 });
-
 
 export default app;

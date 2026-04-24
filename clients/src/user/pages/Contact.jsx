@@ -32,7 +32,7 @@ const Contact = () => {
 
     try {
       // Send form data to backend
-      const response = await axios.post(`${API}/send-email`, data);
+      const response = await axios.post(`${API}/api/send-email`, data);
 
       if (response.data.success) {
         

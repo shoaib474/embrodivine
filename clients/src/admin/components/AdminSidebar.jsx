@@ -18,6 +18,7 @@ const menuItems = [
   { id: "orders", icon: ShoppingCart, label: "Orders", badge: null },
   { id: "products", icon: Package, label: "Products", badge: null },
   { id: "notify", icon: Bell, label: "Notify", badge: null },
+  { id: "users", icon: User, label: "Users", badge: null },
   { id: "quote", icon: FileText, label: "Quote Requests", badge: null },
 ];
 

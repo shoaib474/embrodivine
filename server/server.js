@@ -6,9 +6,7 @@ const PORT = process.env.PORT || 5000;
 
 Connection();
 
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "Hello from the other side." });
-});
+app.get("/", (req, res) => res.status(403).send("Forbidden"));
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -32,6 +32,7 @@ import ProductView from "./admin/pages/ProductView";
 import UserProductView from "./user/pages/UserProductView";
 import NotifyEmails from "./admin/pages/NotifyEmails";
 import QuoteRequests from "./admin/pages/QuoteRequests";
+import AdminUsers from "./admin/pages/User";
 
 export const router = createBrowserRouter([
   {
@@ -99,8 +100,7 @@ export const router = createBrowserRouter([
 
       {
         path: "/order-success",
-        element: <OrderSuccess />
-
+        element: <OrderSuccess />,
       },
 
       { path: "*", element: <NotFound /> },
@@ -121,6 +121,7 @@ export const router = createBrowserRouter([
       { path: "products", element: <Products /> },
       { path: "products/:id", element: <ProductView /> },
       { path: "notify", element: <NotifyEmails /> },
+      { path: "users", element: <AdminUsers /> },
       { path: "quote", element: <QuoteRequests /> },
     ],
   },
