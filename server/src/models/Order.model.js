@@ -16,7 +16,7 @@ const orderItemSchema = new mongoose.Schema(
       required: true,
     },
     downloadUrl: {
-      type: String, // e.g. "dragon-patch-design.dst"
+      type: String, 
       required: false,
     },
     downloadable: {
