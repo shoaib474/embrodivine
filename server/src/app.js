@@ -2,6 +2,12 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import nodemailer from "nodemailer";
+import helmet from "helmet";
+import morgan from "morgan";
+import mongoSanitize from "express-mongo-sanitize";
+import rateLimit from "express-rate-limit";
+import xss from "xss-clean";
+import hpp from "hpp";
 
 import authRouter from "./routes/auth.routes.js";
 import productRouter from "./routes/product.routes.js";
@@ -15,7 +21,16 @@ import profileRouter from "./routes/profile.routes.js";
 
 const app = express();
 
-app.use(express.json());
+app.set("trust proxy", 1);
+app.disable("x-powered-by");
+app.disable("etag");
+
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
+app.use(morgan("combined"));
 app.use(cookieParser());
 app.use(
   cors({
@@ -31,6 +46,17 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use(express.json({ limit: "10kb" }));
+app.use(express.urlencoded({ extended: true }));
+
+app.use(hpp());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+app.use(limiter); 
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);

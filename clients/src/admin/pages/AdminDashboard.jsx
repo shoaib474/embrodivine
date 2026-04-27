@@ -80,48 +80,6 @@ const AdminDashboard = () => {
     },
   ];
 
-  // const recentOrders = [
-  //   {
-  //     id: "#ORD-1234",
-  //     customer: "John Doe",
-  //     product: "Golden Dragon Patch",
-  //     amount: "$31.98",
-  //     status: "Completed",
-  //     date: "2 hours ago",
-  //   },
-  //   {
-  //     id: "#ORD-1235",
-  //     customer: "Jane Smith",
-  //     product: "Custom Logo Design",
-  //     amount: "$125.00",
-  //     status: "Processing",
-  //     date: "5 hours ago",
-  //   },
-  //   {
-  //     id: "#ORD-1236",
-  //     customer: "Mike Johnson",
-  //     product: "Vintage Rose Patch",
-  //     amount: "$12.99",
-  //     status: "Pending",
-  //     date: "1 day ago",
-  //   },
-  //   {
-  //     id: "#ORD-1237",
-  //     customer: "Sarah Williams",
-  //     product: "Team Jersey Set",
-  //     amount: "$45.99",
-  //     status: "Completed",
-  //     date: "1 day ago",
-  //   },
-  //   {
-  //     id: "#ORD-1238",
-  //     customer: "David Brown",
-  //     product: "Wolf Spirit Badge",
-  //     amount: "$44.97",
-  //     status: "Shipped",
-  //     date: "2 days ago",
-  //   },
-  // ];
 
   const topProducts = [
     {
