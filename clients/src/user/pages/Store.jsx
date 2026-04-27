@@ -383,6 +383,7 @@ const Store = () => {
                       <img
                         src={product.image.url}
                         alt={product.name}
+                        loading="lazy"
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         loading="lazy"
                       />

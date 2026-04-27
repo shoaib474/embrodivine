@@ -103,6 +103,7 @@ const Home = () => {
                   <img
                     src={service.icon}
                     alt={service.title}
+                    loading="lazy"
                     className="w-full h-full"
                   />
                 </div>

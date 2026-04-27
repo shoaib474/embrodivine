@@ -262,8 +262,8 @@ const AdminUsers = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#101010] pt-24 pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#101010] p-4 sm:p-6 lg:p-8">
+      <div className="max-w-8xl mx-auto ">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

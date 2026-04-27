@@ -344,6 +344,7 @@ const { checkoutData } = useCheckout();
                     <img
                       src={item.image}
                       alt={item.name}
+                      loading="lazy"
                       className="w-16 h-16 rounded-lg object-cover"
                     />
                     <div className="flex-1">

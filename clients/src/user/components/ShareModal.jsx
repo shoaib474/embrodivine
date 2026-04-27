@@ -188,6 +188,7 @@ const ShareModal = ({ isOpen, onClose, productData }) => {
                   <img
                     src={product.images}
                     alt={product.name}
+                    loading="lazy"
                     className="w-20 h-20 object-cover rounded-lg"
                   />
                   <div className="flex-1">

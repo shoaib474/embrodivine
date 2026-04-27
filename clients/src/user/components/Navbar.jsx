@@ -93,8 +93,8 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* LOGO */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-[#D4AF37] rounded-lg flex items-center justify-center group-hover:scale-110 transition">
-              <Scissors className="w-6 h-6 text-black" />
+            <div className="w-12 h-12 bg-[#D4AF37] rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+              <img src="/logo.png" alt="logo" />
             </div>
             <span className="text-xl md:text-2xl font-bold text-white">
               Embrodivine

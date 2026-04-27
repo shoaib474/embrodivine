@@ -598,6 +598,7 @@ const QuoteRequests = () => {
                           <img
                             src={file.url}
                             alt={`Attachment ${idx + 1}`}
+                            loading="lazy"
                             className="w-20 h-20 object-cover rounded-md"
                           />
                         ) : (

@@ -127,6 +127,7 @@ const Profile = ({ userData, onSave }) => {
                   {profileImage ? (
                     <img
                       src={profileImage}
+                      loading="lazy"
                       alt="Profile"
                       className="w-full h-full object-cover"
                     />

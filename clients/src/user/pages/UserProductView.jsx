@@ -186,6 +186,7 @@ const UserProductView = () => {
                     <img
                       src={product?.images[selectedMedia.index]}
                       alt={product.name}
+                      loading="lazy"
                       className="w-full h-full object-cover rounded-2xl transition-transform duration-700 group-hover:scale-105"
                     />
                   </Zoom>
@@ -235,6 +236,7 @@ const UserProductView = () => {
                 >
                   <img
                     src={img}
+                    loading="lazy"
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </button>

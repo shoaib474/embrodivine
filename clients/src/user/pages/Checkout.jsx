@@ -75,6 +75,7 @@ const Checkout = () => {
                         <img
                           src={item.img}
                           alt={item.name}
+                          loading="lazy"
                           className="w-16 h-16 rounded-lg object-cover border border-[#D4AF37]/20"
                         />
                         <div className="flex-1">

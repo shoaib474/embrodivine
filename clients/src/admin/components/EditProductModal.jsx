@@ -235,6 +235,7 @@ const EditProductModal = ({
             {imagePreview && (
               <img
                 src={imagePreview}
+                loading="lazy"
                 alt="Preview"
                 className="w-24 h-24 mt-2 object-cover rounded-lg"
               />

@@ -73,6 +73,7 @@ const Favorites = () => {
               <div className="aspect-square overflow-hidden relative">
                 <img
                   src={item.image || "/placeholder.png"}
+                  loading="lazy"
                   className="w-full h-full object-cover"
                 />
 

@@ -282,6 +282,7 @@ const CategoryDetail = () => {
                     <img
                       src={product.image?.url || "/placeholder.png"}
                       alt={product.name}
+                      loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
 

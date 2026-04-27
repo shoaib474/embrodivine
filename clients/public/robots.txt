@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Block admin or private pages (if any)
+Disallow: /admin
+Disallow: /admin/dashboard
+Disallow: /checkout-success
+
+# Sitemap location (VERY IMPORTANT)
+Sitemap: https://embrodivine.com/sitemap.xml

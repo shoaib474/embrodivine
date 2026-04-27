@@ -49,30 +49,24 @@ const Contact = () => {
   };
 
   const contactInfo = [
-    {
-      icon: Phone,
-      title: "Phone",
-      details: ["+1 (555) 123-4567", "+1 (555) 987-6543"],
-      link: "tel:+15551234567",
-    },
+    // {
+    //   icon: Phone,
+    //   title: "Phone",
+    //   details: ["+1 (555) 123-4567", "+1 (555) 987-6543"],
+    //   link: "tel:+15551234567",
+    // },
     {
       icon: Mail,
       title: "Email",
-      details: ["info@patchshop.com", "orders@patchshop.com"],
-      link: "mailto:info@patchshop.com",
+      details: ["eembroideryhub@gmail.com"],
+      link: "mailto:eembroideryhub@gmail.com",
     },
-    {
-      icon: MapPin,
-      title: "Address",
-      details: ["123 Embroidery Lane", "Craft City, ST 12345"],
-      link: "https://maps.google.com",
-    },
-    {
-      icon: Clock,
-      title: "Business Hours",
-      details: ["Mon-Fri: 9AM - 6PM", "Sat: 10AM - 4PM"],
-      link: null,
-    },
+    // {
+    //   icon: Clock,
+    //   title: "Business Hours",
+    //   details: ["24/7"],
+    //   link: null,
+    // },
   ];
 
   const socialMedia = [
@@ -429,14 +423,14 @@ const Contact = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link
-                to="tel:+15551234567"
+                to=""
                 className="inline-flex items-center justify-center gap-2 bg-[#D4AF37] text-[#101010] px-8 py-4 rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#D4AF37]/30"
               >
                 <Phone className="w-5 h-5" />
                 Call Now
               </Link>
               <Link
-                to="mailto:embrodivine@gmail.com"
+                to="mailto:eembroideryhub@gmail.com"
                 className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-[#D4AF37] text-[#D4AF37] px-8 py-4 rounded-lg font-bold hover:bg-[#D4AF37]/10 transition-all duration-300"
               >
                 <Mail className="w-5 h-5" />

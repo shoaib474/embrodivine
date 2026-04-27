@@ -9,7 +9,9 @@ const Footer = () => {
           {/* Logo & description */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <Scissors className="w-8 h-8 text-[#D4AF37]" />
+              <div className="w-12 h-12 bg-[#D4AF37] rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+              <img src="/logo.png" alt="logo" />
+            </div>
               <span className="text-2xl font-bold text-white">Embrodivine</span>
             </div>
             <p className="text-[#E8D7B5]/80">
@@ -72,19 +74,19 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4 text-white">Get in Touch</h3>
             <div className="space-y-3">
               <Link
-                to="mailto:eembroideryhub@gmail.com"
+                to="mailto:eeembroideryhub@gmail.com"
                 className="flex items-center space-x-2 hover:text-[#D4AF37] transition-colors"
               >
                 <Mail size={18} />
-                <span>embroideryhub@gmail.com</span>
+                <span>eembroideryhub@gmail.com</span>
               </Link>
-              <Link
+              {/* <Link
                 to="https://wa.me/1234567890"
                 className="flex items-center space-x-2 hover:text-[#D4AF37] transition-colors"
               >
                 <MessageCircle size={18} />
                 <span>WhatsApp</span>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
