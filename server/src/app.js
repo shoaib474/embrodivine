@@ -43,7 +43,8 @@ app.use(
       }
     },
     credentials: true,
-
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 
@@ -57,7 +58,7 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
-app.use(limiter); 
+app.use(limiter);
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
