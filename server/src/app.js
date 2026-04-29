@@ -31,7 +31,6 @@ app.use(
   }),
 );
 app.use(morgan("combined"));
-app.use(cookieParser());
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -44,9 +43,11 @@ app.use(
       }
     },
     credentials: true,
+
   }),
 );
 
+app.use(cookieParser());
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -67,7 +68,7 @@ app.use("/api/quotes", quoteRouter);
 app.use("/api/paypal", paypalRouter);
 app.use("/api", notifyRouter);
 app.use("/api/profile", profileRouter);
-app.post("/send-email", async (req, res) => {
+app.post("/api/send-email", async (req, res) => {
   const { name, email, phone, company, subject, message } = req.body;
 
   // create transporter

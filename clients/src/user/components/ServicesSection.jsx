@@ -14,7 +14,7 @@ const ServicesSection = () => {
     },
     {
       title: "Patches",
-      image: "/images/patches.jpeg",
+      image: "/images/patches2.jpeg",
       description:
         "Custom embroidered patches with detailed stitching, durable finish, and options like iron-on, sew-on, and Velcro backing.",
     },

@@ -17,6 +17,7 @@ import {
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -29,15 +30,12 @@ const Contact = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-
     try {
       // Send form data to backend
       const response = await axios.post(`${API}/api/send-email`, data);
 
       if (response.data.success) {
-        
-      
-        
+        toast.success("Email send sucessfully");
       }
     } catch (error) {
       console.error("Error sending email:", error);
