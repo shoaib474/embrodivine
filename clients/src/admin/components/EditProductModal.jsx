@@ -5,11 +5,8 @@ import { Link } from "react-router-dom";
 
 import { useUpdateProduct } from "../../hooks/useProduct";
 
-const EditProductModal = ({
-  setShowEditModal,
-  product,
-}) => {
-  const { mutate: updateProduct } = useUpdateProduct();
+const EditProductModal = ({ setShowEditModal, product }) => {
+  const { mutate: updateProduct, isPending } = useUpdateProduct();
 
   const {
     register,
@@ -79,9 +76,14 @@ const EditProductModal = ({
         console.log(k, v);
       }
 
-      updateProduct({ id: product._id, data: formData });
-
-      setShowEditModal(false);
+      updateProduct(
+        { id: product._id, data: formData },
+        {
+          onSuccess: () => {
+            setShowEditModal(false);
+          },
+        },
+      );
     } catch (error) {
       console.error(error.response?.data || error.message);
     }
@@ -295,15 +297,19 @@ const EditProductModal = ({
             </button>
             <button
               type="submit"
-              disabled={!isDirty}
-              className={`flex-1 px-4 py-2 sm:py-3 rounded-lg font-semibold transition-all
-                          ${
-                            !isDirty
-                              ? "bg-gray-500 cursor-not-allowed text-gray-300"
-                              : "bg-[#D4AF37] text-[#101010] hover:bg-[#E8D7B5]"
-                          }`}
+              disabled={!isDirty || isPending}
+              className={`flex-1 px-4 py-2 sm:py-3 rounded-lg font-semibold transition-all flex items-center justify-center
+    ${
+      !isDirty || isPending
+        ? "bg-gray-500 cursor-not-allowed text-gray-300"
+        : "bg-[#D4AF37] text-[#101010] hover:bg-[#E8D7B5]"
+    }`}
             >
-              Update Product
+              {isPending ? (
+                <span className="flex items-center gap-2">Updating...</span>
+              ) : (
+                "Update Product"
+              )}
             </button>
           </div>
         </form>

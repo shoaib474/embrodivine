@@ -26,7 +26,6 @@ const AddProductModal = ({
 
     handleAddProduct(data); // send FormData to backend
     reset();
-    setShowAddModal(false);
   };
 
   const zip = watch("zip");

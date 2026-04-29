@@ -50,7 +50,11 @@ const AdminProducts = () => {
   const handleAddProduct = (data) => {
     const formData = buildProductFormData(data);
 
-    addProduct(formData);
+    addProduct(formData, {
+      onSuccess: () => {
+        setShowAddModal(false);
+      },
+    });
   };
 
   const handleDeleteProduct = async (id) => {
@@ -214,7 +218,7 @@ const AdminProducts = () => {
             showAddModal={showAddModal}
             setShowAddModal={setShowAddModal}
             handleAddProduct={handleAddProduct}
-            loading={isLoading}
+            loading={isPending}
             categories={categories.filter((c) => c !== "all")}
           />
         )}
