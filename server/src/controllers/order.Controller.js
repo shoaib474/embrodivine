@@ -6,7 +6,7 @@ import Order from "../models/Order.model.js";
 import Product from "../models/Product.model.js";
 
 const PAYPAL_BASE_URL =
-  process.env.PAYPAL_BASE_URL || "https://api-m.sandbox.paypal.com";
+  process.env.PAYPAL_BASE_URL || "https://api-m.paypal.com";
 
 const generateOrderId = () => {
   const year = new Date().getFullYear();
@@ -17,6 +17,10 @@ const generateOrderId = () => {
 // 🔹 Create Order (after PayPal payment)
 export const createOrder = async (req, res) => {
   try {
+    console.log("REQ BODY:", req.body);
+    console.log("CLIENT ID:", process.env.PAYPAL_CLIENT_ID);
+    console.log("BASE URL:", process.env.PAYPAL_BASE_URL);
+
     const { amount, cartItems, customer } = req.body;
 
     if (!amount || isNaN(amount) || Number(amount) <= 0) {
@@ -244,7 +248,7 @@ export const deleteOrder = async (req, res) => {
     const order = await Order.findByIdAndDelete(req.params.orderId);
 
     if (!order) {
-      return res.status(404).json({ message: "Order not found" }); 
+      return res.status(404).json({ message: "Order not found" });
     }
 
     res.status(200).json({ message: "Order deleted successfully" });

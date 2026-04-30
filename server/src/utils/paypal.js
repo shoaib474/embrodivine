@@ -1,11 +1,16 @@
 const PAYPAL_BASE_URL =
-  process.env.PAYPAL_BASE_URL || "https://api-m.sandbox.paypal.com";
+  process.env.PAYPAL_BASE_URL || "https://api-m.paypal.com";
 
 const getAccessToken = async () => {
   try {
-    const auth = Buffer.from(
-      `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`,
-    ).toString("base64");
+    const clientId = process.env.PAYPAL_CLIENT_ID;
+    const secret = process.env.PAYPAL_SECRET;
+
+    if (!clientId || !secret) {
+      throw new Error("Missing PayPal credentials");
+    }
+
+    const auth = Buffer.from(`${clientId}:${secret}`).toString("base64");
 
     const response = await fetch(`${PAYPAL_BASE_URL}/v1/oauth2/token`, {
       method: "POST",
@@ -18,9 +23,8 @@ const getAccessToken = async () => {
 
     const data = await response.json();
 
-    console.log("PayPal Token Response:", data);
-
     if (!response.ok) {
+      console.error("PayPal Token Error:", data);
       throw new Error(data.error_description || "Token request failed");
     }
 
