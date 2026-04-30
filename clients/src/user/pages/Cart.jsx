@@ -380,6 +380,7 @@ const Cart = () => {
                   Proceed to Checkout
                 </button>
 
+
                 <div className="mt-4 flex items-center justify-center gap-2 text-[#D4AF37]/60 text-sm">
                   <Lock className="w-4 h-4" />
                   <span>Secure SSL Encryption</span>
