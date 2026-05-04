@@ -36,8 +36,7 @@ const Services = () => {
       ],
       price: "From $25",
       turnaround: "5-7 days",
-      image:
-        "/images/mainServices1.jpeg",
+      image: "/images/mainServices1.jpeg",
       color: "#D4AF37",
     },
     {
@@ -54,8 +53,7 @@ const Services = () => {
       ],
       price: "From $15",
       turnaround: "24-48 hours",
-      image:
-        "/images/mainServices2.jpeg",
+      image: "/images/mainServices2.jpeg",
       color: "#E8D7B5",
     },
     {
@@ -72,8 +70,7 @@ const Services = () => {
       ],
       price: "Custom Quote",
       turnaround: "7-14 days",
-      image:
-        "/images/mainServices3.jpeg",
+      image: "/images/mainServices3.jpeg",
       color: "#CD853F",
     },
     {
@@ -90,8 +87,7 @@ const Services = () => {
       ],
       price: "+50% fee",
       turnaround: "1-3 days",
-      image:
-        "/images/mainServices4.jpeg",
+      image: "/images/mainServices4.jpeg",
       color: "#DAA520",
     },
   ];
@@ -186,36 +182,40 @@ const Services = () => {
         Digitizing
       </title>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#1A1A1A] via-[#101010] to-[#1A1A1A] border-b border-[#D4AF37]/20">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#0b0b0f] via-[#111113] to-[#0b0b0f] border-b border-yellow-500/20">
+        {/* Background Glow */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 right-20 w-96 h-96 bg-[#D4AF37] rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-20 right-20 w-96 h-96 bg-yellow-500 rounded-full blur-3xl animate-pulse"></div>
           <div
-            className="absolute bottom-20 left-20 w-96 h-96 bg-[#D4AF37] rounded-full blur-3xl animate-pulse"
+            className="absolute bottom-20 left-20 w-96 h-96 bg-yellow-500 rounded-full blur-3xl animate-pulse"
             style={{ animationDelay: "1.5s" }}
           ></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32">
           <div className="text-center space-y-6 animate-fade-in">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-full text-[#D4AF37] text-sm font-semibold backdrop-blur-sm">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#111827]/40 border border-yellow-500/30 rounded-full text-yellow-400 text-sm font-semibold backdrop-blur-sm">
               <Sparkles className="w-4 h-4" />
               Professional Services
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-[#E8D7B5] tracking-tight">
+            {/* Heading */}
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white tracking-tight">
               Embroidery Services
-              <span className="block text-[#D4AF37] mt-2">Made Simple</span>
+              <span className="block text-yellow-500 mt-2">Made Simple</span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-[#D4AF37]/80 max-w-3xl mx-auto leading-relaxed">
+            {/* Subtext */}
+            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
               From custom patches to bulk orders, we bring your designs to life
               with precision and care
             </p>
 
+            {/* Button */}
             <Link
               to="/quote"
-              className="inline-flex items-center gap-3 bg-[#D4AF37] text-[#101010] px-8 py-4 rounded-lg font-bold text-lg hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#D4AF37]/30 mt-8"
+              className="inline-flex items-center gap-3 bg-yellow-500 text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-white transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/20 mt-8"
             >
               Get A Free Quote
               <ArrowRight className="w-5 h-5" />

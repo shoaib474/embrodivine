@@ -33,7 +33,7 @@ const Hero = () => {
 
         {/* Heading */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-          Premium Embroidery <span className="text-yellow-500">Digitizing</span>
+          Premium Embroidery <span className="text-yellow-500">Digitizing Design</span>
         </h1>
 
         {/* Sub text */}
