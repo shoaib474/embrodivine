@@ -1,4 +1,5 @@
 import cloudinary from "../config/cloudinary.js";
+import { redisClient } from "../config/redis.js";
 import Product from "../models/Product.model.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 
@@ -78,6 +79,8 @@ export const createProduct = async (req, res) => {
       zipUrl,
     });
 
+    await redisClient.del("all_products");
+
     res.status(201).json({
       success: true,
       message: "Product created successfully",
@@ -95,8 +98,30 @@ export const createProduct = async (req, res) => {
 // GET ALL PRODUCTS
 export const getProduct = async (req, res) => {
   try {
+    const cacheKey = "all_products";
+
+    // 1. Check Redis first
+    const cachedData = await redisClient.get(cacheKey);
+
+    if (cachedData) {
+      return res.status(200).json({
+        success: true,
+        source: "redis",
+        products: JSON.parse(cachedData),
+      });
+    }
+
+    // 2. DB hit if cache miss
     const products = await Product.find().sort({ createdAt: -1 });
-    res.status(200).json({ success: true, products });
+
+    // 3. Save in Redis (1 hour cache)
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
+
+    res.status(200).json({
+      success: true,
+      source: "mongodb",
+      products,
+    });
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -108,15 +133,31 @@ export const getProduct = async (req, res) => {
 
 export const getProductById = async (req, res) => {
   try {
+    const cacheKey = `product_${req.params.id}`;
+
+    const cachedProduct = await redisClient.get(cacheKey);
+
+    if (cachedProduct) {
+      return res.status(200).json({
+        success: true,
+        source: "redis",
+        product: JSON.parse(cachedProduct),
+      });
+    }
+
     const product = await Product.findById(req.params.id);
+
     if (!product)
       return res.status(404).json({
         success: false,
         message: "Product not found",
       });
 
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(product));
+
     res.status(200).json({
       success: true,
+      source: "mongodb",
       product,
     });
   } catch (err) {
@@ -142,7 +183,7 @@ export const updateProduct = async (req, res) => {
       badge,
       dimensions,
       colors,
-      zipUrl
+      zipUrl,
     } = req.body;
 
     if (!name || !price) {
@@ -217,6 +258,9 @@ export const updateProduct = async (req, res) => {
 
     await product.save();
 
+    await redisClient.del("all_products");
+    await redisClient.del(`product_${id}`);
+
     res.status(200).json({
       success: true,
       message: "Product updated successfully",
@@ -256,6 +300,9 @@ export const deleteProduct = async (req, res) => {
     // 2️⃣ Delete product from DB
     await product.deleteOne();
 
+    await redisClient.del("all_products");
+    await redisClient.del(`product_${req.params.id}`);
+
     res.status(200).json({
       success: true,
       message: "Product deleted successfully",
@@ -270,15 +317,18 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
-
 export const searchProducts = async (req, res) => {
   try {
     const { query } = req.query;
+    const cacheKey = `search_${query}`;
 
-    if (!query) {
-      return res.status(400).json({
-        success: false,
-        message: "Search query is required",
+    const cached = await redisClient.get(cacheKey);
+
+    if (cached) {
+      return res.json({
+        success: true,
+        source: "redis",
+        products: JSON.parse(cached),
       });
     }
 
@@ -289,8 +339,11 @@ export const searchProducts = async (req, res) => {
       ],
     }).sort({ createdAt: -1 });
 
+    await redisClient.setEx(cacheKey, 300, JSON.stringify(products));
+
     res.status(200).json({
       success: true,
+      source: "mongodb",
       products,
     });
   } catch (err) {

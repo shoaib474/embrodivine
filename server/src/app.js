@@ -18,7 +18,7 @@ import paypalRouter from "./routes/paypal.routes.js";
 import notifyRouter from "./routes/notify.routes.js";
 import quoteRouter from "./routes/quote.routes.js";
 import profileRouter from "./routes/profile.routes.js";
-import userRouter from "./routes/user.routes.js"
+import userRouter from "./routes/user.routes.js";
 
 const app = express();
 
@@ -62,7 +62,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use("/api/auth", authRouter);
-app.use("/api/user",userRouter)
+app.use("/api/user", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/user/cart", cartRouter);
 app.use("/api/orders", orderRouter);
@@ -72,45 +72,61 @@ app.use("/api/paypal", paypalRouter);
 app.use("/api", notifyRouter);
 app.use("/api/profile", profileRouter);
 app.post("/api/send-email", async (req, res) => {
-  const { name, email, phone, company, subject, message } = req.body;
-
-  // create transporter
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-
-  let mailOptions = {
-    from: email,
-    to: process.env.EMAIL_USER, // your receiving email
-    subject: subject || `Message from ${name}`,
-    text: `
-    Name: ${name}
-    Email: ${email}
-    Phone: ${phone}
-    Company: ${company}
-    Message: ${message}
-    `,
-    html: `
-    <p>New Message from Contact Form</p>
-    <p><strong>Name:</strong> ${name}</p>
-    <p><strong>Email:</strong> ${email}</p>
-    <p><strong>Phone:</strong> ${phone}</p>
-    <p><strong>Company:</strong> ${company}</p>
-    <p><strong>Message:</strong> ${message}</p>
-    `,
-  };
-
   try {
+    const { name, email, phone, company, subject, message } = req.body;
+
+    if (!name || !email || !message) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, email, and message are required",
+      });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS, // Gmail App Password
+      },
+    });
+
+    const mailOptions = {
+      from: `"Embrodivine Contact" <${process.env.EMAIL_USER}>`,
+      replyTo: email,
+      to: process.env.EMAIL_USER,
+      subject: subject || `Message from ${name}`,
+      text: `
+Name: ${name}
+Email: ${email}
+Phone: ${phone || "N/A"}
+Company: ${company || "N/A"}
+Message: ${message}
+      `,
+      html: `
+        <h2>New Contact Form Message</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || "N/A"}</p>
+        <p><strong>Company:</strong> ${company || "N/A"}</p>
+        <p><strong>Message:</strong> ${message}</p>
+      `,
+    };
+
     const info = await transporter.sendMail(mailOptions);
-    res.status(200).json({ success: true, info });
+
+    res.status(200).json({
+      success: true,
+      message: "Email sent successfully",
+      info,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error });
+    console.error("SEND EMAIL ERROR:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to send email",
+      error: error.message,
+    });
   }
 });
-
 export default app;

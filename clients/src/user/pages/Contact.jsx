@@ -35,7 +35,7 @@ const Contact = () => {
       const response = await axios.post(`${API}/api/send-email`, data);
 
       if (response.data.success) {
-        toast.success("Email send sucessfully");
+        toast.success("Email sent successfully");
       }
     } catch (error) {
       console.error("Error sending email:", error);

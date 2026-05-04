@@ -4,12 +4,27 @@ import Profile from "../models/Profile.model.js";
 import User from "../models/User.model.js";
 import Order from "../models/Order.model.js";
 import Favorite from "../models/Favorite.model.js";
+import { redisClient } from "../config/redis.js";
 
 // 🔹 Get Profile
 export const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
-    const profile = await Profile.findOne({ userId: req.user.id });
+    const userId = req.user.id;
+    const cacheKey = `profile_${userId}`;
+
+    // 🔥 CHECK REDIS FIRST
+    const cached = await redisClient.get(cacheKey);
+
+    if (cached) {
+      return res.status(200).json({
+        success: true,
+        source: "redis",
+        user: JSON.parse(cached),
+      });
+    }
+
+    const user = await User.findById(userId).select("-password");
+    const profile = await Profile.findOne({ userId });
 
     if (!user) {
       return res.status(404).json({
@@ -18,12 +33,18 @@ export const getProfile = async (req, res) => {
       });
     }
 
+    const combined = {
+      ...user._doc,
+      ...(profile ? profile._doc : {}),
+    };
+
+    // 🔥 STORE IN REDIS
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(combined));
+
     res.status(200).json({
       success: true,
-      user: {
-        ...user._doc,
-        ...(profile ? profile._doc : {}),
-      },
+      source: "db",
+      user: combined,
     });
   } catch (err) {
     res.status(500).json({
@@ -38,6 +59,7 @@ export const getProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
+    const cacheKey = `profile_${userId}`;
 
     const {
       name,
@@ -53,7 +75,6 @@ export const updateProfile = async (req, res) => {
       bio,
     } = req.body;
 
-    // ✅ Basic validation
     if (name !== undefined && name.trim() === "") {
       return res.status(400).json({
         success: false,
@@ -75,7 +96,6 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    // ✅ Build update object — only defined fields update karo
     const updateFields = {};
     const fields = {
       name,
@@ -95,12 +115,21 @@ export const updateProfile = async (req, res) => {
       if (value !== undefined) updateFields[key] = value;
     }
 
-    // ✅ upsert: true — profile nahi hai toh create kar do
     const profile = await Profile.findOneAndUpdate(
       { userId },
       { $set: updateFields },
       { new: true, upsert: true, runValidators: true },
     );
+
+    const user = await User.findById(userId).select("-password");
+
+    const combined = {
+      ...user._doc,
+      ...profile._doc,
+    };
+
+    // 🔥 UPDATE CACHE
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(combined));
 
     res.status(200).json({
       success: true,
@@ -120,9 +149,8 @@ export const updateProfile = async (req, res) => {
 export const updateAvatar = async (req, res) => {
   try {
     const userId = req.user.id;
+    const cacheKey = `profile_${userId}`;
 
-    // ✅ File upload middleware (multer/cloudinary) use karo
-    // req.file multer se aata hai
     if (!req.file) {
       return res.status(400).json({
         success: false,
@@ -130,14 +158,23 @@ export const updateAvatar = async (req, res) => {
       });
     }
 
-    // Cloudinary ya koi bhi storage use karo
-    const avatarUrl = req.file.path; // cloudinary URL
+    const avatarUrl = req.file.path;
 
     const profile = await Profile.findOneAndUpdate(
       { userId },
       { $set: { avatar: avatarUrl } },
       { new: true, upsert: true },
     );
+
+    const user = await User.findById(userId).select("-password");
+
+    const combined = {
+      ...user._doc,
+      ...profile._doc,
+    };
+
+    // 🔥 UPDATE CACHE
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(combined));
 
     res.status(200).json({
       success: true,
@@ -178,6 +215,13 @@ export const deleteAccount = async (req, res) => {
 
     await session.commitTransaction();
     session.endSession();
+
+    // 🔥 REMOVE ALL REDIS CACHE
+    await redisClient.del(`profile_${userId}`);
+    await redisClient.del(`cart_${userId}`);
+    await redisClient.del(`saved_${userId}`);
+    await redisClient.del(`favorites_${userId}`);
+    await redisClient.del(`session_${userId}`);
 
     res.clearCookie("token");
 

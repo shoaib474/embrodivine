@@ -1,6 +1,7 @@
 import Cart from "../models/Cart.model.js";
 import Order from "../models/Order.model.js";
 import Product from "../models/Product.model.js";
+import { redisClient } from "../config/redis.js";
 
 export const addToCart = async (req, res) => {
   try {
@@ -9,6 +10,7 @@ export const addToCart = async (req, res) => {
     }
 
     const { productId, qty } = req.body;
+    const userId = req.user.id;
 
     if (!productId || !qty || isNaN(qty) || qty <= 0) {
       return res.status(400).json({
@@ -17,34 +19,43 @@ export const addToCart = async (req, res) => {
       });
     }
 
-    let cart = await Cart.findOne({ user: req.user.id });
+    let cart = await Cart.findOne({ user: userId });
 
     if (cart) {
-      cart.products = cart.products.filter((p) => p.productId); // only keep valid entries
+      cart.products = cart.products.filter((p) => p.productId);
     }
 
     if (!cart) {
       cart = new Cart({
-        user: req.user.id,
+        user: userId,
         products: [{ productId, qty }],
       });
     } else {
       const index = cart.products.findIndex(
-        (p) => p.productId?.toString() === productId,
+        (p) => p.productId?.toString() === productId
       );
 
       if (index > -1) {
-        cart.products[index].qty += qty; // increment
+        cart.products[index].qty += qty;
       } else {
-        cart.products.push({ productId, qty }); // add new
+        cart.products.push({ productId, qty });
       }
     }
 
     await cart.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Product added to cart", cart });
+    // 🔥 CACHE UPDATE (IMPORTANT)
+    await redisClient.setEx(
+      `cart_${userId}`,
+      3600,
+      JSON.stringify(cart)
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Product added to cart",
+      cart,
+    });
   } catch (err) {
     console.error("Add to cart error:", err);
     res.status(500).json({
@@ -61,16 +72,38 @@ export const getCart = async (req, res) => {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
-    const cart = await Cart.findOne({ user: req.user.id }).populate(
-      "products.productId",
+    const userId = req.user.id;
+    const cacheKey = `cart_${userId}`;
+
+    // 🔥 CHECK REDIS FIRST
+    const cachedCart = await redisClient.get(cacheKey);
+
+    if (cachedCart) {
+      const cart = JSON.parse(cachedCart);
+
+      return res.status(200).json({
+        success: true,
+        source: "redis",
+        products: cart.products,
+        count: cart.products.reduce((sum, item) => sum + item.qty, 0),
+      });
+    }
+
+    // DB fallback
+    const cart = await Cart.findOne({ user: userId }).populate(
+      "products.productId"
     );
 
     if (!cart) {
       return res.status(200).json({ success: true, cart: [], count: 0 });
     }
 
+    // 🔥 STORE IN REDIS
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(cart));
+
     res.status(200).json({
       success: true,
+      source: "db",
       products: cart.products,
       count: cart.products.reduce((sum, item) => sum + item.qty, 0),
     });
@@ -89,14 +122,8 @@ export const removeFromCart = async (req, res) => {
     const userId = req.user.id;
     const { productId } = req.params;
 
-    if (!productId) {
-      return res.status(400).json({
-        success: false,
-        message: "Product ID is required",
-      });
-    }
-
     const cart = await Cart.findOne({ user: userId });
+
     if (!cart) {
       return res.status(404).json({
         success: false,
@@ -104,12 +131,18 @@ export const removeFromCart = async (req, res) => {
       });
     }
 
-    // FIX 🔥
     cart.products = cart.products.filter(
-      (item) => item.productId.toString() !== productId,
+      (item) => item.productId.toString() !== productId
     );
 
     await cart.save();
+
+    // 🔥 UPDATE CACHE
+    await redisClient.setEx(
+      `cart_${userId}`,
+      3600,
+      JSON.stringify(cart)
+    );
 
     return res.json({
       success: true,
@@ -118,24 +151,33 @@ export const removeFromCart = async (req, res) => {
     });
   } catch (err) {
     console.error("Remove Cart Error:", err);
-    return res
-      .status(500)
-      .json({ success: false, message: "Server error", error: err.message });
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
 };
 
 export const clearCart = async (req, res) => {
   try {
     const userId = req.user.id;
+
     const cart = await Cart.findOne({ user: userId });
+
     if (!cart) {
       return res.status(404).json({
         success: false,
         message: "Cart not found",
       });
     }
+
     cart.products = [];
     await cart.save();
+
+    // 🔥 DELETE CACHE
+    await redisClient.del(`cart_${userId}`);
+
     res.status(200).json({
       success: true,
       message: "Cart cleared",
@@ -246,15 +288,43 @@ export const getSavedItems = async (req, res) => {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
-    const cart = await Cart.findOne({ user: req.user.id }).populate(
-      "saveForLater.productId",
+    const userId = req.user.id;
+    const cacheKey = `saved_${userId}`;
+
+    // 🔥 CHECK REDIS FIRST
+    const cached = await redisClient.get(cacheKey);
+
+    if (cached) {
+      return res.status(200).json({
+        success: true,
+        source: "redis",
+        savedItems: JSON.parse(cached),
+      });
+    }
+
+    const cart = await Cart.findOne({ user: userId }).populate(
+      "saveForLater.productId"
     );
 
     if (!cart || cart.saveForLater.length === 0) {
-      return res.status(200).json({ success: true, savedItems: [] });
+      return res.status(200).json({
+        success: true,
+        savedItems: [],
+      });
     }
 
-    res.status(200).json({ success: true, savedItems: cart.saveForLater });
+    // 🔥 SAVE TO REDIS
+    await redisClient.setEx(
+      cacheKey,
+      3600,
+      JSON.stringify(cart.saveForLater)
+    );
+
+    res.status(200).json({
+      success: true,
+      source: "db",
+      savedItems: cart.saveForLater,
+    });
   } catch (err) {
     console.error("Get saved items error:", err);
     res.status(500).json({
@@ -279,6 +349,7 @@ export const removeSavedItem = async (req, res) => {
     }
 
     const cart = await Cart.findOne({ user: userId });
+
     if (!cart) {
       return res.status(404).json({
         success: false,
@@ -287,8 +358,9 @@ export const removeSavedItem = async (req, res) => {
     }
 
     const initialLength = cart.saveForLater.length;
+
     cart.saveForLater = cart.saveForLater.filter(
-      (item) => item.productId.toString() !== productId,
+      (item) => item.productId.toString() !== productId
     );
 
     if (cart.saveForLater.length === initialLength) {
@@ -299,6 +371,13 @@ export const removeSavedItem = async (req, res) => {
     }
 
     await cart.save();
+
+    // 🔥 UPDATE CACHE
+    await redisClient.setEx(
+      `saved_${userId}`,
+      3600,
+      JSON.stringify(cart.saveForLater)
+    );
 
     res.status(200).json({
       success: true,
@@ -321,9 +400,15 @@ export const checkoutCart = async (req, res) => {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
-    const cart = await Cart.findOne({ user: req.user.id });
+    const userId = req.user.id;
+
+    const cart = await Cart.findOne({ user: userId });
+
     if (!cart || cart.products.length === 0) {
-      return res.status(400).json({ success: false, message: "Cart is empty" });
+      return res.status(400).json({
+        success: false,
+        message: "Cart is empty",
+      });
     }
 
     let totalPrice = 0;
@@ -331,25 +416,35 @@ export const checkoutCart = async (req, res) => {
 
     for (const item of cart.products) {
       const product = await Product.findById(item.productId);
+
       if (!product) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Product not found" });
+        return res.status(404).json({
+          success: false,
+          message: "Product not found",
+        });
       }
 
-      orderProducts.push({ product: product._id, qty: item.qty });
+      orderProducts.push({
+        product: product._id,
+        qty: item.qty,
+      });
+
       totalPrice += product.price * item.qty;
     }
 
     const order = await Order.create({
-      user: req.user.id,
+      user: userId,
       products: orderProducts,
       totalPrice,
     });
 
-    // Clear cart
+    // 🔥 CLEAR CART
     cart.products = [];
     await cart.save();
+
+    // 🔥 CLEAR REDIS CACHE (IMPORTANT)
+    await redisClient.del(`cart_${userId}`);
+    await redisClient.del(`saved_${userId}`);
 
     res.status(201).json({
       success: true,
