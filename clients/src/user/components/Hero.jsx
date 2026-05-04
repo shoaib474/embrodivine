@@ -28,7 +28,7 @@ const Hero = () => {
       >
         {/* Badge */}
         <div className="inline-block border border-yellow-500/40 text-yellow-400 px-5 py-2 rounded-full text-sm font-semibold mb-6 bg-[#111827]/40 backdrop-blur-md">
-          ✨ Trusted by 1000+ Businesses
+          
         </div>
 
         {/* Heading */}

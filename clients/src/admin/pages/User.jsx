@@ -23,9 +23,20 @@ import {
   Crown,
   Star,
   AlertCircle,
+  User,
 } from "lucide-react";
 
+import {
+  useDeleteUser,
+  useUpdateUserRole,
+  useUsers,
+} from "../../hooks/useUser";
+import toast from "react-hot-toast";
+
 const AdminUsers = () => {
+  const { mutate: updateRole } = useUpdateUserRole();
+  const { mutate: deleteUser, isPending } = useDeleteUser();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -37,86 +48,8 @@ const AdminUsers = () => {
   const [expandedUser, setExpandedUser] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
 
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      phone: "+1 (555) 123-4567",
-      role: "admin",
-      status: "active",
-      joinDate: "2023-01-15",
-      lastActive: "2024-02-15",
-      orders: 24,
-      spent: "$1,245.50",
-      avatar: "SJ",
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      email: "michael.chen@example.com",
-      phone: "+1 (555) 234-5678",
-      role: "customer",
-      status: "active",
-      joinDate: "2023-03-22",
-      lastActive: "2024-02-14",
-      orders: 12,
-      spent: "$567.80",
-      avatar: "MC",
-    },
-    {
-      id: 3,
-      name: "Emma Wilson",
-      email: "emma.wilson@example.com",
-      phone: "+1 (555) 345-6789",
-      role: "moderator",
-      status: "active",
-      joinDate: "2023-05-10",
-      lastActive: "2024-02-13",
-      orders: 8,
-      spent: "$342.20",
-      avatar: "EW",
-    },
-    {
-      id: 4,
-      name: "James Rodriguez",
-      email: "james.rod@example.com",
-      phone: "+1 (555) 456-7890",
-      role: "customer",
-      status: "inactive",
-      joinDate: "2023-07-18",
-      lastActive: "2024-01-05",
-      orders: 3,
-      spent: "$125.00",
-      avatar: "JR",
-    },
-    {
-      id: 5,
-      name: "Olivia Brown",
-      email: "olivia.brown@example.com",
-      phone: "+1 (555) 567-8901",
-      role: "customer",
-      status: "active",
-      joinDate: "2023-09-25",
-      lastActive: "2024-02-15",
-      orders: 18,
-      spent: "$892.30",
-      avatar: "OB",
-    },
-    {
-      id: 6,
-      name: "David Kim",
-      email: "david.kim@example.com",
-      phone: "+1 (555) 678-9012",
-      role: "customer",
-      status: "banned",
-      joinDate: "2023-11-02",
-      lastActive: "2024-01-20",
-      orders: 2,
-      spent: "$45.00",
-      avatar: "DK",
-    },
-  ]);
+  const { data, isLoading } = useUsers();
+  const users = data?.users || data || [];
 
   const roles = [
     {
@@ -127,15 +60,8 @@ const AdminUsers = () => {
       bgColor: "bg-red-500/10",
     },
     {
-      id: "moderator",
-      label: "Moderator",
-      icon: Shield,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
-    },
-    {
-      id: "customer",
-      label: "Customer",
+      id: "user",
+      label: "user",
       icon: Users,
       color: "text-green-500",
       bgColor: "bg-green-500/10",
@@ -150,22 +76,16 @@ const AdminUsers = () => {
       color: "text-blue-500",
     },
     {
-      label: "Active Users",
-      value: users.filter((u) => u.status === "active").length,
-      icon: UserCheck,
-      color: "text-green-500",
-    },
-    {
       label: "Admins",
       value: users.filter((u) => u.role === "admin").length,
       icon: Crown,
       color: "text-[#D4AF37]",
     },
     {
-      label: "Banned",
-      value: users.filter((u) => u.status === "banned").length,
-      icon: Ban,
-      color: "text-red-500",
+      label: "User",
+      value: users.filter((u) => u.role === "user").length,
+      icon: User,
+      color: "text-green-500",
     },
   ];
 
@@ -191,33 +111,32 @@ const AdminUsers = () => {
   const handleSelectAll = () => {
     if (selectedUsers.size === filteredUsers.length)
       setSelectedUsers(new Set());
-    else setSelectedUsers(new Set(filteredUsers.map((u) => u.id)));
+    else setSelectedUsers(new Set(filteredUsers.map((u) => u._id)));
   };
 
   const handleChangeRole = (userId, newRole) => {
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === userId ? { ...user, role: newRole } : user,
-      ),
+    updateRole(
+      { id: userId, role: newRole },
+      {
+        onSuccess: () => {
+          toast.success("User role updated successfully");
+          setShowRoleModal(false);
+          setSelectedUser(null);
+        },
+      },
     );
-    setShowRoleModal(false);
-    setSelectedUser(null);
   };
 
-  const handleDeleteUser = (userId) => {
-    setUsers((prev) => prev.filter((user) => user.id !== userId));
-    setShowDeleteModal(false);
-    setUserToDelete(null);
-  };
+  const handleDeleteUser = (id) => {
+    console.log(id);
 
-  const handleBanUser = (userId) => {
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === userId
-          ? { ...user, status: user.status === "banned" ? "active" : "banned" }
-          : user,
-      ),
-    );
+    deleteUser(id, {
+      onSuccess: () => {
+        toast.success("User delete successfully");
+        setShowDeleteModal(false);
+        setUserToDelete(null);
+      },
+    });
   };
 
   const getRoleBadge = (role) => {
@@ -230,38 +149,6 @@ const AdminUsers = () => {
       >
         <Icon className="w-3 h-3" />
         {roleData.label}
-      </span>
-    );
-  };
-
-  const getStatusBadge = (status) => {
-    const statusConfig = {
-      active: {
-        color: "text-green-500",
-        bg: "bg-green-500/10",
-        dot: "bg-green-500",
-        label: "Active",
-      },
-      inactive: {
-        color: "text-gray-400",
-        bg: "bg-gray-500/10",
-        dot: "bg-gray-400",
-        label: "Inactive",
-      },
-      banned: {
-        color: "text-red-500",
-        bg: "bg-red-500/10",
-        dot: "bg-red-500",
-        label: "Banned",
-      },
-    };
-    const config = statusConfig[status];
-    return (
-      <span
-        className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-semibold ${config.bg} ${config.color}`}
-      >
-        <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
-        {config.label}
       </span>
     );
   };
@@ -284,7 +171,7 @@ const AdminUsers = () => {
         </motion.div>
 
         {/* Stats Grid — 2 cols on mobile, 4 on lg */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
@@ -356,18 +243,7 @@ const AdminUsers = () => {
               >
                 <option value="all">All Roles</option>
                 <option value="admin">Admin</option>
-                <option value="moderator">Moderator</option>
-                <option value="customer">Customer</option>
-              </select>
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="flex-1 px-3 py-2.5 sm:py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37] transition-all text-sm"
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-                <option value="banned">Banned</option>
+                <option value="customer">User</option>
               </select>
               <button className="flex sm:hidden items-center justify-center gap-2 px-4 py-2.5 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-lg text-[#D4AF37] hover:bg-[#D4AF37]/20 transition-all font-semibold text-sm">
                 <Download className="w-4 h-4" />
@@ -411,237 +287,205 @@ const AdminUsers = () => {
             </div>
           </div>
 
-          {/* ── DESKTOP TABLE (md+) ── */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-[#101010]">
-                <tr>
-                  {[
-                    "",
-                    "User",
-                    "Contact",
-                    "Role",
-                    "Status",
-                    "Orders",
-                    "Spent",
-                    "Actions",
-                  ].map((h) => (
-                    <th
-                      key={h}
-                      className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-[#D4AF37]/70 uppercase tracking-wider"
+          <div className="w-full">
+            {/* Desktop / Tablet Table */}
+            <div className="hidden md:block overflow-x-auto rounded-2xl border border-[#D4AF37]/10">
+              <table className="w-full min-w-[800px]">
+                <thead className="bg-[#101010] sticky top-0 z-10">
+                  <tr>
+                    {["", "User", "Contact", "Role", "Actions"].map((h) => (
+                      <th
+                        key={h}
+                        className="px-4 lg:px-6 py-4 text-left text-xs font-semibold text-[#D4AF37]/70 uppercase tracking-wider whitespace-nowrap"
+                      >
+                        {h === "" ? (
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 rounded accent-[#D4AF37] cursor-pointer"
+                            onChange={handleSelectAll}
+                          />
+                        ) : (
+                          h
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-[#D4AF37]/10">
+                  {filteredUsers.map((user, index) => (
+                    <motion.tr
+                      key={user._id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      className="hover:bg-[#D4AF37]/5 transition-colors"
                     >
-                      {h === "" ? (
+                      {/* Checkbox */}
+                      <td className="px-4 lg:px-6 py-4">
                         <input
                           type="checkbox"
-                          className="w-4 h-4 rounded accent-[#D4AF37]"
-                          onChange={handleSelectAll}
+                          checked={selectedUsers.has(user._id)}
+                          onChange={() => handleSelectUser(user._id)}
+                          className="w-4 h-4 rounded accent-[#D4AF37] cursor-pointer"
                         />
-                      ) : (
-                        h
-                      )}
-                    </th>
+                      </td>
+
+                      {/* User */}
+                      <td className="px-4 lg:px-6 py-4 min-w-[220px]">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] font-bold uppercase shrink-0">
+                            {user.name?.charAt(0)}
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="text-[#E8D7B5] font-semibold text-sm lg:text-base truncate">
+                              {user.name}
+                            </p>
+
+                            <p className="text-[#D4AF37]/60 text-xs mt-0.5">
+                              Joined{" "}
+                              {user?.createdAt
+                                ? new Date(user.createdAt).toLocaleDateString(
+                                    "en-GB",
+                                    {
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                    },
+                                  )
+                                : "N/A"}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Contact */}
+                      <td className="px-4 lg:px-6 py-4 min-w-[250px]">
+                        <p className="text-[#D4AF37]/70 flex items-center gap-2 text-sm">
+                          <Mail className="w-4 h-4 shrink-0" />
+                          <span className="truncate">{user.email}</span>
+                        </p>
+                      </td>
+
+                      {/* Role */}
+                      <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
+                        {getRoleBadge(user.role)}
+                      </td>
+
+                      {/* Actions */}
+                      <td className="px-4 lg:px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedUser(user);
+                              setShowRoleModal(true);
+                            }}
+                            className="p-2 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-lg text-[#D4AF37] hover:bg-[#D4AF37]/20 transition-all"
+                            title="Change Role"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setUserToDelete(user);
+                              setShowDeleteModal(true);
+                            }}
+                            className="p-2 bg-red-500/10 border border-red-500/30 rounded-lg text-red-500 hover:bg-red-500/20 transition-all"
+                            title="Delete User"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
                   ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#D4AF37]/10">
-                {filteredUsers.map((user, index) => (
-                  <motion.tr
-                    key={user.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="hover:bg-[#D4AF37]/5 transition-colors"
-                  >
-                    <td className="px-4 lg:px-6 py-4">
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile View */}
+            <div className="grid grid-cols-1 gap-4 md:hidden">
+              {filteredUsers.map((user, index) => (
+                <motion.div
+                  key={user._id}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="bg-[#101010] border border-[#D4AF37]/10 rounded-2xl p-4"
+                >
+                  {/* Top */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                       <input
                         type="checkbox"
-                        checked={selectedUsers.has(user.id)}
-                        onChange={() => handleSelectUser(user.id)}
-                        className="w-4 h-4 rounded accent-[#D4AF37]"
+                        checked={selectedUsers.has(user._id)}
+                        onChange={() => handleSelectUser(user._id)}
+                        className="w-4 h-4 rounded accent-[#D4AF37] mt-1"
                       />
-                    </td>
-                    <td className="px-4 lg:px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 lg:w-10 lg:h-10 bg-gradient-to-br from-[#D4AF37] to-[#C9A961] rounded-full flex items-center justify-center shrink-0">
-                          <span className="text-[#101010] font-bold text-xs lg:text-sm">
-                            {user.avatar}
-                          </span>
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-[#E8D7B5] font-semibold text-sm truncate">
-                            {user.name}
-                          </p>
-                          <p className="text-[#D4AF37]/60 text-xs">
-                            Joined {user.joinDate}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 lg:px-6 py-4">
-                      <div className="text-xs lg:text-sm">
-                        <p className="text-[#D4AF37]/70 flex items-center gap-1.5 truncate">
-                          <Mail className="w-3.5 h-3.5 shrink-0" />
-                          <span className="truncate max-w-[150px] lg:max-w-none">
-                            {user.email}
-                          </span>
-                        </p>
-                        <p className="text-[#D4AF37]/70 flex items-center gap-1.5 mt-1">
-                          <Phone className="w-3.5 h-3.5 shrink-0" />
-                          {user.phone}
-                        </p>
-                      </div>
-                    </td>
-                    <td className="px-4 lg:px-6 py-4">
-                      {getRoleBadge(user.role)}
-                    </td>
-                    <td className="px-4 lg:px-6 py-4">
-                      {getStatusBadge(user.status)}
-                    </td>
-                    <td className="px-4 lg:px-6 py-4">
-                      <span className="text-[#E8D7B5] font-semibold text-sm">
-                        {user.orders}
-                      </span>
-                    </td>
-                    <td className="px-4 lg:px-6 py-4">
-                      <span className="text-[#D4AF37] font-bold text-sm">
-                        {user.spent}
-                      </span>
-                    </td>
-                    <td className="px-4 lg:px-6 py-4">
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={() => {
-                            setSelectedUser(user);
-                            setShowRoleModal(true);
-                          }}
-                          className="p-1.5 lg:p-2 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-lg text-[#D4AF37] hover:bg-[#D4AF37]/20 transition-all"
-                          title="Change Role"
-                        >
-                          <Edit className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleBanUser(user.id)}
-                          className={`p-1.5 lg:p-2 rounded-lg transition-all ${
-                            user.status === "banned"
-                              ? "bg-green-500/10 border border-green-500/30 text-green-500 hover:bg-green-500/20"
-                              : "bg-orange-500/10 border border-orange-500/30 text-orange-500 hover:bg-orange-500/20"
-                          }`}
-                          title={
-                            user.status === "banned" ? "Unban User" : "Ban User"
-                          }
-                        >
-                          <Ban className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            setUserToDelete(user);
-                            setShowDeleteModal(true);
-                          }}
-                          className="p-1.5 lg:p-2 bg-red-500/10 border border-red-500/30 rounded-lg text-red-500 hover:bg-red-500/20 transition-all"
-                          title="Delete User"
-                        >
-                          <Trash2 className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
 
-          {/* ── MOBILE CARD LIST (< md) ── */}
-          <div className="md:hidden divide-y divide-[#D4AF37]/10">
-            {filteredUsers.map((user, index) => (
-              <motion.div
-                key={user.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="p-4"
-              >
-                {/* Card Top Row */}
-                <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    checked={selectedUsers.has(user.id)}
-                    onChange={() => handleSelectUser(user.id)}
-                    className="w-4 h-4 rounded accent-[#D4AF37] mt-1 shrink-0"
-                  />
-                  <div className="w-10 h-10 bg-gradient-to-br from-[#D4AF37] to-[#C9A961] rounded-full flex items-center justify-center shrink-0">
-                    <span className="text-[#101010] font-bold text-sm">
-                      {user.avatar}
-                    </span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-[#E8D7B5] font-semibold text-sm truncate">
-                        {user.name}
-                      </p>
-                      {getStatusBadge(user.status)}
+                      <div className="w-12 h-12 rounded-full bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] font-bold uppercase shrink-0">
+                        {user.name?.charAt(0)}
+                      </div>
+
+                      <div className="min-w-0">
+                        <h3 className="text-[#E8D7B5] font-semibold text-sm truncate">
+                          {user.name}
+                        </h3>
+
+                        <p className="text-[#D4AF37]/60 text-xs">
+                          Joined{" "}
+                          {user?.createdAt
+                            ? new Date(user.createdAt).toLocaleDateString(
+                                "en-GB",
+                                {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                },
+                              )
+                            : "N/A"}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-[#D4AF37]/60 text-xs mt-0.5">
-                      Joined {user.joinDate}
-                    </p>
-                  </div>
-                </div>
 
-                {/* Card Body */}
-                <div className="mt-3 ml-7 space-y-1.5">
-                  <p className="text-[#D4AF37]/70 text-xs flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5 shrink-0" />
-                    <span className="truncate">{user.email}</span>
-                  </p>
-                  <p className="text-[#D4AF37]/70 text-xs flex items-center gap-1.5">
-                    <Phone className="w-3.5 h-3.5 shrink-0" />
-                    {user.phone}
-                  </p>
-                </div>
-
-                {/* Card Footer */}
-                <div className="mt-3 ml-7 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
                     {getRoleBadge(user.role)}
-                    <span className="text-[#D4AF37]/60 text-xs">
-                      {user.orders} orders
-                    </span>
-                    <span className="text-[#D4AF37] font-bold text-xs">
-                      {user.spent}
-                    </span>
                   </div>
-                  <div className="flex items-center gap-1.5">
+
+                  {/* Email */}
+                  <div className="mt-4 flex items-center gap-2 text-[#D4AF37]/70 text-sm min-w-0">
+                    <Mail className="w-4 h-4 shrink-0" />
+                    <span className="truncate">{user.email}</span>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-2 mt-4">
                     <button
                       onClick={() => {
                         setSelectedUser(user);
                         setShowRoleModal(true);
                       }}
-                      className="p-1.5 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-lg text-[#D4AF37] hover:bg-[#D4AF37]/20 transition-all"
+                      className="flex-1 flex items-center justify-center gap-2 py-2 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-xl text-[#D4AF37] hover:bg-[#D4AF37]/20 transition-all"
                     >
-                      <Edit className="w-3.5 h-3.5" />
+                      <Edit className="w-4 h-4" />
+                      Edit Role
                     </button>
-                    <button
-                      onClick={() => handleBanUser(user.id)}
-                      className={`p-1.5 rounded-lg transition-all ${
-                        user.status === "banned"
-                          ? "bg-green-500/10 border border-green-500/30 text-green-500"
-                          : "bg-orange-500/10 border border-orange-500/30 text-orange-500"
-                      }`}
-                    >
-                      <Ban className="w-3.5 h-3.5" />
-                    </button>
+
                     <button
                       onClick={() => {
                         setUserToDelete(user);
                         setShowDeleteModal(true);
                       }}
-                      className="p-1.5 bg-red-500/10 border border-red-500/30 rounded-lg text-red-500 hover:bg-red-500/20 transition-all"
+                      className="flex-1 flex items-center justify-center gap-2 py-2 bg-red-500/10 border border-red-500/30 rounded-xl text-red-500 hover:bg-red-500/20 transition-all"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-4 h-4" />
+                      Delete
                     </button>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           {filteredUsers.length === 0 && (
@@ -679,11 +523,6 @@ const AdminUsers = () => {
                 </div>
 
                 <div className="flex items-center gap-3 p-4 bg-[#101010] rounded-lg border border-[#D4AF37]/20 mb-4">
-                  <div className="w-10 h-10 bg-gradient-to-br from-[#D4AF37] to-[#C9A961] rounded-full flex items-center justify-center shrink-0">
-                    <span className="text-[#101010] font-bold text-sm">
-                      {selectedUser.avatar}
-                    </span>
-                  </div>
                   <div className="min-w-0">
                     <p className="text-[#E8D7B5] font-semibold text-sm truncate">
                       {selectedUser.name}
@@ -704,7 +543,7 @@ const AdminUsers = () => {
                       <button
                         key={role.id}
                         onClick={() =>
-                          handleChangeRole(selectedUser.id, role.id)
+                          handleChangeRole(selectedUser._id, role.id)
                         }
                         className={`w-full flex items-center gap-3 p-3 sm:p-4 rounded-lg border-2 transition-all ${
                           selectedUser.role === role.id
@@ -723,8 +562,7 @@ const AdminUsers = () => {
                           </p>
                           <p className="text-[#D4AF37]/60 text-xs">
                             {role.id === "admin" && "Full system access"}
-                            {role.id === "moderator" && "Content management"}
-                            {role.id === "customer" && "Standard user"}
+                            {role.id === "user" && "Standard user"}
                           </p>
                         </div>
                         {selectedUser.role === role.id && (
@@ -776,11 +614,17 @@ const AdminUsers = () => {
                     Cancel
                   </button>
                   <button
-                    onClick={() => handleDeleteUser(userToDelete.id)}
-                    className="flex-1 px-4 py-2.5 sm:py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-all text-sm"
+                    disabled={isPending}
+                    onClick={() => handleDeleteUser(userToDelete._id)}
+                    className={`flex-1 px-4 py-2.5 sm:py-3 rounded-lg font-semibold transition-all text-sm ${
+                      isPending
+                        ? "bg-red-300 cursor-not-allowed"
+                        : "bg-red-500 hover:bg-red-600 text-white"
+                    }`}
                   >
-                    Delete
+                    {isPending ? "Deleting..." : "Delete"}
                   </button>
+                  
                 </div>
               </motion.div>
             </div>

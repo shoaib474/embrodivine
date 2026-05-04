@@ -185,7 +185,6 @@ export const deleteAccount = async (req, res) => {
       success: true,
       message: "Account deleted successfully",
     });
-
   } catch (error) {
     await session.abortTransaction();
     session.endSession();

@@ -18,6 +18,7 @@ import paypalRouter from "./routes/paypal.routes.js";
 import notifyRouter from "./routes/notify.routes.js";
 import quoteRouter from "./routes/quote.routes.js";
 import profileRouter from "./routes/profile.routes.js";
+import userRouter from "./routes/user.routes.js"
 
 const app = express();
 
@@ -61,6 +62,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use("/api/auth", authRouter);
+app.use("/api/user",userRouter)
 app.use("/api/products", productRouter);
 app.use("/api/user/cart", cartRouter);
 app.use("/api/orders", orderRouter);
