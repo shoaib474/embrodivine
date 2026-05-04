@@ -26,7 +26,7 @@ const Cart = () => {
   const navigate = useNavigate();
   const { data, isLoading, isError } = useCart();
   const { data: savedItemsData, isLoading: isSavedItemsLoading } =
-    useSavedItems();
+    useSavedItems();    
 
   const { mutate: removeItem } = useRemoveFromCart();
   const { mutate: removeSavedItem } = useRemoveSavedItem();
@@ -379,7 +379,6 @@ const Cart = () => {
                   <CreditCard className="w-5 h-5" />
                   Proceed to Checkout
                 </button>
-
 
                 <div className="mt-4 flex items-center justify-center gap-2 text-[#D4AF37]/60 text-sm">
                   <Lock className="w-4 h-4" />
