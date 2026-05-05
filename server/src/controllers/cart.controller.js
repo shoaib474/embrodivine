@@ -47,7 +47,7 @@ export const addToCart = async (req, res) => {
     // 🔥 CACHE UPDATE (IMPORTANT)
     await redisClient.setEx(
       `cart_${userId}`,
-      3600,
+      300,
       JSON.stringify(cart)
     );
 
@@ -99,7 +99,7 @@ export const getCart = async (req, res) => {
     }
 
     // 🔥 STORE IN REDIS
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(cart));
+    await redisClient.setEx(cacheKey, 300, JSON.stringify(cart));
 
     res.status(200).json({
       success: true,
@@ -140,7 +140,7 @@ export const removeFromCart = async (req, res) => {
     // 🔥 UPDATE CACHE
     await redisClient.setEx(
       `cart_${userId}`,
-      3600,
+      300,
       JSON.stringify(cart)
     );
 
@@ -316,7 +316,7 @@ export const getSavedItems = async (req, res) => {
     // 🔥 SAVE TO REDIS
     await redisClient.setEx(
       cacheKey,
-      3600,
+      300,
       JSON.stringify(cart.saveForLater)
     );
 
@@ -375,7 +375,7 @@ export const removeSavedItem = async (req, res) => {
     // 🔥 UPDATE CACHE
     await redisClient.setEx(
       `saved_${userId}`,
-      3600,
+      300,
       JSON.stringify(cart.saveForLater)
     );
 
