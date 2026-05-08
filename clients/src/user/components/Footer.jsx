@@ -3,18 +3,18 @@ import { Scissors, Mail, MessageCircle, Award } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#1A1A1A] text-[#E8D7B5]">
+    <footer className="bg-[#1A1A1A] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Logo & description */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-12 h-12 bg-[#D4AF37] rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+              <div className="w-12 h-12 bg-gray-300 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
               <img src="/logo.png" alt="logo" />
             </div>
               <span className="text-2xl font-bold text-white">Embrodivine</span>
             </div>
-            <p className="text-[#E8D7B5]/80">
+            <p className="text-gray-300">
               Professional embroidery digitizing services for businesses and
               individuals worldwide.
             </p>
@@ -26,43 +26,37 @@ const Footer = () => {
             <div className="space-y-2">
               <Link
                 to="/"
-                className="block hover:text-[#D4AF37] transition-colors"
+                className="block hover:text-yellow-500 transition-colors"
               >
                 Home
               </Link>
               <Link
                 to="/services"
-                className="block hover:text-[#D4AF37] transition-colors"
+                className="block hover:text-yellow-500 transition-colors"
               >
                 Services
               </Link>
               <Link
                 to="/store"
-                className="block hover:text-[#D4AF37] transition-colors"
+                className="block hover:text-yellow-500 transition-colors"
               >
                 Store
               </Link>
               <Link
-                to="/colection"
-                className="block hover:text-[#D4AF37] transition-colors"
-              >
-                Collection
-              </Link>
-              <Link
                 to="/category"
-                className="block hover:text-[#D4AF37] transition-colors"
+                className="block hover:text-yellow-500 transition-colors"
               >
                 Category
               </Link>
               <Link
                 to="/quote"
-                className="block hover:text-[#D4AF37] transition-colors"
+                className="block hover:text-yellow-500 transition-colors"
               >
                 Get A Quote! 
               </Link>
               <Link
                 to="/contact"
-                className="block hover:text-[#D4AF37] transition-colors"
+                className="block hover:text-yellow-500 transition-colors"
               >
                 Contact
               </Link>
@@ -75,14 +69,14 @@ const Footer = () => {
             <div className="space-y-3">
               <Link
                 to="mailto:eeembroideryhub@gmail.com"
-                className="flex items-center space-x-2 hover:text-[#D4AF37] transition-colors"
+                className="flex items-center space-x-2 hover:text-yellow-500 transition-colors"
               >
                 <Mail size={18} />
                 <span>eembroideryhub@gmail.com</span>
               </Link>
               {/* <Link
                 to="https://wa.me/1234567890"
-                className="flex items-center space-x-2 hover:text-[#D4AF37] transition-colors"
+                className="flex items-center space-x-2 hover:text-yellow-500 transition-colors"
               >
                 <MessageCircle size={18} />
                 <span>WhatsApp</span>
@@ -105,14 +99,13 @@ const Footer = () => {
                   Embrodivine
                 </span>
                 <div
-                  className="h-0.5 mt-1"
-                  style={{ backgroundColor: "#D4AF37" }}
+                  className="h-0.5 mt-1 w-full bg-gradient-to-r from-yellow-500 to-transparent"
                 ></div>
               </div>
             </div>
             <p
-              className="font-light text-sm tracking-wider"
-              style={{ color: "#E8D7B5" }}
+              className="font-light text-sm tracking-wider text-gray-300"
+              
             >
               &copy; {new Date().getFullYear()} Embrodivine. All rights reserved.
             </p>

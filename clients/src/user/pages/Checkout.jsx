@@ -57,8 +57,8 @@ const Checkout = () => {
           {/* Order Summary Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
-              <div className="bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-xl p-6">
-                <h3 className="text-xl font-bold text-[#E8D7B5] mb-4">
+              <div className="bg-[#1A1A1A] border border-yellow-500/20 rounded-xl p-6">
+                <h3 className="text-xl font-bold text-white mb-4">
                   Order Summary
                 </h3>
 
@@ -76,16 +76,16 @@ const Checkout = () => {
                           src={item.img}
                           alt={item.name}
                           loading="lazy"
-                          className="w-16 h-16 rounded-lg object-cover border border-[#D4AF37]/20"
+                          className="w-16 h-16 rounded-lg object-cover border border-yellow-500/20"
                         />
                         <div className="flex-1">
-                          <p className="text-[#E8D7B5] font-semibold text-sm">
+                          <p className="text-white font-semibold text-sm">
                             {item.name}
                           </p>
-                          <p className="text-[#D4AF37]/70 text-xs">
+                          <p className="text-yellow-500/70 text-xs">
                             Qty: {item.quantity}
                           </p>
-                          <p className="text-[#D4AF37] font-bold text-sm">
+                          <p className="text-yellow-500 font-bold text-sm">
                             ${(item.price * item.quantity).toFixed(2)}
                           </p>
                         </div>
@@ -94,19 +94,19 @@ const Checkout = () => {
                   )}
                 </div>
 
-                <div className="border-t border-[#D4AF37]/20 pt-4 space-y-3">
-                  <div className="flex justify-between text-[#D4AF37]/80">
+                <div className="border-t border-yellow-500/20 pt-4 space-y-3">
+                  <div className="flex justify-between text-yellow-500/80">
                     <span>Subtotal</span>
                     <span className="font-semibold">
                       ${subtotal.toFixed(2)}
                     </span>
                   </div>
 
-                  <div className="flex justify-between text-[#D4AF37]/80">
+                  <div className="flex justify-between text-yellow-500/80">
                     <span>Tax</span>
                     <span className="font-semibold">${tax.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between text-[#E8D7B5] font-bold text-lg mt-3 border-t border-[#D4AF37]/20 pt-3">
+                  <div className="flex justify-between text-white font-bold text-lg mt-3 border-t border-yellow-500/20 pt-3">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
                   </div>

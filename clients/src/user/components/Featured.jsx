@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 const FeaturedProducts = ({ products }) => {
@@ -8,9 +8,7 @@ const FeaturedProducts = ({ products }) => {
   const [showAll, setShowAll] = useState(false);
 
   // Featured products
-  const featuredProducts = products.filter(
-    (p) => p.badge.toLowerCase() === "premium" || p.badge === "featured",
-  );
+  const featuredProducts = products;
 
   // Limit to 6 initially
   const displayedProducts = showAll
@@ -20,7 +18,7 @@ const FeaturedProducts = ({ products }) => {
   return (
     <section className="py-16 bg-[#0A0A0A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-4xl font-bold text-[#D4AF37] mb-6">
+        <h2 className="text-4xl font-bold text-yellow-500 mb-6">
           Featured Products
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -42,13 +40,32 @@ const FeaturedProducts = ({ products }) => {
 
               {/* Content */}
               <div className="mt-4 space-y-2">
-                <h3 className="text-[#E8D7B5] font-semibold text-lg line-clamp-1">
+                <h3 className="text-white font-semibold text-lg line-clamp-1">
                   {product.name}
                 </h3>
 
-                <span className="block text-[#D4AF37] font-bold text-xl">
-                  ${product.price}
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="block text-yellow-500 font-bold text-left text-xl">
+                    ${product.price}
+                  </span>
+                  <div className="flex items-center gap-2 py-2">
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 ${
+                            i < Math.floor(product.rating)
+                              ? "text-yellow-500 fill-current"
+                              : "text-[#D4AF37]/30"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-yellow-500 text-sm">
+                      ({product.rating})
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
@@ -56,7 +73,7 @@ const FeaturedProducts = ({ products }) => {
 
         <Link
           to="/store"
-          className="mt-8 inline-flex items-center gap-2 bg-[#D4AF37] text-[#101010] px-6 py-3 rounded-lg font-bold hover:bg-[#E8D7B5] transition-all"
+          className="mt-8 inline-flex items-center gap-2 bg-yellow-500 text-[#101010] px-6 py-3 rounded-lg font-bold hover:bg-[#E8D7B5] transition-all"
         >
           More
           <ArrowRight className="w-5 h-5" />

@@ -21,7 +21,7 @@ import { useCartCount } from "../../hooks/useCartCount";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const count = useCartCount();
+  const count = useCartCount(user);
 
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -93,7 +93,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* LOGO */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-12 h-12 bg-[#D4AF37] rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+            <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center group-hover:scale-110 transition">
               <img src="/logo.png" alt="logo" />
             </div>
             <span className="text-xl md:text-2xl font-bold text-white">
@@ -111,7 +111,7 @@ const Navbar = () => {
                   onMouseEnter={() => setCategoryOpen(true)}
                   onMouseLeave={() => setCategoryOpen(false)}
                 >
-                  <button className="flex items-center gap-1 text-[#E8D7B5] hover:text-[#D4AF37] font-medium">
+                  <button className="flex items-center gap-1 text-white hover:text-yellow-500 font-medium">
                     Category
                     <ChevronDown
                       size={16}
@@ -129,38 +129,22 @@ const Navbar = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="absolute left-1/2 -translate-x-1/2 mt-3 w-80 bg-[#101010]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4"
                       >
-                        <p className="text-xs text-[#E8D7B5]/60 uppercase mb-3">
+                        <p className="text-xs text-white uppercase mb-3">
                           Categories
                         </p>
-
                         <div className="space-y-2">
-                          <Link
-                            to="/collection"
-                            className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition group"
-                          >
-                            <div className="w-10 h-10 bg-[#D4AF37]/20 rounded-lg flex items-center justify-center">
-                              <Grid className="w-5 h-5 text-[#D4AF37]" />
-                            </div>
-                            <div>
-                              <p className="text-[#E8D7B5] group-hover:text-[#D4AF37] font-medium">
-                                New Collection
-                              </p>
-                              <p className="text-xs text-[#E8D7B5]/50">
-                                Our New Collections
-                              </p>
-                            </div>
-                          </Link>
+                          
                           {categories.map((cat) => (
                             <Link
                               key={cat.slug}
                               to={`/category/${cat.slug}`}
                               className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition group"
                             >
-                              <div className="w-10 h-10 bg-[#D4AF37]/20 rounded-lg flex items-center justify-center">
-                                <cat.icon className="w-5 h-5 text-[#D4AF37]" />
+                              <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                                <cat.icon className="w-5 h-5 text-yellow-500" />
                               </div>
                               <div>
-                                <p className="text-[#E8D7B5] group-hover:text-[#D4AF37] font-medium">
+                                <p className="text-white group-hover:text-yellow-500 font-medium">
                                   {cat.title}
                                 </p>
                                 <p className="text-xs text-[#E8D7B5]/50">
@@ -173,7 +157,7 @@ const Navbar = () => {
 
                         <Link
                           to="/category"
-                          className="block mt-4 text-center text-sm text-[#D4AF37] hover:underline"
+                          className="block mt-4 text-center text-sm text-yellow-500 hover:underline"
                         >
                           View All →
                         </Link>
@@ -187,8 +171,8 @@ const Navbar = () => {
                   to={link.to}
                   className={`font-medium transition ${
                     location.pathname === link.to
-                      ? "text-[#D4AF37]"
-                      : "text-[#E8D7B5] hover:text-[#D4AF37]"
+                      ? "text-yellow-500"
+                      : "text-white hover:text-yellow-500"
                   }`}
                 >
                   {link.label}
@@ -201,17 +185,17 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-4">
             {!user ? (
               <Link to="/auth">
-                <User className="w-5 h-5 text-[#E8D7B5]" />
+                <User className="w-5 h-5 text-white" />
               </Link>
             ) : (
               <>
-                <Link to="/dashboard" className="text-[#D4AF37] font-medium">
+                <Link to="/dashboard" className="text-yellow-500 font-medium">
                   Dashboard
                 </Link>
                 <Link to="/cart" className="relative">
-                  <ShoppingCart className="w-5 h-5 text-[#E8D7B5]" />
+                  <ShoppingCart className="w-5 h-5 text-white" />
                   {count > 0 && (
-                    <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#D4AF37] text-black text-xs rounded-full flex items-center justify-center">
+                    <span className="absolute -top-2 -right-2 w-5 h-5 bg-yellow-500 text-black text-xs rounded-full flex items-center justify-center">
                       {count > 99 ? "99+" : count}
                     </span>
                   )}
@@ -228,14 +212,14 @@ const Navbar = () => {
             <div className="flex md:hidden items-center gap-4">
               {!user ? (
                 <Link to="/auth">
-                  <User className="w-5 h-5 text-[#E8D7B5]" />
+                  <User className="w-5 h-5 text-white" />
                 </Link>
               ) : (
                 <>
                   <Link to="/cart" className="relative">
-                    <ShoppingCart className="w-5 h-5 text-[#E8D7B5]" />
+                    <ShoppingCart className="w-5 h-5 text-white" />
                     {count > 0 && (
-                      <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#D4AF37] text-black text-xs rounded-full flex items-center justify-center">
+                      <span className="absolute -top-2 -right-2 w-5 h-5 bg-yellow-500 text-black text-xs rounded-full flex items-center justify-center">
                         {count > 99 ? "99+" : count}
                       </span>
                     )}
@@ -248,7 +232,7 @@ const Navbar = () => {
             </div>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className=" text-[#E8D7B5]"
+              className=" text-white"
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -271,7 +255,7 @@ const Navbar = () => {
                   <div key={i}>
                     <button
                       onClick={() => setMobileCategoryOpen(!mobileCategoryOpen)}
-                      className="flex text-center m-auto items-center justify-center gap-2 w-full text-[#E8D7B5]"
+                      className="flex text-center m-auto items-center justify-center gap-2 w-full text-white"
                     >
                       Category
                       <ChevronDown
@@ -288,14 +272,14 @@ const Navbar = () => {
                           <Link
                             key={cat.slug}
                             to={`/category/${cat.slug}`}
-                            className="block text-center py-1 text-[#E8D7B5] hover:text-[#D4AF37] "
+                            className="block text-center py-1 text-white hover:text-yellow-500 transition"
                           >
                             {cat.title}
                           </Link>
                         ))}
                         <Link
                           to="/category"
-                          className="block mt-4 text-center text-sm text-[#D4AF37] hover:underline"
+                          className="block mt-4 text-center text-sm text-yellow-500 hover:underline"
                         >
                           View All →
                         </Link>
@@ -306,7 +290,7 @@ const Navbar = () => {
                   <Link
                     key={link.to}
                     to={link.to}
-                    className="block text-center py-2 text-[#E8D7B5] hover:text-[#D4AF37]"
+                    className="block text-center py-2 text-white hover:text-yellow-500 transition"
                   >
                     {link.label}
                   </Link>
@@ -314,7 +298,7 @@ const Navbar = () => {
               )}
               <Link
                 to="/dashboard"
-                className="bg-[#D4AF37] text-white flex justify-center items-center font-bold border-2 py-3 rounded-2xl"
+                className="bg-yellow-500 text-black flex justify-center items-center font-bold border-2 py-3 rounded-2xl"
               >
                 Dashboard
               </Link>

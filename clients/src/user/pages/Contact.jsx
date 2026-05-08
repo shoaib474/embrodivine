@@ -124,7 +124,7 @@ const Contact = () => {
             </h1>
 
             {/* Subtext */}
-            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
               Have questions about our embroidery services? We'd love to hear
               from you.
             </p>
@@ -140,14 +140,14 @@ const Contact = () => {
             return (
               <div
                 key={idx}
-                className="bg-[#1A1A1A] rounded-xl border border-[#D4AF37]/20 p-6 hover:border-[#D4AF37] transition-all duration-500 hover:shadow-xl hover:shadow-[#D4AF37]/10 transform hover:-translate-y-2 group"
+                className="bg-[#1A1A1A] rounded-xl border border-yellow-500/20 p-6 hover:border-yellow-500 transition-all duration-500 hover:shadow-xl hover:shadow-yellow-500/10 transform hover:-translate-y-2 group"
                 style={{
                   animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s both`,
                 }}
               >
-                <div className="w-14 h-14 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[#D4AF37] transition-all duration-300">
+                <div className="w-14 h-14 bg-yellow-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-yellow-500 transition-all duration-300">
                   <Icon
-                    className="w-7 h-7 text-[#D4AF37] group-hover:text-[#101010] transition-colors duration-300"
+                    className="w-7 h-7 text-yellow-500 group-hover:text-[#101010] transition-colors duration-300"
                     strokeWidth={1.5}
                   />
                 </div>
@@ -156,11 +156,11 @@ const Contact = () => {
                 </h3>
                 <div className="space-y-1">
                   {info.details.map((detail, i) => (
-                    <p key={i} className="text-[#D4AF37]/70 text-sm">
+                    <p key={i} className="text-yellow-500/70 text-sm">
                       {info.link ? (
                         <Link
                           to={info.link}
-                          className="hover:text-[#D4AF37] transition-colors"
+                          className="hover:text-yellow-500 transition-colors"
                         >
                           {detail}
                         </Link>
@@ -185,7 +185,7 @@ const Contact = () => {
               <h2 className="text-3xl sm:text-4xl font-bold text-[#E8D7B5] mb-4">
                 Send Us a Message
               </h2>
-              <p className="text-[#D4AF37]/80 text-lg">
+              <p className="text-yellow-500/80 text-lg">
                 Fill out the form below and we'll get back to you as soon as
                 possible.
               </p>
@@ -193,7 +193,7 @@ const Contact = () => {
 
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="space-y-6 bg-[#1A1A1A] rounded-2xl border border-[#D4AF37]/20 p-6 sm:p-8"
+              className="space-y-6 bg-[#1A1A1A] rounded-2xl border border-yellow-500/20 p-6 sm:p-8"
             >
               {/* Name & Email */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -202,11 +202,11 @@ const Contact = () => {
                     Your Name *
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D4AF37]/60" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/60" />
                     <input
                       type="text"
                       placeholder="John Doe"
-                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                       {...register("name", { required: true })}
                     />
                   </div>
@@ -222,11 +222,11 @@ const Contact = () => {
                     Email Address *
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D4AF37]/60" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/60" />
                     <input
                       type="email"
                       placeholder="john@example.com"
-                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                       {...register("email", { required: true })}
                     />
                   </div>
@@ -245,11 +245,11 @@ const Contact = () => {
                     Phone Number
                   </label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D4AF37]/60" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/60" />
                     <input
                       type="tel"
                       placeholder="+1 (555) 123-4567"
-                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                       {...register("phone")}
                     />
                   </div>
@@ -260,11 +260,11 @@ const Contact = () => {
                     Company Name
                   </label>
                   <div className="relative">
-                    <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D4AF37]/60" />
+                    <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/60" />
                     <input
                       type="text"
                       placeholder="Optional"
-                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                       {...register("company")}
                     />
                   </div>
@@ -279,7 +279,7 @@ const Contact = () => {
                 <input
                   type="text"
                   placeholder="How can we help you?"
-                  className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                   {...register("subject", { required: true })}
                 />
                 {errors.subject && (
@@ -297,7 +297,7 @@ const Contact = () => {
                 <textarea
                   placeholder="Tell us more about your inquiry..."
                   rows="6"
-                  className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors resize-none"
+                  className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors resize-none"
                   {...register("message", { required: true })}
                 />
                 {errors.message && (
@@ -311,7 +311,7 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full px-8 py-4 bg-[#D4AF37] text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#D4AF37]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                className="w-full px-8 py-4 bg-yellow-500 text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>
@@ -328,8 +328,8 @@ const Contact = () => {
 
               {/* Success Message */}
               {isSubmitSuccessful && (
-                <div className="bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-lg p-4 animate-fade-in">
-                  <p className="text-[#D4AF37] text-center font-semibold">
+                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 animate-fade-in">
+                  <p className="text-yellow-500 text-center font-semibold">
                     Thank you! We'll get back to you within 24 hours.
                   </p>
                 </div>
@@ -340,7 +340,7 @@ const Contact = () => {
           {/* Right Side Content */}
           <div className="space-y-8">
             {/* Map */}
-            <div className="bg-[#1A1A1A] rounded-2xl border border-[#D4AF37]/20 overflow-hidden h-64 sm:h-80">
+            {/* <div className="bg-[#1A1A1A] rounded-2xl border border-yellow-500/20 overflow-hidden h-64 sm:h-80">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.2412648718453!2d-73.98784368459395!3d40.748817379327965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
                 width="100%"
@@ -350,14 +350,14 @@ const Contact = () => {
                 loading="lazy"
                 title="Location Map"
               ></iframe>
-            </div>
+            </div> */}
 
             {/* Social Media */}
-            <div className="bg-[#1A1A1A] rounded-2xl border border-[#D4AF37]/20 p-6 sm:p-8">
+            <div className="bg-[#1A1A1A] rounded-2xl border border-yellow-500/20 p-6 sm:p-8">
               <h3 className="text-2xl font-bold text-[#E8D7B5] mb-4">
                 Follow Us
               </h3>
-              <p className="text-[#D4AF37]/80 mb-6">
+              <p className="text-yellow-500/80 mb-6">
                 Stay connected with us on social media for updates, inspiration,
                 and special offers.
               </p>
@@ -368,12 +368,12 @@ const Contact = () => {
                     <Link
                       key={idx}
                       to={social.link}
-                      className="flex items-center gap-3 p-4 bg-[#101010] border border-[#D4AF37]/20 rounded-lg hover:border-[#D4AF37] transition-all duration-300 transform hover:scale-105 group"
+                      className="flex items-center gap-3 p-4 bg-[#101010] border border-yellow-500/20 rounded-lg hover:border-yellow-500 transition-all duration-300 transform hover:scale-105 group"
                     >
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#D4AF37]/10 group-hover:bg-[#D4AF37] transition-all duration-300">
-                        <Icon className="w-5 h-5 text-[#D4AF37] group-hover:text-[#101010] transition-colors duration-300" />
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-yellow-500/10 group-hover:bg-yellow-500 transition-all duration-300">
+                        <Icon className="w-5 h-5 text-yellow-500 group-hover:text-[#101010] transition-colors duration-300" />
                       </div>
-                      <span className="text-[#E8D7B5] font-semibold group-hover:text-[#D4AF37] transition-colors">
+                      <span className="text-[#E8D7B5] font-semibold group-hover:text-yellow-500 transition-colors">
                         {social.name}
                       </span>
                     </Link>
@@ -383,7 +383,7 @@ const Contact = () => {
             </div>
 
             {/* FAQs */}
-            <div className="bg-[#1A1A1A] rounded-2xl border border-[#D4AF37]/20 p-6 sm:p-8">
+            <div className="bg-[#1A1A1A] rounded-2xl border border-yellow-500/20 p-6 sm:p-8">
               <h3 className="text-2xl font-bold text-[#E8D7B5] mb-4">
                 Quick Answers
               </h3>
@@ -391,12 +391,12 @@ const Contact = () => {
                 {faqs.map((faq, idx) => (
                   <div
                     key={idx}
-                    className="border-b border-[#D4AF37]/10 last:border-0 pb-4 last:pb-0"
+                    className="border-b border-yellow-500/10 last:border-0 pb-4 last:pb-0"
                   >
                     <h4 className="text-[#E8D7B5] font-semibold mb-2">
                       {faq.question}
                     </h4>
-                    <p className="text-[#D4AF37]/70 text-sm leading-relaxed">
+                    <p className="text-yellow-500/70 text-sm leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>
@@ -409,31 +409,31 @@ const Contact = () => {
 
       {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#1A1A1A] to-[#101010] border border-[#D4AF37]/30 p-12 sm:p-16 text-center">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#1A1A1A] to-[#101010] border border-yellow-500/30 p-12 sm:p-16 text-center">
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#D4AF37] rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#D4AF37] rounded-full blur-3xl"></div>
+            <div className="absolute top-0 left-1/4 w-64 h-64 bg-yellow-500 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-yellow-500 rounded-full blur-3xl"></div>
           </div>
 
           <div className="relative space-y-6">
-            <Phone className="w-12 h-12 text-[#D4AF37] mx-auto animate-pulse" />
+            <Phone className="w-12 h-12 text-yellow-500 mx-auto animate-pulse" />
             <h2 className="text-3xl sm:text-4xl font-bold text-[#E8D7B5]">
               Prefer to Talk?
             </h2>
-            <p className="text-[#D4AF37]/80 text-lg max-w-2xl mx-auto">
+            <p className="text-yellow-500/80 text-lg max-w-2xl mx-auto">
               Give us a call and speak directly with our embroidery experts
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link
                 to=""
-                className="inline-flex items-center justify-center gap-2 bg-[#D4AF37] text-[#101010] px-8 py-4 rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#D4AF37]/30"
+                className="inline-flex items-center justify-center gap-2 bg-yellow-500 text-[#101010] px-8 py-4 rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/30"
               >
                 <Phone className="w-5 h-5" />
                 Call Now
               </Link>
               <Link
                 to="mailto:eembroideryhub@gmail.com"
-                className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-[#D4AF37] text-[#D4AF37] px-8 py-4 rounded-lg font-bold hover:bg-[#D4AF37]/10 transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-yellow-500 text-yellow-500 px-8 py-4 rounded-lg font-bold hover:bg-yellow-500/10 transition-all duration-300"
               >
                 <Mail className="w-5 h-5" />
                 Email Us

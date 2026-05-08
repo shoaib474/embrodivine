@@ -307,7 +307,7 @@ const Quotes = () => {
     return (
       <div className="min-h-screen bg-[#101010] flex items-center justify-center px-4">
         <div className="max-w-2xl w-full text-center space-y-6 animate-fade-in">
-          <div className="w-20 h-20 bg-[#D4AF37] rounded-full flex items-center justify-center mx-auto animate-scale-in">
+          <div className="w-20 h-20 bg-yellow-500 rounded-full flex items-center justify-center mx-auto animate-scale-in">
             <CheckCircle2
               className="w-12 h-12 text-[#101010]"
               strokeWidth={3}
@@ -316,23 +316,23 @@ const Quotes = () => {
           <h2 className="text-4xl font-bold text-[#E8D7B5]">
             Quote Request Received!
           </h2>
-          <p className="text-[#D4AF37]/80 text-lg leading-relaxed">
+          <p className="text-yellow-500/80 text-lg leading-relaxed">
             Thank you for your interest! We've received your quote request and
             our team will review it carefully. You'll receive a detailed quote
             within 24 hours at{" "}
-            <span className="text-[#D4AF37] font-semibold">
+            <span className="text-yellow-500 font-semibold">
               {formData.email}
             </span>
             .
           </p>
           {estimatedPrice && (
-            <div className="bg-[#1A1A1A] border border-[#D4AF37]/30 rounded-xl p-6">
+            <div className="bg-[#1A1A1A] border border-yellow-500/30 rounded-xl p-6">
               <p className="text-[#E8D7B5] mb-2">Estimated Price Range:</p>
-              <p className="text-4xl font-bold text-[#D4AF37]">
+              <p className="text-4xl font-bold text-yellow-500">
                 ${(estimatedPrice * 0.9).toFixed(0)} - $
                 {(estimatedPrice * 1.1).toFixed(0)}
               </p>
-              <p className="text-[#D4AF37]/60 text-sm mt-2">
+              <p className="text-yellow-500/60 text-sm mt-2">
                 Final quote may vary based on design complexity
               </p>
             </div>
@@ -358,13 +358,13 @@ const Quotes = () => {
                 setFiles([]);
                 setEstimatedPrice(null);
               }}
-              className="px-8 py-4 bg-[#D4AF37] text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105"
+              className="px-8 py-4 bg-yellow-500 text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105"
             >
               Submit Another Quote
             </button>
             <Link
               to="/store"
-              className="px-8 py-4 bg-transparent border-2 border-[#D4AF37] text-[#D4AF37] rounded-lg font-bold hover:bg-[#D4AF37]/10 transition-all duration-300"
+              className="px-8 py-4 bg-transparent border-2 border-yellow-500 text-yellow-500 rounded-lg font-bold hover:bg-yellow-500/10 transition-all duration-300"
             >
               Browse Products
             </Link>
@@ -392,7 +392,7 @@ const Quotes = () => {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
           <div className="text-center space-y-6 animate-fade-in">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#111827]/40 border border-yellow-500/30 rounded-full text-yellow-400 text-sm font-semibold backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#111827]/40 border border-yellow-500 rounded-full text-yellow-400 text-sm font-semibold backdrop-blur-sm">
               <DollarSign className="w-4 h-4" />
               Free Quote
             </div>
@@ -404,7 +404,7 @@ const Quotes = () => {
             </h1>
 
             {/* Subtext */}
-            <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
               Tell us about your project and receive a detailed quote within 24
               hours
             </p>
@@ -421,15 +421,15 @@ const Quotes = () => {
                 <div
                   className={`w-12 h-12 rounded-full flex items-center justify-center font-bold transition-all duration-500 ${
                     step >= s
-                      ? "bg-[#D4AF37] text-[#101010] shadow-lg shadow-[#D4AF37]/50 scale-110"
-                      : "bg-[#1A1A1A] text-[#D4AF37] border-2 border-[#D4AF37]/30"
+                      ? "bg-yellow-500 text-[#101010] shadow-lg shadow-yellow-500/50 scale-110"
+                      : "bg-[#1A1A1A] text-yellow-500 border-2 border-yellow-500/30"
                   }`}
                 >
                   {step > s ? <Check className="w-6 h-6" /> : s}
                 </div>
                 <span
                   className={`text-sm mt-2 font-semibold transition-colors ${
-                    step >= s ? "text-[#D4AF37]" : "text-[#D4AF37]/50"
+                    step >= s ? "text-yellow-500" : "text-yellow-500/50"
                   }`}
                 >
                   {s === 1
@@ -442,7 +442,7 @@ const Quotes = () => {
               {s < 3 && (
                 <div
                   className={`flex-1 h-1 mx-4 rounded transition-all duration-500 ${
-                    step > s ? "bg-[#D4AF37]" : "bg-[#D4AF37]/20"
+                    step > s ? "bg-yellow-500" : "bg-yellow-500/20"
                   }`}
                 />
               )}
@@ -453,7 +453,7 @@ const Quotes = () => {
         {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="bg-[#1A1A1A] rounded-2xl border border-[#D4AF37]/20 p-6 sm:p-8 shadow-2xl"
+          className="bg-[#1A1A1A] rounded-2xl border border-yellow-500/20 p-6 sm:p-8 shadow-2xl"
         >
           {/* Step 1: Project Details */}
           {step === 1 && (
@@ -474,23 +474,23 @@ const Quotes = () => {
                         }
                         className={`p-4 rounded-xl border-2 transition-all duration-300 text-left transform hover:scale-105 ${
                           formData.projectType === type.value
-                            ? "border-[#D4AF37] bg-[#D4AF37]/10 shadow-lg shadow-[#D4AF37]/20"
-                            : "border-[#D4AF37]/20 hover:border-[#D4AF37]/50 bg-[#101010]"
+                            ? "border-yellow-500 bg-yellow-500/10 shadow-lg shadow-yellow-500/20"
+                            : "border-yellow-500/20 hover:border-yellow-500/50 bg-[#101010]"
                         }`}
                       >
                         <div className="flex items-start gap-3">
                           <div
                             className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
                               formData.projectType === type.value
-                                ? "bg-[#D4AF37]"
-                                : "bg-[#D4AF37]/20"
+                                ? "bg-yellow-500"
+                                : "bg-yellow-500/20"
                             }`}
                           >
                             <Icon
                               className={`w-6 h-6 ${
                                 formData.projectType === type.value
                                   ? "text-[#101010]"
-                                  : "text-[#D4AF37]"
+                                  : "text-yellow-500"
                               }`}
                             />
                           </div>
@@ -498,12 +498,12 @@ const Quotes = () => {
                             <h3 className="text-[#E8D7B5] font-bold mb-1">
                               {type.label}
                             </h3>
-                            <p className="text-[#D4AF37]/70 text-sm">
+                            <p className="text-yellow-500/70 text-sm">
                               {type.desc}
                             </p>
                           </div>
                           {formData.projectType === type.value && (
-                            <Check className="w-6 h-6 text-[#D4AF37] flex-shrink-0" />
+                            <Check className="w-6 h-6 text-yellow-500 flex-shrink-0" />
                           )}
                         </div>
                       </button>
@@ -524,8 +524,8 @@ const Quotes = () => {
                       onClick={() => updateFormData("quantity", qty.value)}
                       className={`p-4 rounded-xl border-2 transition-all duration-300 font-semibold transform hover:scale-105 ${
                         formData.quantity === qty.value
-                          ? "border-[#D4AF37] bg-[#D4AF37] text-[#101010] shadow-lg shadow-[#D4AF37]/30"
-                          : "border-[#D4AF37]/20 text-[#D4AF37] hover:border-[#D4AF37]/50 bg-[#101010]"
+                          ? "border-yellow-500 bg-yellow-500 text-[#101010] shadow-lg shadow-yellow-500/30"
+                          : "border-yellow-500/20 text-yellow-500 hover:border-yellow-500/50 bg-[#101010]"
                       }`}
                     >
                       {qty.label}
@@ -538,7 +538,7 @@ const Quotes = () => {
                 <label className="block text-[#E8D7B5] font-semibold mb-4 text-lg">
                   Upload Your Design (Optional)
                 </label>
-                <div className="border-2 border-dashed border-[#D4AF37]/30 rounded-xl p-8 text-center hover:border-[#D4AF37] transition-all duration-300 bg-[#101010]">
+                <div className="border-2 border-dashed border-yellow-500/30 rounded-xl p-8 text-center hover:border-yellow-500 transition-all duration-300 bg-[#101010]">
                   <input
                     type="file"
                     multiple
@@ -548,11 +548,11 @@ const Quotes = () => {
                     id="file-upload"
                   />
                   <label htmlFor="file-upload" className="cursor-pointer">
-                    <Upload className="w-12 h-12 text-[#D4AF37] mx-auto mb-4" />
+                    <Upload className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
                     <p className="text-[#E8D7B5] font-semibold mb-2">
                       Click to upload or drag and drop
                     </p>
-                    <p className="text-[#D4AF37]/60 text-sm">
+                    <p className="text-yellow-500/60 text-sm">
                       PNG, JPG, PDF, AI, EPS (Max 10MB)
                     </p>
                   </label>
@@ -562,10 +562,10 @@ const Quotes = () => {
                     {files.map((file, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between p-3 bg-[#101010] rounded-lg border border-[#D4AF37]/20"
+                        className="flex items-center justify-between p-3 bg-[#101010] rounded-lg border border-yellow-500/20"
                       >
                         <div className="flex items-center gap-3">
-                          <FileText className="w-5 h-5 text-[#D4AF37]" />
+                          <FileText className="w-5 h-5 text-yellow-500" />
                           <span className="text-[#E8D7B5] text-sm">
                             {file.name}
                           </span>
@@ -573,7 +573,7 @@ const Quotes = () => {
                         <button
                           type="button"
                           onClick={() => removeFile(idx)}
-                          className="text-[#D4AF37] hover:text-[#E8D7B5] transition-colors"
+                          className="text-yellow-500 hover:text-[#E8D7B5] transition-colors"
                         >
                           <X className="w-5 h-5" />
                         </button>
@@ -600,8 +600,8 @@ const Quotes = () => {
                       onClick={() => updateFormData("size", size.value)}
                       className={`p-4 rounded-xl border-2 transition-all duration-300 font-semibold transform hover:scale-105 ${
                         formData.size === size.value
-                          ? "border-[#D4AF37] bg-[#D4AF37] text-[#101010] shadow-lg shadow-[#D4AF37]/30"
-                          : "border-[#D4AF37]/20 text-[#D4AF37] hover:border-[#D4AF37]/50 bg-[#101010]"
+                          ? "border-yellow-500 bg-yellow-500 text-[#101010] shadow-lg shadow-yellow-500/30"
+                          : "border-yellow-500/20 text-yellow-500 hover:border-yellow-500/50 bg-[#101010]"
                       }`}
                     >
                       {size.label}
@@ -624,24 +624,24 @@ const Quotes = () => {
                         onClick={() => updateFormData("timeline", time.value)}
                         className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left transform hover:scale-105 ${
                           formData.timeline === time.value
-                            ? "border-[#D4AF37] bg-[#D4AF37]/10 shadow-lg shadow-[#D4AF37]/20"
-                            : "border-[#D4AF37]/20 hover:border-[#D4AF37]/50 bg-[#101010]"
+                            ? "border-yellow-500 bg-yellow-500/10 shadow-lg shadow-yellow-500/20"
+                            : "border-yellow-500/20 hover:border-yellow-500/50 bg-[#101010]"
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <Icon className="w-6 h-6 text-[#D4AF37]" />
+                            <Icon className="w-6 h-6 text-yellow-500" />
                             <span className="text-[#E8D7B5] font-semibold">
                               {time.label}
                             </span>
                           </div>
                           {time.extra && (
-                            <span className="text-[#D4AF37] text-sm font-bold">
+                            <span className="text-yellow-500 text-sm font-bold">
                               {time.extra}
                             </span>
                           )}
                           {formData.timeline === time.value && (
-                            <Check className="w-6 h-6 text-[#D4AF37]" />
+                            <Check className="w-6 h-6 text-yellow-500" />
                           )}
                         </div>
                       </button>
@@ -660,7 +660,7 @@ const Quotes = () => {
                     value={formData.colors}
                     onChange={(e) => updateFormData("colors", e.target.value)}
                     placeholder="e.g., 3"
-                    className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                    className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                   />
                 </div>
                 <div>
@@ -672,24 +672,24 @@ const Quotes = () => {
                     value={formData.budget}
                     onChange={(e) => updateFormData("budget", e.target.value)}
                     placeholder="e.g., $500-$1000"
-                    className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                    className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                   />
                 </div>
               </div>
 
               {estimatedPrice && (
-                <div className="bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-xl p-6 animate-scale-in">
+                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6 animate-scale-in">
                   <div className="flex items-center gap-3 mb-2">
-                    <AlertCircle className="w-5 h-5 text-[#D4AF37]" />
+                    <AlertCircle className="w-5 h-5 text-yellow-500" />
                     <h3 className="text-[#E8D7B5] font-bold text-lg">
                       Estimated Price Range
                     </h3>
                   </div>
-                  <p className="text-3xl font-bold text-[#D4AF37] mb-2">
+                  <p className="text-3xl font-bold text-yellow-500 mb-2">
                     ${(estimatedPrice * 0.9).toFixed(0)} - $
                     {(estimatedPrice * 1.1).toFixed(0)}
                   </p>
-                  <p className="text-[#D4AF37]/70 text-sm">
+                  <p className="text-yellow-500/70 text-sm">
                     This is a rough estimate. Final quote may vary based on
                     design complexity and specifications.
                   </p>
@@ -707,7 +707,7 @@ const Quotes = () => {
                     Full Name *
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D4AF37]/60" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/60" />
                     <input
                       type="text"
                       required
@@ -716,7 +716,7 @@ const Quotes = () => {
                         updateFormData("customerName", e.target.value)
                       }
                       placeholder="John Doe"
-                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -725,14 +725,14 @@ const Quotes = () => {
                     Email Address *
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D4AF37]/60" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/60" />
                     <input
                       type="email"
                       required
                       value={formData.email}
                       onChange={(e) => updateFormData("email", e.target.value)}
                       placeholder="john@example.com"
-                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -744,13 +744,13 @@ const Quotes = () => {
                     Phone Number
                   </label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D4AF37]/60" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/60" />
                     <input
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => updateFormData("phone", e.target.value)}
                       placeholder="+1 (555) 123-4567"
-                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -763,7 +763,7 @@ const Quotes = () => {
                     value={formData.company}
                     onChange={(e) => updateFormData("company", e.target.value)}
                     placeholder="Optional"
-                    className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                    className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
                   />
                 </div>
               </div>
@@ -773,7 +773,7 @@ const Quotes = () => {
                   Additional Message
                 </label>
                 <div className="relative">
-                  <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-[#D4AF37]/60" />
+                  <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-yellow-500/60" />
                   <textarea
                     value={formData.message}
                     onChange={(e) => updateFormData("message", e.target.value)}
@@ -781,17 +781,17 @@ const Quotes = () => {
                     maxLength={100}
                     placeholder="Tell us more about your project..."
                     rows="4"
-                    className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors resize-none"
+                    className="w-full pl-10 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-[#E8D7B5] placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors resize-none"
                   />
                 </div>
               </div>
 
-              <div className="bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-xl p-6">
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6">
                 <h3 className="text-[#E8D7B5] font-bold mb-4">Quote Summary</h3>
                 <div className="space-y-2 text-sm">
                   {formData.projectType && (
                     <div className="flex justify-between">
-                      <span className="text-[#D4AF37]/70">Project Type:</span>
+                      <span className="text-yellow-500/70">Project Type:</span>
                       <span className="text-[#E8D7B5] font-semibold capitalize">
                         {formData.projectType}
                       </span>
@@ -799,7 +799,7 @@ const Quotes = () => {
                   )}
                   {formData.quantity && (
                     <div className="flex justify-between">
-                      <span className="text-[#D4AF37]/70">Quantity:</span>
+                      <span className="text-yellow-500/70">Quantity:</span>
                       <span className="text-[#E8D7B5] font-semibold">
                         {formData.quantity} pieces
                       </span>
@@ -807,7 +807,7 @@ const Quotes = () => {
                   )}
                   {formData.size && (
                     <div className="flex justify-between">
-                      <span className="text-[#D4AF37]/70">Size:</span>
+                      <span className="text-yellow-500/70">Size:</span>
                       <span className="text-[#E8D7B5] font-semibold capitalize">
                         {formData.size}
                       </span>
@@ -815,7 +815,7 @@ const Quotes = () => {
                   )}
                   {formData.timeline && (
                     <div className="flex justify-between">
-                      <span className="text-[#D4AF37]/70">Timeline:</span>
+                      <span className="text-yellow-500/70">Timeline:</span>
                       <span className="text-[#E8D7B5] font-semibold capitalize">
                         {formData.timeline}
                       </span>
@@ -823,7 +823,7 @@ const Quotes = () => {
                   )}
                   {files.length > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-[#D4AF37]/70">Uploaded Files:</span>
+                      <span className="text-yellow-500/70">Uploaded Files:</span>
                       <span className="text-[#E8D7B5] font-semibold">
                         {files.length} file(s)
                       </span>
@@ -831,7 +831,7 @@ const Quotes = () => {
                   )}
                   {formData.colors && (
                     <div className="flex justify-between">
-                      <span className="text-[#D4AF37]/70">Colors:</span>
+                      <span className="text-yellow-500/70">Colors:</span>
                       <span className="text-[#E8D7B5] font-semibold">
                         {formData.colors}
                       </span>
@@ -839,7 +839,7 @@ const Quotes = () => {
                   )}
                   {formData.budget && (
                     <div className="flex justify-between">
-                      <span className="text-[#D4AF37]/70">Budget:</span>
+                      <span className="text-yellow-500/70">Budget:</span>
                       <span className="text-[#E8D7B5] font-semibold">
                         {formData.budget}
                       </span>
@@ -847,10 +847,10 @@ const Quotes = () => {
                   )}
                   {estimatedPrice && (
                     <div className="flex justify-between mt-2">
-                      <span className="text-[#D4AF37]/70">
+                      <span className="text-yellow-500/70">
                         Estimated Price:
                       </span>
-                      <span className="text-[#D4AF37] font-bold text-lg">
+                      <span className="text-yellow-500 font-bold text-lg">
                         ${(estimatedPrice * 0.9).toFixed(0)} - $
                         {(estimatedPrice * 1.1).toFixed(0)}
                       </span>
@@ -867,7 +867,7 @@ const Quotes = () => {
               <button
                 type="button"
                 onClick={prevStep}
-                className="px-6 py-3 bg-transparent border-2 border-[#D4AF37] text-[#D4AF37] rounded-lg font-bold hover:bg-[#D4AF37]/10 transition-all duration-300"
+                className="px-6 py-3 bg-transparent border-2 border-yellow-500 text-yellow-500 rounded-lg font-bold hover:bg-yellow-500/10 transition-all duration-300"
               >
                 Back
               </button>
@@ -879,14 +879,14 @@ const Quotes = () => {
               <button
                 type="button"
                 onClick={nextStep}
-                className="px-6 py-3 bg-[#D4AF37] text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300"
+                className="px-6 py-3 bg-yellow-500 text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300"
               >
                 Next
               </button>
             ) : (
               <button
                 type="submit"
-                className="px-6 py-3 bg-[#D4AF37] text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 flex items-center justify-center gap-2"
+                className="px-6 py-3 bg-yellow-500 text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 flex items-center justify-center gap-2"
                 disabled={loading} // optional: disable while loading
               >
                 {loading ? (
@@ -924,9 +924,9 @@ const Quotes = () => {
 
       <section className="relative bg-gradient-to-r from-[#101010] via-[#1A1A1A] to-[#101010] py-20 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
         {/* Decorative circles */}
-        <div className="absolute top-0 left-0 w-72 h-72 bg-[#D4AF37]/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+        <div className="absolute top-0 left-0 w-72 h-72 bg-yellow-500/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
         <div
-          className="absolute bottom-0 right-0 w-72 h-72 bg-[#D4AF37]/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 animate-pulse"
+          className="absolute bottom-0 right-0 w-72 h-72 bg-yellow-500/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 animate-pulse"
           style={{ animationDelay: "1s" }}
         ></div>
 
@@ -934,21 +934,21 @@ const Quotes = () => {
           <h2 className="text-4xl sm:text-5xl font-bold text-[#E8D7B5]">
             Bring Your Custom Embroidery Ideas to Life
           </h2>
-          <p className="text-[#D4AF37]/80 text-lg sm:text-xl max-w-2xl mx-auto">
+          <p className="text-yellow-500/80 text-lg sm:text-xl max-w-2xl mx-auto">
             Get a free quote today and let our expert team turn your vision into
             a beautifully embroidered reality.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
             <Link
               to="/quote"
-              className="inline-flex items-center justify-center px-8 py-4 bg-[#D4AF37] text-[#101010] font-bold rounded-lg shadow-lg hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105"
+              className="inline-flex items-center justify-center px-8 py-4 bg-yellow-500 text-[#101010] font-bold rounded-lg shadow-lg hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105"
             >
               <DollarSign className="w-5 h-5 mr-2" />
               Request a Free Quote
             </Link>
             <Link
               to="/store"
-              className="inline-flex items-center justify-center px-8 py-4 border-2 border-[#D4AF37] text-[#D4AF37] font-bold rounded-lg hover:bg-[#D4AF37]/10 transition-all duration-300"
+              className="inline-flex items-center justify-center px-8 py-4 border-2 border-yellow-500 text-yellow-500 font-bold rounded-lg hover:bg-yellow-500/10 transition-all duration-300"
             >
               <ShoppingCart className="w-5 h-5 mr-2" />
               Browse Products

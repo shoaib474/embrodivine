@@ -1,4 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  useInfiniteQuery,
+} from "@tanstack/react-query";
 import {
   getProducts,
   getProductById,
@@ -11,9 +16,15 @@ import toast from "react-hot-toast";
 
 // 🛍️ GET ALL PRODUCTS
 export const useProducts = () => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["products"],
-    queryFn: getProducts,
+
+    queryFn: ({ pageParam = null }) => getProducts({ cursor: pageParam }),
+
+    getNextPageParam: (lastPage) => {
+      return lastPage.hasMore ? lastPage.nextCursor : undefined;
+    },
+
     staleTime: 1000 * 60 * 5,
   });
 };

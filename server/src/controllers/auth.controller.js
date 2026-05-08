@@ -86,15 +86,11 @@ export const registerUser = async (req, res) => {
         role: newUser.role,
       },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: "2d" }
+      { expiresIn: "2d" },
     );
 
     // 🔥 Save session in Redis
-    await redisClient.setEx(
-      `session_${newUser._id}`,
-      60 * 60 * 24 * 2,
-      token
-    );
+    await redisClient.setEx(`session_${newUser._id}`, 60 * 60 * 24 * 2, token);
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -177,15 +173,11 @@ export const loginUser = async (req, res) => {
         role: user.role,
       },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: "2d" }
+      { expiresIn: "2d" },
     );
 
     // 🔥 Store session in Redis
-    await redisClient.setEx(
-      `session_${user._id}`,
-      60 * 60 * 24 * 2,
-      token
-    );
+    await redisClient.setEx(`session_${user._id}`, 60 * 60 * 24 * 2, token);
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -227,11 +219,7 @@ export const dashboardUser = async (req, res) => {
       });
     }
 
-    await redisClient.setEx(
-      cacheKey,
-      3600,
-      JSON.stringify(req.user)
-    );
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(req.user));
 
     res.status(200).json({
       success: true,
@@ -253,25 +241,38 @@ export const dashboardUser = async (req, res) => {
 ========================= */
 export const logoutUser = async (req, res) => {
   try {
+    // User check
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized user.",
+      });
+    }
+
     const userId = req.user.id;
 
-    // 🔥 Remove session from Redis
-    await redisClient.del(`session_${userId}`);
+    // Redis session delete
+    if (redisClient?.isOpen) {
+      await redisClient.del(`session_${userId}`);
+    }
 
+    // Clear cookie
     res.clearCookie("token", {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Logout successfully!",
     });
   } catch (err) {
+    console.error("Logout Error:", err); // 🔥 Real error dekho
+
     return res.status(500).json({
       success: false,
-      message: "Server error.",
+      message: err.message || "Server error.",
     });
   }
 };

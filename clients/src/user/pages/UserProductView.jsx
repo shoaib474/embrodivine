@@ -16,6 +16,7 @@ import {
 import Error500 from "../components/Error500";
 import SpinnerLoader from "../components/SpinnerLoader";
 import ShareModal from "../components/ShareModal";
+
 import { useAddToCart, useCart } from "../../hooks/useCart";
 import { useProduct } from "../../hooks/useProduct";
 import { useFavorites, useToggleFavorite } from "../../hooks/useFavorites";
@@ -149,19 +150,19 @@ const UserProductView = () => {
         <div className="flex items-center gap-2 text-sm">
           <Link
             to="/store"
-            className="text-[#D4AF37]/70 hover:text-[#D4AF37] transition-colors"
+            className="text-yellow-500/70 hover:text-yellow-500 transition-colors"
           >
             Store
           </Link>
-          <span className="text-[#D4AF37]/50">/</span>
+          <span className="text-yellow-500/50">/</span>
           <Link
             to={`/category/${product.category.toLocaleLowerCase().replace(/\s+/g, "-")}`}
-            className="text-[#D4AF37]/70 hover:text-[#D4AF37] transition-colors"
+            className="text-yellow-500/70 hover:text-yellow-500 transition-colors"
           >
             {product.category}
           </Link>
-          <span className="text-[#D4AF37]/50">/</span>
-          <span className="text-[#E8D7B5]">{product.name}</span>
+          <span className="text-yellow-500/50">/</span>
+          <span className="text-white">{product.name}</span>
         </div>
       </div>
 
@@ -179,7 +180,7 @@ const UserProductView = () => {
           {/* Images */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div className="relative aspect-square rounded-2xl overflow-hidden border border-[#D4AF37]/20 group shadow-lg hover:shadow-2xl transition-shadow duration-300">
+            <div className="relative aspect-square rounded-2xl overflow-hidden border border-yellow-500/20 group shadow-lg hover:shadow-2xl transition-shadow duration-300">
               {selectedMedia.type === "image" ? (
                 <>
                   <Zoom>
@@ -194,19 +195,19 @@ const UserProductView = () => {
                   {/* Navigation Arrows */}
                   <button
                     onClick={prevMedia}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#101010]/80 backdrop-blur-sm border border-[#D4AF37]/30 rounded-full flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#101010] transition-all opacity-0 group-hover:opacity-100"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#101010]/80 backdrop-blur-sm border border-yellow-500/30 rounded-full flex items-center justify-center text-yellow-500 hover:bg-yellow-500 hover:text-[#101010] transition-all opacity-0 group-hover:opacity-100"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
                     onClick={nextMedia}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#101010]/80 backdrop-blur-sm border border-[#D4AF37]/30 rounded-full flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#101010] transition-all opacity-0 group-hover:opacity-100"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#101010]/80 backdrop-blur-sm border border-yellow-500/30 rounded-full flex items-center justify-center text-yellow-500 hover:bg-yellow-500 hover:text-[#101010] transition-all opacity-0 group-hover:opacity-100"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>
 
                   {/* Zoom Icon */}
-                  <div className="absolute top-4 right-4 w-10 h-10 bg-[#101010]/80 backdrop-blur-sm border border-[#D4AF37]/30 rounded-full flex items-center justify-center text-[#D4AF37] opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute top-4 right-4 w-10 h-10 bg-[#101010]/80 backdrop-blur-sm border border-yellow-500/30 rounded-full flex items-center justify-center text-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity">
                     <ZoomIn className="w-5 h-5" />
                   </div>
                 </>
@@ -230,8 +231,8 @@ const UserProductView = () => {
                   className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-300 ${
                     selectedMedia.type === "image" &&
                     selectedMedia.index === idx
-                      ? "border-[#D4AF37] shadow-lg"
-                      : "border-[#D4AF37]/20 hover:border-[#D4AF37]/50 hover:shadow-md"
+                      ? "border-yellow-500 shadow-lg"
+                      : "border-yellow-500/20 hover:border-yellow-500/50 hover:shadow-md"
                   }`}
                 >
                   <img
@@ -248,8 +249,8 @@ const UserProductView = () => {
                   onClick={() => setSelectedMedia({ type: "pdf", index: idx })}
                   className={`aspect-square rounded-lg flex flex-col items-center justify-center bg-[#101010] border-2 text-sm font-semibold transition-all duration-300 ${
                     selectedMedia.type === "pdf" && selectedMedia.index === idx
-                      ? "border-[#D4AF37] shadow-lg"
-                      : "border-[#D4AF37]/20 hover:border-[#D4AF37]/50 hover:shadow-md"
+                      ? "border-yellow-500 shadow-lg"
+                      : "border-yellow-500/20 hover:border-yellow-500/50 hover:shadow-md"
                   }`}
                 >
                   📄
@@ -273,15 +274,15 @@ const UserProductView = () => {
                 onClick={() => handleToggleFavorite(product._id)}
                 className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm border transition-all ${
                   favorites.includes(product._id)
-                    ? "bg-[#D4AF37]/20 border-[#D4AF37]"
-                    : "bg-[#101010]/90 border-[#D4AF37]/30 hover:bg-[#D4AF37]/20"
+                    ? "bg-yellow-500/20 border-yellow-500"
+                    : "bg-[#101010]/90 border-yellow-500/30 hover:bg-yellow-500/20"
                 }`}
               >
                 <Heart
                   className={`w-5 h-5 transition-colors ${
                     favorites.includes(product._id)
-                      ? "text-[#D4AF37]"
-                      : "text-white/70 hover:text-[#D4AF37]"
+                      ? "text-yellow-500"
+                      : "text-white/70 hover:text-yellow-500"
                   }`}
                   fill={
                     favorites.includes(product._id) ? "#D4AF37" : "transparent"
@@ -299,7 +300,7 @@ const UserProductView = () => {
                     className={`w-4 h-4 sm:w-5 sm:h-5 ${
                       i < Math.floor(product.rating)
                         ? "text-[#FFD700] fill-current"
-                        : "text-[#D4AF37]/30"
+                        : "text-yellow-500/30"
                     }`}
                   />
                 ))}
@@ -310,23 +311,23 @@ const UserProductView = () => {
             </div>
 
             {/* Price */}
-            <p className="text-3xl sm:text-4xl font-extrabold text-[#D4AF37] tracking-tight">
+            <p className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               ${product.price}
             </p>
 
             {/* Description */}
-            <p className="text-[#D4AF37]/80 leading-relaxed text-sm sm:text-base">
+            <p className="text-gray-200 leading-relaxed text-sm sm:text-base">
               {product.description}
             </p>
 
             {/* PDF Section */}
             {product.pdfs?.url && (
-              <div className="rounded-xl bg-[#101010]/80 border border-[#D4AF37]/20 p-4 flex items-center justify-between gap-4 hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] transition-all">
+              <div className="rounded-xl bg-[#101010]/80 border border-yellow-500/20 p-4 flex items-center justify-between gap-4 hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] transition-all">
                 <div>
                   <p className="text-[#E8D7B5] font-semibold">
                     {product.name} - PDF
                   </p>
-                  <p className="text-[#D4AF37]/80 text-sm">
+                  <p className="text-yellow-500/80 text-sm">
                     {product.dimensions}
                   </p>
                 </div>
@@ -335,7 +336,7 @@ const UserProductView = () => {
                   download
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-[#D4AF37] text-[#101010] font-semibold rounded-lg hover:bg-[#E8D7B5] transition"
+                  className="inline-block px-4 py-2 bg-yellow-500 text-[#101010] font-semibold rounded-lg hover:bg-[#E8D7B5] transition"
                 >
                   Download PDF
                 </Link>
@@ -356,7 +357,7 @@ const UserProductView = () => {
         ${
           isProductInCart(product._id)
             ? "bg-green-600 text-white cursor-not-allowed"
-            : "bg-[#D4AF37] text-[#101010] hover:bg-[#E8D7B5] cursor-pointer shadow-lg shadow-[#D4AF37]/30 hover:scale-105"
+            : "bg-yellow-500 text-[#101010] hover:bg-[#E8D7B5] cursor-pointer hover:scale-105"
         }`}
               >
                 {isProductInCart(product._id) ? (
@@ -370,7 +371,7 @@ const UserProductView = () => {
               </button>
               <button
                 onClick={() => setShareOpen(true)}
-                className="px-6 py-4 bg-[#1A1A1A] border-2 border-[#D4AF37] text-[#D4AF37] rounded-lg font-bold hover:bg-[#D4AF37]/10 transition-all flex items-center gap-2"
+                className="px-6 py-4 bg-[#1A1A1A] border-2 border-yellow-500 text-yellow-500 rounded-lg font-bold hover:bg-yellow-500/10 transition-all flex items-center gap-2"
               >
                 <Share2 className="w-5 h-5" />
                 <span className="hidden sm:inline">Share</span>
@@ -382,14 +383,14 @@ const UserProductView = () => {
         {/* Tabs Section */}
         <div
           className="bg-gradient-to-br from-[#1A1A1A] to-[#0E0E0E]
-border border-[#D4AF37]/30 rounded-3xl p-6 sm:p-8 mb-12
+border border-yellow-500/30 rounded-3xl p-6 sm:p-8 mb-12
 shadow-[0_0_30px_rgba(212,175,55,0.06)]"
         >
           <div className="space-y-10">
             {/* FEATURES */}
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-[#E8D7B5] mb-6 flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-[#D4AF37] rounded-full"></span>
+                <span className="w-1.5 h-6 bg-yellow-500 rounded-full"></span>
                 Features
               </h2>
 
@@ -398,10 +399,10 @@ shadow-[0_0_30px_rgba(212,175,55,0.06)]"
                   <li
                     key={idx}
                     className="flex items-start gap-3 p-4 rounded-xl
-            bg-[#101010] border border-[#D4AF37]/20
-            hover:border-[#D4AF37]/50 transition"
+            bg-[#101010] border border-yellow-500/20
+            hover:border-yellow-500/50 transition"
                   >
-                    <Check className="w-5 h-5 text-[#D4AF37] mt-0.5 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
                     <span className="text-[#E8D7B5] text-sm sm:text-base leading-relaxed">
                       {feature}
                     </span>
@@ -411,12 +412,12 @@ shadow-[0_0_30px_rgba(212,175,55,0.06)]"
             </div>
 
             {/* DIVIDER */}
-            <div className="h-px bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent" />
+            <div className="h-px bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent" />
 
             {/* SPECIFICATIONS */}
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-[#E8D7B5] mb-6 flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-[#D4AF37] rounded-full"></span>
+                <span className="w-1.5 h-6 bg-yellow-500 rounded-full"></span>
                 Specifications
               </h2>
 
@@ -425,10 +426,10 @@ shadow-[0_0_30px_rgba(212,175,55,0.06)]"
                 {product?.dimensions && (
                   <div
                     className="bg-gradient-to-br from-[#121212] to-[#0C0C0C]
-          border border-[#D4AF37]/20 rounded-xl p-5
-          hover:border-[#D4AF37]/50 transition"
+          border border-yellow-500/20 rounded-xl p-5
+          hover:border-yellow-500/50 transition"
                   >
-                    <p className="text-[#D4AF37]/60 text-xs uppercase tracking-wider mb-1">
+                    <p className="text-yellow-500/60 text-xs uppercase tracking-wider mb-1">
                       Dimensions
                     </p>
                     <p className="text-[#E8D7B5] font-semibold text-sm sm:text-base">
@@ -441,10 +442,10 @@ shadow-[0_0_30px_rgba(212,175,55,0.06)]"
                 {product?.colors && (
                   <div
                     className="bg-gradient-to-br from-[#121212] to-[#0C0C0C]
-          border border-[#D4AF37]/20 rounded-xl p-5
-          hover:border-[#D4AF37]/50 transition"
+          border border-yellow-500/20 rounded-xl p-5
+          hover:border-yellow-500/50 transition"
                   >
-                    <p className="text-[#D4AF37]/60 text-xs uppercase tracking-wider mb-1">
+                    <p className="text-yellow-500/60 text-xs uppercase tracking-wider mb-1">
                       Colors
                     </p>
                     <p className="text-[#E8D7B5] font-semibold text-sm sm:text-base">

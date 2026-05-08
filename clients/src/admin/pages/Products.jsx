@@ -28,7 +28,7 @@ const AdminProducts = () => {
   const { mutate: addProduct, isPending } = useAddProduct();
   const { mutate: deleteProduct } = useDeleteProduct();
 
-  const products = productsData?.products || productsData || [];
+  const products = productsData?.pages.flatMap((page) => page.products) || [];
 
   const categories = React.useMemo(() => {
     if (!products?.length) return ["all"];

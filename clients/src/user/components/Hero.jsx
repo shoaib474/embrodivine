@@ -27,20 +27,20 @@ const Hero = () => {
         className="relative max-w-3xl text-center"
       >
         {/* Badge */}
-        <div className="inline-block border border-yellow-500/40 text-yellow-400 px-5 py-2 rounded-full text-sm font-semibold mb-6 bg-[#111827]/40 backdrop-blur-md">
+        <div className="inline-block border border-yellow-500/40 text-yellow-500 px-5 py-2 rounded-full text-sm font-semibold mb-6 bg-[#111827]/40 backdrop-blur-md">
           ✨ Trusted by 1000+ Businesses
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-          Premium Embroidery <span className="text-yellow-500">Digitizing Design</span>
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-yellow-500 mb-6 leading-tight ">
+          Where Detail Comes True
         </h1>
 
         {/* Sub text */}
-        <p className="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed">
-          Transform your designs into flawless, machine-ready embroidery files.
-          High-quality digitizing, vector art & patches with fast 24-hour
-          delivery.
+        <p className="text-lg md:text-xl text-white mb-10 leading-relaxed">
+          Because extraordinary brands are remembered by the details others
+          overlook. Crafted with precision, built to elevate every stitch, edge,
+          and impression.
         </p>
 
         {/* Buttons */}

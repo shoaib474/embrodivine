@@ -3,10 +3,15 @@ import axios from "axios";
 const API = import.meta.env.VITE_API_URL;
 
 // GET products
-export const getProducts = async () => {
+export const getProducts = async ({ cursor = null, limit = 12 }) => {
   const res = await axios.get(`${API}/api/products`, {
+    params: {
+      limit,
+      cursor,
+    },
     withCredentials: true,
   });
+
   return res.data;
 };
 

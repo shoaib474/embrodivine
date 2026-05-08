@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 import {
   registerUser,
@@ -8,42 +9,61 @@ import {
   getCurrentUser,
 } from "../API/authApi";
 
-const queryKey = "auth";
-
+// GET CURRENT USER
 export const useCurrentUser = () => {
   return useQuery({
-    queryKey: [queryKey],
+    queryKey: ["currentUser"],
     queryFn: getCurrentUser,
+    retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
   });
 };
 
+// REGISTER
 export const useRegister = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: registerUser,
 
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Registered successfully 🎉");
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+
+      // 🔥 immediately refetch current user
+      await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
     },
 
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Register failed");
-    
     },
   });
 };
 
+// LOGIN
 export const useLogin = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: loginUser,
 
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Login successful ✅");
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+
+      // wait so cookie properly register ho
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      // force fresh user fetch
+      await queryClient.refetchQueries({
+        queryKey: ["currentUser"],
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["cart"],
+      });
+
+      // redirect
+      window.location.replace("/dashboard");
     },
 
     onError: (error) => {
@@ -52,6 +72,7 @@ export const useLogin = () => {
   });
 };
 
+// LOGOUT
 export const useLogout = () => {
   const queryClient = useQueryClient();
 
@@ -59,20 +80,20 @@ export const useLogout = () => {
     mutationFn: logoutUser,
 
     onSuccess: () => {
-      // 🔥 1. Clear ALL React Query cache
+      // Clear all cache
       queryClient.clear();
 
-      // 🔥 2. Clear browser storage
+      // Clear storage
       localStorage.clear();
       sessionStorage.clear();
 
-      // 🔥 3. Remove axios auth header (agar use kar rahe ho)
+      // Remove auth header
       delete axios.defaults.headers.common["Authorization"];
 
       toast.success("Logged out 👋");
 
-      // 🔥 4. Redirect
-      window.location.href = "/login";
+      // Redirect
+      window.location.replace("/auth");
     },
 
     onError: () => {

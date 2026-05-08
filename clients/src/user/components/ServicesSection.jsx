@@ -24,10 +24,10 @@ const ServicesSection = () => {
     <section className="bg-[#0b0b0f] text-white py-20 px-6">
       {/* Heading */}
       <div className="text-center mb-14">
-        <h2 className="text-4xl md:text-5xl font-bold text-yellow-400 tracking-wide">
+        <h2 className="text-4xl md:text-5xl font-bold text-yellow-500 tracking-wide">
           Our Services
         </h2>
-        <p className="text-gray-400 mt-3">
+        <p className="text-white mt-3">
           Premium embroidery solutions crafted for your brand identity
         </p>
       </div>
@@ -51,10 +51,10 @@ const ServicesSection = () => {
 
             {/* Content */}
             <div className="p-6">
-              <h3 className="text-xl font-semibold text-yellow-400 mb-3">
+              <h3 className="text-xl font-semibold text-yellow-500 mb-3">
                 {service.title}
               </h3>
-              <p className="text-gray-300 text-sm leading-relaxed">
+              <p className="text-white text-sm leading-relaxed">
                 {service.description}
               </p>
             </div>

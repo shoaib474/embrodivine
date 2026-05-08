@@ -41,7 +41,7 @@ const Categories = () => {
 
   const { data, isLoading, isError } = useProducts();
 
-  const products = data?.products || data || [];
+  const products = data?.pages.flatMap((page) => page.products) || [];
 
   const categories = useMemo(() => {
     if (!products.length) return [];
@@ -107,8 +107,8 @@ const Categories = () => {
 
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
       {/* Hero Section */}
@@ -125,24 +125,24 @@ const Categories = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-full mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500/10 border border-yellow-500/30 rounded-full mb-6"
             >
-              <Zap className="w-4 h-4 text-[#D4AF37]" />
-              <span className="text-[#D4AF37] text-sm font-semibold">
+              <Zap className="w-4 h-4 text-yellow-500" />
+              <span className="text-yellow-500 text-sm font-semibold">
                 Premium Embroidery & Patches
               </span>
             </motion.div>
 
             {/* Main Heading */}
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-[#E8D7B5] mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
               Discover Our
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#E8D7B5]">
+              <span className="block text-transparent bg-clip-text bg-yellow-500 ">
                 Design Collections
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-[#D4AF37]/70 text-lg md:text-xl max-w-3xl mx-auto mb-8 leading-relaxed">
+            <p className="text-gray-200 text-lg md:text-xl max-w-3xl mx-auto mb-8 leading-relaxed">
               Explore premium embroidered patches and designs crafted with
               precision. From classic styles to custom creations, find the
               perfect piece for your project.
@@ -155,13 +155,13 @@ const Categories = () => {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
-              <button className="group px-8 py-4 bg-[#D4AF37] text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-[#D4AF37]/20">
+              <button className="group px-8 py-4 bg-yellow-500 text-[#101010] rounded-lg font-bold hover:bg-yellow-600 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-yellow-500/20">
                 Browse Collections
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <Link
                 to="/quote"
-                className="px-8 py-4 bg-[#1A1A1A] border-2 border-[#D4AF37]/30 text-[#D4AF37] rounded-lg font-bold hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] transition-all duration-300"
+                className="px-8 py-4 bg-[#1A1A1A] border-2 border-yellow-500/30 text-yellow-500 rounded-lg font-bold hover:bg-yellow-500/10 hover:border-yellow-500 transition-all duration-300"
               >
                 Custom Request
               </Link>
@@ -169,13 +169,13 @@ const Categories = () => {
 
             {/* Decorative Divider */}
             <div className="flex items-center justify-center mt-12 gap-3">
-              <div className="h-px w-24 bg-gradient-to-r from-transparent to-[#D4AF37]/50" />
+              <div className="h-px w-24 bg-gradient-to-r from-transparent to-yellow-500/50" />
               <div className="flex gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#D4AF37]" />
-                <div className="w-2 h-2 rounded-full bg-[#D4AF37]/60" />
-                <div className="w-2 h-2 rounded-full bg-[#D4AF37]/30" />
+                <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
+                <div className="w-2 h-2 rounded-full bg-yellow-500/30" />
               </div>
-              <div className="h-px w-24 bg-gradient-to-l from-transparent to-[#D4AF37]/50" />
+              <div className="h-px w-24 bg-gradient-to-l from-transparent to-yellow-500/50" />
             </div>
           </motion.div>
         </div>
@@ -198,13 +198,13 @@ const Categories = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-[#1A1A1A]/50 backdrop-blur-sm border border-[#D4AF37]/20 rounded-xl p-6 text-center hover:border-[#D4AF37]/50 transition-all duration-300"
+                className="bg-[#1A1A1A]/50 backdrop-blur-sm border border-yellow-500/20 rounded-xl p-6 text-center hover:border-yellow-500/50 transition-all duration-300"
               >
-                <stat.icon className="w-8 h-8 text-[#D4AF37] mx-auto mb-3" />
+                <stat.icon className="w-8 h-8 text-yellow-500 mx-auto mb-3" />
                 <div className="text-3xl font-bold text-[#E8D7B5] mb-1">
                   {stat.value}
                 </div>
-                <div className="text-[#D4AF37]/60 text-sm">{stat.label}</div>
+                <div className="text-yellow-500/60 text-sm">{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -225,7 +225,7 @@ const Categories = () => {
             <h2 className="text-4xl md:text-5xl font-bold text-[#E8D7B5] mb-4">
               Shop by Category
             </h2>
-            <p className="text-[#D4AF37]/70 text-lg max-w-2xl mx-auto">
+            <p className="text-yellow-500/70 text-lg max-w-2xl mx-auto">
               Choose from our carefully curated collections
             </p>
           </motion.div>
@@ -253,9 +253,9 @@ const Categories = () => {
                   className="group relative cursor-pointer"
                 >
                   {/* Card */}
-                  <div className="relative bg-[#1A1A1A]/80 backdrop-blur-sm border border-[#D4AF37]/20 rounded-2xl p-8 h-full transition-all duration-300 group-hover:border-[#D4AF37] group-hover:shadow-2xl group-hover:shadow-[#D4AF37]/20">
+                  <div className="relative bg-[#1A1A1A]/80 backdrop-blur-sm border border-yellow-500/20 rounded-2xl p-8 h-full transition-all duration-300 group-hover:border-yellow-500 group-hover:shadow-2xl group-hover:shadow-yellow-500/20">
                     {/* Hover Glow */}
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#D4AF37]/0 via-[#D4AF37]/0 to-[#D4AF37]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-yellow-500/0 via-yellow-500/0 to-yellow-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                     {/* Content */}
                     <div className="relative z-10 flex flex-col items-center text-center space-y-4">
@@ -263,42 +263,42 @@ const Categories = () => {
                       <motion.div
                         whileHover={{ rotate: 5 }}
                         transition={{ duration: 0.3 }}
-                        className="w-20 h-20 bg-[#D4AF37]/10 rounded-2xl flex items-center justify-center border border-[#D4AF37]/30 group-hover:bg-[#D4AF37]/20 group-hover:border-[#D4AF37] transition-all duration-300"
+                        className="w-20 h-20 bg-yellow-500/10 rounded-2xl flex items-center justify-center border border-yellow-500/30 group-hover:bg-yellow-500/20 group-hover:border-yellow-500 transition-all duration-300"
                       >
-                        <IconComponent className="w-10 h-10 text-[#D4AF37] group-hover:scale-110 transition-transform duration-300" />
+                        <IconComponent className="w-10 h-10 text-yellow-500 group-hover:scale-110 transition-transform duration-300" />
                       </motion.div>
 
                       {/* Title */}
-                      <h3 className="text-2xl font-bold text-[#E8D7B5] group-hover:text-[#D4AF37] transition-colors duration-300">
+                      <h3 className="text-2xl font-bold text-[#E8D7B5] group-hover:text-yellow-500 transition-colors duration-300">
                         {category.title}
                       </h3>
 
                       {/* Subtitle */}
-                      <p className="text-[#D4AF37]/70 text-sm group-hover:text-[#D4AF37]/90 transition-colors duration-300">
+                      <p className="text-yellow-500/70 text-sm group-hover:text-yellow-500/90 transition-colors duration-300">
                         {category.subtitle}
                       </p>
 
                       {/* Count Badge */}
-                      <div className="px-4 py-1.5 bg-[#D4AF37]/10 rounded-full">
-                        <span className="text-[#D4AF37] text-xs font-semibold">
+                      <div className="px-4 py-1.5 bg-yellow-500/10 rounded-full">
+                        <span className="text-yellow-500 text-xs font-semibold">
                           {category.count}
                         </span>
                       </div>
 
                       {/* Arrow Icon */}
                       <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <ArrowRight className="w-5 h-5 text-[#D4AF37]" />
+                        <ArrowRight className="w-5 h-5 text-yellow-500" />
                       </div>
                     </div>
 
                     {/* Bottom Accent */}
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent group-hover:w-3/4 transition-all duration-500 rounded-full" />
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent group-hover:w-3/4 transition-all duration-500 rounded-full" />
                   </div>
 
                   {/* Accessibility Link */}
                   <Link
                     to={`/category/${category.slug}`}
-                    className="absolute inset-0 z-20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 focus:ring-offset-[#101010]"
+                    className="absolute inset-0 z-20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-[#101010]"
                     aria-label={`Browse ${category.title} - ${category.subtitle}`}
                     onClick={(e) => {
                       e.preventDefault();
@@ -324,7 +324,7 @@ const Categories = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-[#1A1A1A] to-[#101010] border border-[#D4AF37]/20 rounded-3xl p-8 md:p-12"
+            className="bg-gradient-to-br from-[#1A1A1A] to-[#101010] border border-yellow-500/20 rounded-3xl p-8 md:p-12"
           >
             <div className="grid md:grid-cols-2 gap-12 items-center">
               {/* Left Content */}
@@ -332,7 +332,7 @@ const Categories = () => {
                 <h3 className="text-3xl md:text-4xl font-bold text-[#E8D7B5] mb-4">
                   Why Choose Our Patches?
                 </h3>
-                <p className="text-[#D4AF37]/70 mb-6 leading-relaxed">
+                <p className="text-yellow-500/70 mb-6 leading-relaxed">
                   We're committed to delivering the highest quality embroidered
                   patches with attention to every detail. Join thousands of
                   satisfied customers worldwide.
@@ -347,8 +347,8 @@ const Categories = () => {
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                       className="flex items-center gap-3"
                     >
-                      <div className="w-6 h-6 bg-[#D4AF37]/20 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Check className="w-4 h-4 text-[#D4AF37]" />
+                      <div className="w-6 h-6 bg-yellow-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Check className="w-4 h-4 text-yellow-500" />
                       </div>
                       <span className="text-[#E8D7B5]">{feature}</span>
                     </motion.li>
@@ -358,13 +358,13 @@ const Categories = () => {
 
               {/* Right Content - Image Placeholder */}
               <div className="relative">
-                <div className="aspect-square bg-gradient-to-br from-[#D4AF37]/20 to-[#D4AF37]/5 rounded-2xl flex items-center justify-center border border-[#D4AF37]/30">
+                <div className="aspect-square bg-gradient-to-br from-yellow-500/20 to-yellow-500/5 rounded-2xl flex items-center justify-center border border-yellow-500/30">
                   <div className="text-center">
-                    <Star className="w-20 h-20 text-[#D4AF37] mx-auto mb-4" />
+                    <Star className="w-20 h-20 text-yellow-500 mx-auto mb-4" />
                     <p className="text-[#E8D7B5] font-semibold">
                       Premium Quality
                     </p>
-                    <p className="text-[#D4AF37]/60 text-sm">
+                    <p className="text-yellow-500/60 text-sm">
                       Crafted with Excellence
                     </p>
                   </div>
@@ -383,7 +383,7 @@ const Categories = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-gradient-to-r from-[#D4AF37]/10 via-[#D4AF37]/5 to-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden"
+            className="bg-gradient-to-r from-yellow-500/10 via-yellow-500/5 to-yellow-500/10 border border-yellow-500/30 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden"
           >
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-5">
@@ -401,7 +401,7 @@ const Categories = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-[#E8D7B5] mb-4">
                 Need a Custom Design?
               </h2>
-              <p className="text-[#D4AF37]/70 text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-yellow-500/70 text-lg mb-8 max-w-2xl mx-auto">
                 Can't find exactly what you're looking for? Our design team is
                 ready to bring your unique vision to life with premium quality
                 craftsmanship.
@@ -409,14 +409,14 @@ const Categories = () => {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
                   to="/quote"
-                  className="group px-8 py-4 bg-[#D4AF37] text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-[#D4AF37]/20"
+                  className="group px-8 py-4 bg-yellow-500 text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-yellow-500/20"
                 >
                   Start Custom Order
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
                   to="/contact"
-                  className="px-8 py-4 bg-transparent border-2 border-[#D4AF37] text-[#D4AF37] rounded-lg font-bold hover:bg-[#D4AF37]/10 transition-all duration-300"
+                  className="px-8 py-4 bg-transparent border-2 border-yellow-500 text-yellow-500 rounded-lg font-bold hover:bg-yellow-500/10 transition-all duration-300"
                 >
                   Contact Us
                 </Link>

@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   ];
 
   const orders = data?.orders || data || [];
-  const products = productsData?.products || productsData || [];
+  const products = productsData?.pages.flatMap((page) => page.products) || [];
 
   const stats = [
     {
@@ -79,7 +79,6 @@ const AdminDashboard = () => {
       color: "#FF6347",
     },
   ];
-
 
   const topProducts = [
     {

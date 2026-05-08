@@ -32,7 +32,14 @@ const Store = () => {
 
   const count = useCartCount();
   const { data: cartData, isLoading: isCartLoading } = useCart();
-  const { data: productsData, isLoading, isError } = useProducts();
+  const {
+    data: productsData,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useProducts();
   const { mutate, isPending } = useAddToCart();
   const { data: favData } = useFavorites();
   const { mutate: toggleFavorite } = useToggleFavorite();
@@ -44,7 +51,8 @@ const Store = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
 
-  const products = productsData?.products || productsData || [];
+  const products = productsData?.pages.flatMap((page) => page.products) || [];
+
   const cart = cartData?.products || [];
 
   const isProductInCart = (productId) => {
@@ -145,7 +153,7 @@ const Store = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32">
           <div className="text-center space-y-6 animate-fade-in">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#111827]/40 border border-yellow-500/30 rounded-full text-yellow-400 text-sm font-semibold backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#111827]/40 border border-yellow-500/30 rounded-full text-yellow-500 text-sm font-semibold backdrop-blur-sm">
               <Sparkles className="w-4 h-4" />
               Premium Embroidery Collection
             </div>
@@ -159,7 +167,7 @@ const Store = () => {
             </h1>
 
             {/* Subtext */}
-            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-white max-w-3xl mx-auto leading-relaxed">
               Explore our premium embroidery solutions designed for brands,
               businesses, and creators who demand flawless quality and precision
               craftsmanship.
@@ -170,7 +178,7 @@ const Store = () => {
               to="/quote"
               className="inline-flex items-center gap-3 bg-yellow-500 text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-white transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/20 mt-8"
             >
-              Explore Products
+              Quote Your Project
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -187,7 +195,7 @@ const Store = () => {
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+              className="w-full pl-10 pr-4 py-2 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-white placeholder:text-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
             />
           </div>
         </div>
@@ -195,7 +203,7 @@ const Store = () => {
 
       {/* Cart Summary Bar */}
       {!isLoading && count > 0 && (
-        <div className="sticky top-[68px] md:top-20 z-40 bg-[#D4AF37] text-[#101010] py-2 px-4 animate-slide-down">
+        <div className="sticky top-[68px] md:top-20 z-40 bg-yellow-500 text-[#101010] py-2 px-4 animate-slide-down">
           <div className="max-w-7xl mx-auto flex items-center justify-between text-sm font-semibold">
             <span>🛒 {count} items in cart</span>
             <span>Total: ${cartTotal.toFixed(2)}</span>
@@ -214,8 +222,8 @@ const Store = () => {
             <div className="sticky top-24 space-y-6">
               {/* Categories */}
               <div className="bg-[#1A1A1A] rounded-xl p-6 border border-[#D4AF37]/20">
-                <h3 className="text-lg font-bold text-[#E8D7B5] mb-4 flex items-center gap-2">
-                  <SlidersHorizontal className="w-5 h-5 text-[#D4AF37]" />
+                <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <SlidersHorizontal className="w-5 h-5 text-yellow-500" />
                   Categories
                 </h3>
                 <div className="relative">
@@ -226,8 +234,8 @@ const Store = () => {
                         onClick={() => setSelectedCategory(cat.value)}
                         className={`w-full text-left px-4 py-2 rounded-lg flex justify-between transition ${
                           selectedCategory === cat.value
-                            ? "bg-[#D4AF37] text-[#101010]"
-                            : "text-[#D4AF37] hover:bg-[#D4AF37]/10"
+                            ? "bg-yellow-500 text-[#101010]"
+                            : "text-yellow-500 hover:bg-yellow-500/10"
                         }`}
                       >
                         <span>{cat.label}</span>
@@ -243,7 +251,7 @@ const Store = () => {
 
               {/* Price Range */}
               <div className="bg-[#1A1A1A] rounded-xl p-6 border border-[#D4AF37]/20">
-                <h3 className="text-lg font-bold text-[#E8D7B5] mb-4">
+                <h3 className="text-lg font-bold text-white mb-4">
                   Price Range
                 </h3>
                 <div className="space-y-4">
@@ -255,9 +263,9 @@ const Store = () => {
                     onChange={(e) =>
                       setPriceRange([0, parseInt(e.target.value)])
                     }
-                    className="w-full accent-[#D4AF37]"
+                    className="w-full accent-yellow-500"
                   />
-                  <div className="flex items-center justify-between text-sm text-[#D4AF37]">
+                  <div className="flex items-center justify-between text-sm text-gray-300">
                     <span>${priceRange[0]}</span>
                     <span>${priceRange[1]}</span>
                   </div>
@@ -266,19 +274,19 @@ const Store = () => {
 
               {/* Badges */}
               <div className="bg-[#1A1A1A] rounded-xl p-6 border border-[#D4AF37]/20">
-                <h3 className="text-lg font-bold text-[#E8D7B5] mb-4">
+                <h3 className="text-lg font-bold text-white mb-4">
                   Quick Filters
                 </h3>
                 <div className="space-y-2">
-                  <button className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-[#D4AF37] hover:bg-[#D4AF37]/10 transition-all">
+                  <button className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-yellow-500 hover:bg-yellow-500/10 transition-all">
                     <TrendingUp className="w-4 h-4" />
                     <span className="text-sm">Trending</span>
                   </button>
-                  <button className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-[#D4AF37] hover:bg-[#D4AF37]/10 transition-all">
+                  <button className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-yellow-500 hover:bg-yellow-500/10 transition-all">
                     <Award className="w-4 h-4" />
                     <span className="text-sm">Bestsellers</span>
                   </button>
-                  <button className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-[#D4AF37] hover:bg-[#D4AF37]/10 transition-all">
+                  <button className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-yellow-500 hover:bg-yellow-500/10 transition-all">
                     <Star className="w-4 h-4" />
                     <span className="text-sm">New Arrivals</span>
                   </button>
@@ -299,8 +307,8 @@ const Store = () => {
                   <SlidersHorizontal className="w-4 h-4" />
                   Filters
                 </button>
-                <p className="text-[#E8D7B5]">
-                  <span className="font-bold text-[#D4AF37]">
+                <p className="text-white">
+                  <span className="font-bold text-yellow-500">
                     {filteredProducts.length}
                   </span>{" "}
                   Products
@@ -325,8 +333,8 @@ const Store = () => {
                     onClick={() => setViewMode("grid")}
                     className={`p-2 rounded transition-all ${
                       viewMode === "grid"
-                        ? "bg-[#D4AF37] text-[#101010]"
-                        : "text-[#D4AF37]"
+                        ? "bg-yellow-500 text-[#101010]"
+                        : "text-yellow-500"
                     }`}
                   >
                     <Grid3x3 className="w-4 h-4" />
@@ -335,8 +343,8 @@ const Store = () => {
                     onClick={() => setViewMode("list")}
                     className={`p-2 rounded transition-all ${
                       viewMode === "list"
-                        ? "bg-[#D4AF37] text-[#101010]"
-                        : "text-[#D4AF37]"
+                        ? "bg-yellow-500 text-[#101010]"
+                        : "text-yellow-500"
                     }`}
                   >
                     <List className="w-4 h-4" />
@@ -401,7 +409,7 @@ const Store = () => {
                         <div
                           className={`absolute top-2 left-2 px-2 py-1 rounded-full text-xs font-bold uppercase ${
                             product.badge.toLowerCase() === "hot seller"
-                              ? "bg-[#D4AF37] text-[#101010]"
+                              ? "bg-yellow-500 text-[#101010]"
                               : product.badge.toLowerCase() === "popular"
                                 ? "bg-[#FF6347] text-white"
                                 : product.badge.toLowerCase() === "top rated"
@@ -423,15 +431,15 @@ const Store = () => {
                           onClick={() => handleToggleFavorite(product._id)}
                           className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm border transition-all ${
                             favorites.includes(product._id)
-                              ? "bg-[#D4AF37]/20 border-[#D4AF37]"
-                              : "bg-[#101010]/90 border-[#D4AF37]/30 hover:bg-[#D4AF37]/20"
+                              ? "bg-yellow-500/20 border-yellow-500"
+                              : "bg-[#101010]/90 border-yellow-500/30 hover:bg-yellow-500/20"
                           }`}
                         >
                           <Heart
                             className={`w-5 h-5 transition-colors ${
                               favorites.includes(product._id)
-                                ? "text-[#D4AF37]"
-                                : "text-white/70 hover:text-[#D4AF37]"
+                                ? "text-yellow-500"
+                                : "text-white/70 hover:text-yellow-500"
                             }`}
                             fill={
                               favorites.includes(product._id)
@@ -444,7 +452,7 @@ const Store = () => {
                         {/* View */}
                         <button
                           onClick={() => handleView(product._id)}
-                          className="w-10 h-10 bg-[#101010]/90 backdrop-blur-sm border border-[#D4AF37]/30 rounded-full flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37]/20 transition-all"
+                          className="w-10 h-10 bg-[#101010]/90 backdrop-blur-sm border border-yellow-500/30 rounded-full flex items-center justify-center text-yellow-500 hover:bg-yellow-500/20 transition-all"
                         >
                           <Eye className="w-5 h-5" />
                         </button>
@@ -454,34 +462,34 @@ const Store = () => {
                     {/* Content */}
                     <div className="p-4 flex-1 flex flex-col">
                       <div className="flex-1">
-                        <span className="text-xs text-[#D4AF37] uppercase tracking-wider font-semibold">
-                          {product.category}
-                        </span>
-                        <h3 className="text-[#E8D7B5] font-bold text-lg mt-1 group-hover:text-[#D4AF37] transition-colors line-clamp-2">
+                        <h3 className="text-white font-bold text-lg mt-1 group-hover:text-gray-300 transition-colors line-clamp-2">
                           {product.name}
                         </h3>
+                        <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
+                          {product.category}
+                        </span>
 
-                        <div className="flex items-center gap-2 py-2">
+                        <div className="flex items-center justify-between gap-2 py-2">
                           <div className="flex items-center gap-1">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
                                 className={`w-4 h-4 ${
                                   i < Math.floor(product.rating)
-                                    ? "text-[#D4AF37] fill-current"
-                                    : "text-[#D4AF37]/30"
+                                    ? "text-yellow-500 fill-current"
+                                    : "text-yellow-500/30"
                                 }`}
                               />
                             ))}
                           </div>
-                          <span className="text-[#D4AF37]/70 text-sm">
+                          <span className="text-gray-400 text-sm">
                             ({product.rating})
                           </span>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#D4AF37]/20">
-                        <span className="text-2xl font-bold text-[#D4AF37]">
+                        <span className="text-2xl font-bold text-white">
                           ${product.price}
                         </span>
                         {user && (
@@ -495,7 +503,7 @@ const Store = () => {
                             className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
                               isProductInCart(product._id)
                                 ? "bg-green-600 text-white cursor-not-allowed"
-                                : "bg-[#D4AF37] text-[#101010] hover:bg-[#E8D7B5] cursor-pointer shadow-lg shadow-[#D4AF37]/30"
+                                : "bg-yellow-500 text-[#101010] hover:bg-[#E8D7B5] cursor-pointer"
                             }`}
                           >
                             <ShoppingCart className="w-4 h-4" />
@@ -518,6 +526,26 @@ const Store = () => {
           </main>
         </div>
       </div>
+      <button
+        onClick={() => fetchNextPage()}
+        disabled={!hasNextPage || isFetchingNextPage}
+        className="relative px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 
+             bg-black text-white border border-gray-700
+             hover:bg-white hover:text-black hover:border-black
+             disabled:opacity-50 disabled:cursor-not-allowed
+             flex items-center justify-center gap-2 min-w-[160px] m-auto mb-12"
+      >
+        {isFetchingNextPage ? (
+          <>
+            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            Loading...
+          </>
+        ) : hasNextPage ? (
+          "Load More"
+        ) : (
+          "No More Products"
+        )}
+      </button>
 
       <section
         className="py-32 px-4 flex flex-col items-center text-center"
@@ -525,23 +553,23 @@ const Store = () => {
       >
         <div className="mb-6">
           <span
-            className="text-sm tracking-widest font-light"
-            style={{ color: "#D4AF37" }}
+            className="text-sm tracking-widest font-light text-yellow-500 uppercase"
+            
           >
             JOIN THE EXCLUSIVE CIRCLE
           </span>
         </div>
         <h2
-          className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
-          style={{ color: "#FFFFFF" }}
+          className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white"
+       
         >
           Experience Luxury Embroidery
           <br />
-          <span style={{ color: "#D4AF37" }}>Tailored Just For You</span>
+          <span className="text-yellow-500">Tailored Just For You</span>
         </h2>
         <p
-          className="text-lg md:text-xl mb-12 max-w-2xl font-light"
-          style={{ color: "#E8D7B5" }}
+          className="text-lg md:text-xl mb-12 max-w-2xl font-light text-white"
+          
         >
           Subscribe to our newsletter and be the first to discover exclusive
           collections and bespoke designs.
@@ -552,20 +580,12 @@ const Store = () => {
           <input
             type="email"
             placeholder="Your Email Address"
-            className="px-6 py-4 w-full sm:flex-1 focus:outline-none border font-light"
-            style={{
-              backgroundColor: "#000000",
-              color: "#FFFFFF",
-              borderColor: "#D4AF37",
-            }}
+            className="px-6 py-4 w-full sm:flex-1 focus:outline-none border font-light bg-black text-white placeholder:text-[#E8D7B5]/50"
+            
           />
           <button
-            className="px-8 py-4 font-semibold tracking-widest text-sm transform hover:scale-105 transition-all border hover:bg-white hover:text-black"
-            style={{
-              backgroundColor: "#D4AF37",
-              color: "#000000",
-              borderColor: "#D4AF37",
-            }}
+            className="px-8 py-4 font-semibold tracking-widest text-sm transform hover:scale-105 transition-all border hover:bg-white hover:text-black bg-yellow-500 text-[#101010]"
+            
           >
             GET EXCLUSIVE ACCESS
           </button>

@@ -17,7 +17,9 @@ export const useCart = () => {
   return useQuery({
     queryKey: ["cart"],
     queryFn: getCart,
-    staleTime: 1000 * 60 * 5,
+    retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 2,
   });
 };
 
@@ -30,7 +32,7 @@ export const useAddToCart = () => {
 
     onSuccess: () => {
       toast.success("Added to cart 🛒");
-      queryClient.invalidateQueries(["cart"]);
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
 
     onError: (error) => {
@@ -47,7 +49,7 @@ export const useUpdateCart = () => {
     mutationFn: ({ id, data }) => updateCartItem(id, data),
     onSuccess: () => {
       toast.success("Cart updated 🔄");
-      queryClient.invalidateQueries(["cart"]);
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
 
     onError: () => {
@@ -64,7 +66,7 @@ export const useRemoveFromCart = () => {
     mutationFn: removeFromCart,
     onSuccess: () => {
       toast.success("Item removed ❌");
-      queryClient.invalidateQueries(["cart"]);
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
 
     onError: () => {
@@ -80,7 +82,7 @@ export const useClearCart = () => {
   return useMutation({
     mutationFn: clearCart,
     onSuccess: () => {
-      queryClient.invalidateQueries(["cart"]);
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
 
     onError: () => {
@@ -94,6 +96,8 @@ export const useSavedItems = () => {
   return useQuery({
     queryKey: ["savedItems"],
     queryFn: getSavedItems,
+    retry: false,
+    refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5,
   });
 };
@@ -106,7 +110,7 @@ export const useSaveForLater = () => {
     mutationFn: saveForLater,
     onSuccess: () => {
       toast.success("Item saved for later 🕒");
-      queryClient.invalidateQueries(["cart"]);
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
     onError: () => {
       toast.error("Failed to save item");
@@ -121,7 +125,7 @@ export const useMoveToCart = () => {
     mutationFn: moveToCart,
     onSuccess: () => {
       toast.success("Item moved to cart 🛒");
-      queryClient.invalidateQueries(["cart"]);
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
     onError: () => {
       toast.error("Failed to move item");
@@ -136,7 +140,7 @@ export const useRemoveSavedItem = () => {
     mutationFn: removeSavedItem,
     onSuccess: () => {
       toast.success("Saved item removed ❌");
-      queryClient.invalidateQueries(["cart"]);
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
     onError: () => {
       toast.error("Failed to remove saved item");

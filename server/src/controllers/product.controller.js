@@ -98,35 +98,60 @@ export const createProduct = async (req, res) => {
 // GET ALL PRODUCTS
 export const getProduct = async (req, res) => {
   try {
-    const cacheKey = "all_products";
+    const limit = parseInt(req.query.limit) || 12;
+    const cursor = req.query.cursor; // last product _id
 
-    // 1. Check Redis first
-    const cachedData = await redisClient.get(cacheKey);
+    const cacheKey = `products_cursor_${cursor || "start"}_${limit}`;
 
-    if (cachedData) {
-      return res.status(200).json({
+    const cached = await redisClient.get(cacheKey);
+
+    if (cached) {
+      return res.json({
         success: true,
         source: "redis",
-        products: JSON.parse(cachedData),
+        ...JSON.parse(cached),
       });
     }
 
-    // 2. DB hit if cache miss
-    const products = await Product.find().sort({ createdAt: -1 });
+    let query = {};
 
-    // 3. Save in Redis (1 hour cache)
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
+    // 👇 cursor logic
+    if (cursor) {
+      query._id = { $lt: cursor }; // older products
+    }
 
-    res.status(200).json({
+    const products = await Product.find(query)
+      .sort({ _id: -1 })
+      .limit(limit);
+
+    const nextCursor =
+      products.length > 0
+        ? products[products.length - 1]._id
+        : null;
+
+    const hasMore = products.length === limit;
+
+    const response = {
+      products,
+      nextCursor,
+      hasMore,
+    };
+
+    await redisClient.setEx(
+      cacheKey,
+      3600,
+      JSON.stringify(response)
+    );
+
+    res.json({
       success: true,
       source: "mongodb",
-      products,
+      ...response,
     });
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: "Something went wrong",
-      error: err.message,
+      message: err.message,
     });
   }
 };

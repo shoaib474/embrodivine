@@ -195,7 +195,7 @@ const Services = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32">
           <div className="text-center space-y-6 animate-fade-in">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#111827]/40 border border-yellow-500/30 rounded-full text-yellow-400 text-sm font-semibold backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#111827]/40 border border-yellow-500/30 rounded-full text-yellow-500 text-sm font-semibold backdrop-blur-sm">
               <Sparkles className="w-4 h-4" />
               Professional Services
             </div>
@@ -207,7 +207,7 @@ const Services = () => {
             </h1>
 
             {/* Subtext */}
-            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-white max-w-3xl mx-auto leading-relaxed">
               From custom patches to bulk orders, we bring your designs to life
               with precision and care
             </p>
@@ -227,10 +227,10 @@ const Services = () => {
       {/* Main Services */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-16 space-y-4">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#E8D7B5]">
+          <h2 className="text-3xl sm:text-4xl font-bold text-yellow-500">
             Our Core Services
           </h2>
-          <p className="text-[#D4AF37]/80 text-lg max-w-2xl mx-auto">
+          <p className="text-white text-lg max-w-2xl mx-auto">
             Professional embroidery solutions tailored to your needs
           </p>
         </div>
@@ -243,28 +243,28 @@ const Services = () => {
                 key={service.id}
                 onMouseEnter={() => setActiveService(service.id)}
                 onMouseLeave={() => setActiveService(null)}
-                className="group relative overflow-hidden rounded-2xl bg-[#1A1A1A] border border-[#D4AF37]/20 hover:border-[#D4AF37] transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/20 transform hover:-translate-y-2"
+                className="group relative overflow-hidden rounded-2xl bg-[#1A1A1A] border border-yellow-500/20 hover:border-yellow-500 transition-all duration-500 hover:shadow-lg hover:shadow-[#D4AF37]/20 transform hover:-translate-y-2"
                 style={{
                   animation: `fadeInUp 0.6s ease-out ${idx * 0.15}s both`,
                 }}
               >
                 {/* Image */}
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-64 overflow-hidden">
                   <img
                     src={service.image}
                     alt={`${service.title} embroidery service`}
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/70 to-transparent"></div>
+                  <div className="absolute inset-0 "></div>
 
                   {/* Icon */}
-                  <div className="absolute top-4 right-4 w-14 h-14 bg-[#D4AF37] rounded-full flex items-center justify-center transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-[#D4AF37]/50">
+                  <div className="absolute top-4 right-4 w-14 h-14 bg-yellow-500 rounded-full flex items-center justify-center transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-[#D4AF37]/50">
                     <Icon className="w-7 h-7 text-[#101010]" strokeWidth={2} />
                   </div>
 
                   {/* Price Badge */}
-                  <div className="absolute bottom-4 left-4 bg-[#101010]/90 backdrop-blur-sm text-[#D4AF37] px-4 py-2 rounded-lg font-bold border border-[#D4AF37]/30">
+                  <div className="absolute bottom-4 left-4 bg-[#101010]/90 backdrop-blur-sm text-yellow-500 px-4 py-2 rounded-lg font-bold border border-yellow-500/30">
                     {service.price}
                   </div>
                 </div>
@@ -272,10 +272,10 @@ const Services = () => {
                 {/* Content */}
                 <div className="p-6 space-y-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-[#E8D7B5] group-hover:text-[#D4AF37] transition-colors duration-300 mb-2">
+                    <h3 className="text-2xl font-bold text-yellow-500 group-hover:text-yellow-500 transition-colors duration-300 mb-2">
                       {service.title}
                     </h3>
-                    <p className="text-[#D4AF37]/70 leading-relaxed">
+                    <p className="text-white leading-relaxed">
                       {service.description}
                     </p>
                   </div>
@@ -285,9 +285,9 @@ const Services = () => {
                     {service.features.map((feature, i) => (
                       <li
                         key={i}
-                        className="flex items-center gap-2 text-[#E8D7B5] text-sm"
+                        className="flex items-center gap-2 text-white text-sm"
                       >
-                        <CheckCircle className="w-4 h-4 text-[#D4AF37] flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-yellow-500 flex-shrink-0" />
                         {feature}
                       </li>
                     ))}
@@ -295,11 +295,11 @@ const Services = () => {
 
                   {/* Footer */}
                   <div className="flex items-center justify-between pt-4 border-t border-[#D4AF37]/20">
-                    <div className="flex items-center gap-2 text-[#D4AF37]/80 text-sm">
+                    <div className="flex items-center gap-2 text-gray-300 text-sm">
                       <Clock className="w-4 h-4" />
                       {service.turnaround}
                     </div>
-                    <button className="flex items-center gap-2 text-[#D4AF37] font-semibold text-sm group-hover:gap-4 transition-all duration-300">
+                    <button className="flex items-center gap-2 text-yellow-500 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
                       Learn More
                       <ArrowRight className="w-4 h-4" />
                     </button>
@@ -312,13 +312,13 @@ const Services = () => {
       </section>
 
       {/* Additional Services */}
-      <section className="bg-[#1A1A1A] border-y border-[#D4AF37]/20">
+      <section className="bg-[#1A1A1A] border-y border-yellow-500/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#E8D7B5]">
+            <h2 className="text-3xl sm:text-4xl font-bold text-yellow-500">
               Additional Services
             </h2>
-            <p className="text-[#D4AF37]/80 text-lg">
+            <p className="text-white text-lg">
               Everything you need for a seamless experience
             </p>
           </div>
@@ -340,10 +340,10 @@ const Services = () => {
                       strokeWidth={1.5}
                     />
                   </div>
-                  <h3 className="text-lg font-bold text-[#E8D7B5] mb-2">
+                  <h3 className="text-lg font-bold text-yellow-500 mb-2">
                     {service.title}
                   </h3>
-                  <p className="text-[#D4AF37]/70 text-sm leading-relaxed">
+                  <p className="text-white text-sm leading-relaxed">
                     {service.description}
                   </p>
                 </div>
@@ -356,10 +356,10 @@ const Services = () => {
       {/* Process Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-16 space-y-4">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#E8D7B5]">
+          <h2 className="text-3xl sm:text-4xl font-bold text-yellow-500">
             How It Works
           </h2>
-          <p className="text-[#D4AF37]/80 text-lg">
+          <p className="text-white text-lg">
             Simple process from concept to completion
           </p>
         </div>
@@ -383,21 +383,21 @@ const Services = () => {
                 <div className="text-center space-y-4">
                   {/* Step Number & Icon */}
                   <div className="relative inline-block">
-                    <div className="w-24 h-24 bg-gradient-to-br from-[#D4AF37] to-[#E8D7B5] rounded-full flex items-center justify-center shadow-lg shadow-[#D4AF37]/30 transform hover:scale-110 transition-transform duration-300">
+                    <div className="w-24 h-24 bg-gradient-to-br from-yellow-500 rounded-full flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
                       <Icon
                         className="w-10 h-10 text-[#101010]"
                         strokeWidth={2}
                       />
                     </div>
-                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#D4AF37] rounded-full flex items-center justify-center text-[#101010] font-bold text-sm shadow-lg">
+                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-[#101010] font-bold text-sm shadow-lg">
                       {step.step}
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold text-[#E8D7B5]">
+                  <h3 className="text-xl font-bold text-yellow-500">
                     {step.title}
                   </h3>
-                  <p className="text-[#D4AF37]/70 text-sm leading-relaxed">
+                  <p className="text-white text-sm leading-relaxed">
                     {step.description}
                   </p>
                 </div>
@@ -411,10 +411,10 @@ const Services = () => {
       <section className="bg-[#1A1A1A] border-y border-[#D4AF37]/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#E8D7B5]">
+            <h2 className="text-3xl sm:text-4xl font-bold text-yellow-500">
               Frequently Asked Questions
             </h2>
-            <p className="text-[#D4AF37]/80 text-lg">
+            <p className="text-white text-lg">
               Find answers to common questions about our services
             </p>
           </div>
@@ -432,15 +432,15 @@ const Services = () => {
                   onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
                   className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-[#D4AF37]/5 transition-colors duration-300"
                 >
-                  <h3 className="text-lg font-semibold text-[#E8D7B5] pr-4">
+                  <h3 className="text-lg font-semibold text-yellow-500 pr-4">
                     {faq.q}
                   </h3>
                   <div
-                    className={`flex-shrink-0 w-6 h-6 rounded-full bg-[#D4AF37]/20 flex items-center justify-center transform transition-transform duration-300 ${
+                    className={`flex-shrink-0 w-6 h-6 rounded-full bg-yellow-500/20 flex items-center justify-center transform transition-transform duration-300 ${
                       activeFaq === idx ? "rotate-180" : ""
                     }`}
                   >
-                    <ArrowRight className="w-4 h-4 text-[#D4AF37] rotate-90" />
+                    <ArrowRight className="w-4 h-4 text-yellow-500 rotate-90" />
                   </div>
                 </button>
                 <div
@@ -448,7 +448,7 @@ const Services = () => {
                     activeFaq === idx ? "max-h-48" : "max-h-0"
                   }`}
                 >
-                  <div className="px-6 pb-5 text-[#D4AF37]/80 leading-relaxed">
+                  <div className="px-6 pb-5 text-white leading-relaxed">
                     {faq.a}
                   </div>
                 </div>
@@ -467,23 +467,23 @@ const Services = () => {
           </div>
 
           <div className="relative space-y-6">
-            <Star className="w-12 h-12 text-[#D4AF37] mx-auto animate-pulse" />
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#E8D7B5]">
+            <Star className="w-12 h-12 text-yellow-500 mx-auto animate-pulse" />
+            <h2 className="text-3xl sm:text-4xl font-bold text-yellow-500">
               Ready to Start Your Project?
             </h2>
-            <p className="text-[#D4AF37]/80 text-lg max-w-2xl mx-auto">
+            <p className="text-white text-lg max-w-2xl mx-auto">
               Get a free quote today and let's bring your vision to life
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link
                 to="/quote"
-                className="bg-[#D4AF37] text-[#101010] px-8 py-4 mx-4 rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#D4AF37]/30"
+                className="bg-yellow-500 text-[#101010] px-8 py-4 mx-4 rounded-lg font-bold hover:bg-yellow-600 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-[#D4AF37]/30"
               >
                 Get Free Quote
               </Link>
               <Link
                 to="/contact"
-                className="bg-transparent border-2 border-[#D4AF37] text-[#D4AF37] px-8 py-4 rounded-lg font-bold hover:bg-[#D4AF37]/10 transition-all duration-300 transform hover:scale-105 active:scale-95"
+                className="bg-transparent border-2 border-yellow-500 text-yellow-500 px-8 py-4 rounded-lg font-bold hover:bg-yellow-500/10 transition-all duration-300 transform hover:scale-105 active:scale-95"
               >
                 Contact Us
               </Link>
