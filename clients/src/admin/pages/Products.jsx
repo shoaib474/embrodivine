@@ -24,7 +24,14 @@ const AdminProducts = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const { data: productsData, isLoading, isError } = useProducts();
+  const {
+    data: productsData,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useProducts();
   const { mutate: addProduct, isPending } = useAddProduct();
   const { mutate: deleteProduct } = useDeleteProduct();
 
@@ -207,6 +214,26 @@ const AdminProducts = () => {
                 isError={isError}
               />
             ))}
+            <button
+              onClick={() => fetchNextPage()}
+              disabled={!hasNextPage || isFetchingNextPage}
+              className="relative px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 
+             bg-black text-white border border-gray-700
+             hover:bg-white hover:text-black hover:border-black
+             disabled:opacity-50 disabled:cursor-not-allowed
+             flex items-center justify-center gap-2 min-w-[160px] m-auto mb-12"
+            >
+              {isFetchingNextPage ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  Loading...
+                </>
+              ) : hasNextPage ? (
+                "Load More"
+              ) : (
+                "No More Products"
+              )}
+            </button>
           </div>
         ) : (
           <NoProducts />

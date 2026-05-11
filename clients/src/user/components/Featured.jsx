@@ -73,7 +73,7 @@ const FeaturedProducts = ({ products }) => {
 
         <Link
           to="/store"
-          className="mt-8 inline-flex items-center gap-2 bg-yellow-500 text-[#101010] px-6 py-3 rounded-lg font-bold hover:bg-[#E8D7B5] transition-all"
+          className="mt-8 inline-flex items-center gap-2 bg-yellow-600 text-[#101010] px-6 py-3 rounded-lg font-bold hover:bg-[#E8D7B5] transition-all"
         >
           More
           <ArrowRight className="w-5 h-5" />

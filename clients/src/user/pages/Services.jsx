@@ -14,6 +14,7 @@ import {
   Zap,
   Heart,
   MessageCircle,
+  Layers,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -26,69 +27,103 @@ const Services = () => {
       id: 1,
       title: "Graphic Digitizing",
       description:
-        "Transform your vision into reality with our bespoke embroidery services",
+        "Transform artwork, custom designs, and creative concepts into flawless stitch-ready embroidery files with precision and style.",
       icon: Scissors,
       features: [
-        "Any design, any size",
-        "Multiple fabric types",
-        "Color matching",
-        "Digital mockups",
+        "Custom artwork digitizing",
+        "Vector to embroidery conversion",
+        "Detailed stitch mapping",
+        "Fabric-specific optimization",
+        "Color blending",
+        "Left chest & jacket back sizing",
       ],
-      price: "From $25",
-      turnaround: "5-7 days",
-      image: "/images/mainServices1.jpeg",
+      image: "/images/services1.jpeg",
       color: "#D4AF37",
     },
     {
       id: 2,
       title: "Logo Digitizing",
       description:
-        "Professional conversion of your logo to embroidery-ready format",
+        "Professional logo conversion for businesses, brands, and uniforms with clean stitching, sharp detailing, and production-ready files.",
       icon: Palette,
       features: [
-        "High-quality digitizing",
-        "Unlimited revisions",
-        "Multiple formats",
-        "Fast delivery",
+        "Corporate logo digitizing",
+        "Cap & flat logo formats",
+        "Unlimited edits",
+        "DST, PES, EMB & more",
+        "Fast turnaround",
+        "High-detail precision",
       ],
-      price: "From $15",
-      turnaround: "24-48 hours",
-      image: "/images/mainServices2.jpeg",
+      image: "/images/services2.webp",
       color: "#E8D7B5",
     },
     {
       id: 3,
-      title: "Bulk Orders",
+      title: "Applique Digitizing",
       description:
-        "Special pricing for large quantity orders and corporate needs",
-      icon: Package,
+        "Creative applique embroidery solutions for bold designs, patches, sportswear, and fashion garments.",
+      icon: Layers,
       features: [
-        "Volume discounts",
-        "Dedicated manager",
-        "Priority production",
-        "Quality guarantee",
+        "Tackle twill applique",
+        "Patch-style embroidery",
+        "Fabric placement guides",
+        "Clean border stitching",
+        "Sports jersey designs",
+        "Cost-effective large fills",
       ],
-      price: "Custom Quote",
-      turnaround: "7-14 days",
-      image: "/images/mainServices3.jpeg",
-      color: "#CD853F",
+      image: "/images/services3.webp",
+      color: "#C9A227",
     },
     {
       id: 4,
-      title: "Rush Services",
+      title: "3D Puff Digitizing",
       description:
-        "Need it fast? We offer expedited production for urgent projects",
+        "Bold, raised embroidery crafted for caps and apparel with clean depth, sharp edges, and premium dimensional impact.",
       icon: Zap,
       features: [
-        "24-hour rush available",
-        "Priority queue",
-        "Same-day digitizing",
-        "Express shipping",
+        "Raised foam embroidery",
+        "Perfect for caps & hats",
+        "Clean edge precision",
+        "Premium 3D finish",
+        "Bold lettering",
+        "Structured cap optimization",
       ],
-      price: "+50% fee",
-      turnaround: "1-3 days",
-      image: "/images/mainServices4.jpeg",
+      image: "/images/services4.jpeg",
       color: "#DAA520",
+    },
+    {
+      id: 5,
+      title: "Patch Digitizing",
+      description:
+        "Premium embroidered patches for uniforms, biker clubs, brands, and custom merchandise with durable stitch quality.",
+      icon: Shield,
+      features: [
+        "Merrow border patches",
+        "Velcro patch ready",
+        "Iron-on compatible",
+        "Custom badge designs",
+        "High durability",
+        "Detailed emblem stitching",
+      ],
+      image: "/images/patches.jpeg",
+      color: "#B8860B",
+    },
+    {
+      id: 6,
+      title: "Custom Digitizing (Quote Based)",
+      description:
+        "We convert your artwork into professional embroidery digitizing files based on your requirements with custom pricing for every order.",
+      icon: Package,
+      features: [
+        "Custom quote for every design",
+        "High-quality embroidery digitizing",
+        "Machine-ready file formats",
+        "Fast turnaround time",
+        "Accurate stitch conversion",
+        "Support for all design types",
+      ],
+      image: "/images/services6.jpeg",
+      color: "#0B1F3B",
     },
   ];
 
@@ -249,7 +284,7 @@ const Services = () => {
                 }}
               >
                 {/* Image */}
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative h-80 overflow-hidden">
                   <img
                     src={service.image}
                     alt={`${service.title} embroidery service`}
@@ -261,11 +296,6 @@ const Services = () => {
                   {/* Icon */}
                   <div className="absolute top-4 right-4 w-14 h-14 bg-yellow-500 rounded-full flex items-center justify-center transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-[#D4AF37]/50">
                     <Icon className="w-7 h-7 text-[#101010]" strokeWidth={2} />
-                  </div>
-
-                  {/* Price Badge */}
-                  <div className="absolute bottom-4 left-4 bg-[#101010]/90 backdrop-blur-sm text-yellow-500 px-4 py-2 rounded-lg font-bold border border-yellow-500/30">
-                    {service.price}
                   </div>
                 </div>
 
@@ -292,18 +322,6 @@ const Services = () => {
                       </li>
                     ))}
                   </ul>
-
-                  {/* Footer */}
-                  <div className="flex items-center justify-between pt-4 border-t border-[#D4AF37]/20">
-                    <div className="flex items-center gap-2 text-gray-300 text-sm">
-                      <Clock className="w-4 h-4" />
-                      {service.turnaround}
-                    </div>
-                    <button className="flex items-center gap-2 text-yellow-500 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
-                      Learn More
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
                 </div>
               </article>
             );

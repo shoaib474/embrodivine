@@ -365,7 +365,7 @@ const Cart = () => {
                 <button
                   onClick={handleCheckout}
                   disabled={cartItems.length === 0}
-                  className="w-full mt-6 px-8 py-4 bg-yellow-500 text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/30 flex items-center justify-center gap-2"
+                  className="w-full mt-6 px-8 py-4 bg-yellow-600 text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/30 flex items-center justify-center gap-2"
                 >
                   <CreditCard className="w-5 h-5" />
                   Proceed to Checkout

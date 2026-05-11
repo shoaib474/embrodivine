@@ -77,7 +77,7 @@ const Orders = () => {
                     {getStatusIcon(order.status)}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white">
+                    <h3 className="text-lg font-bold text-yellow-500">
                       {"#" + order?.orderId}
                     </h3>
                     <div className="flex items-center gap-3 mt-1">

@@ -2,19 +2,19 @@ const ServicesSection = () => {
   const services = [
     {
       title: "Digitizing",
-      image: "/images/digitizing.jpeg",
+      image: "/images/digitizing.png",
       description:
         "Premium embroidery digitizing for logos, caps, jackets, 3D puff and custom designs with sharp stitch quality and fast turnaround.",
     },
     {
       title: "Vector",
-      image: "/images/vector.jpeg",
+      image: "/images/vector.png",
       description:
         "High-quality vector conversion of logos and images into scalable, print-ready files for branding and professional use.",
     },
     {
       title: "Patches",
-      image: "/images/patches2.jpeg",
+      image: "/images/patches.jpeg",
       description:
         "Custom embroidered patches with detailed stitching, durable finish, and options like iron-on, sew-on, and Velcro backing.",
     },
@@ -37,10 +37,10 @@ const ServicesSection = () => {
         {services.map((service, index) => (
           <div
             key={index}
-            className="bg-[#111827] border border-yellow-500/20 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition duration-300"
+            className="bg-[#1A1A1A] border border-yellow-500/20 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition duration-300"
           >
             {/* Image */}
-            <div className="h-48 overflow-hidden">
+            <div className="overflow-hidden">
               <img
                 src={service.image}
                 alt={service.title}

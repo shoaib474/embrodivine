@@ -80,7 +80,7 @@ export const createOrder = async (req, res) => {
       amount: amount,
       items: cartItems,
       customer,
-      status: "pending",
+      status: "cancelled",
       downloadable: false,
     });
 

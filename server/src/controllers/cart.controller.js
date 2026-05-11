@@ -9,8 +9,10 @@ export const addToCart = async (req, res) => {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
-    const { productId, qty } = req.body;
+    let { productId, qty } = req.body;
     const userId = req.user.id;
+
+    qty = Number(qty);
 
     if (!productId || !qty || isNaN(qty) || qty <= 0) {
       return res.status(400).json({
@@ -21,18 +23,16 @@ export const addToCart = async (req, res) => {
 
     let cart = await Cart.findOne({ user: userId });
 
-    if (cart) {
-      cart.products = cart.products.filter((p) => p.productId);
-    }
-
     if (!cart) {
       cart = new Cart({
         user: userId,
         products: [{ productId, qty }],
       });
     } else {
+      cart.products = cart.products.filter((p) => p.productId);
+
       const index = cart.products.findIndex(
-        (p) => p.productId?.toString() === productId
+        (p) => p.productId?.toString() === productId,
       );
 
       if (index > -1) {
@@ -44,17 +44,21 @@ export const addToCart = async (req, res) => {
 
     await cart.save();
 
-    // 🔥 CACHE UPDATE (IMPORTANT)
+    // ✅ Populate before caching
+    const populatedCart = await Cart.findById(cart._id).populate(
+      "products.productId",
+    );
+
     await redisClient.setEx(
       `cart_${userId}`,
       300,
-      JSON.stringify(cart)
+      JSON.stringify(populatedCart),
     );
 
     res.status(200).json({
       success: true,
       message: "Product added to cart",
-      cart,
+      cart: populatedCart,
     });
   } catch (err) {
     console.error("Add to cart error:", err);
@@ -91,7 +95,7 @@ export const getCart = async (req, res) => {
 
     // DB fallback
     const cart = await Cart.findOne({ user: userId }).populate(
-      "products.productId"
+      "products.productId",
     );
 
     if (!cart) {
@@ -119,8 +123,22 @@ export const getCart = async (req, res) => {
 
 export const removeFromCart = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
     const userId = req.user.id;
     const { productId } = req.params;
+
+    if (!productId) {
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required",
+      });
+    }
 
     const cart = await Cart.findOne({ user: userId });
 
@@ -131,26 +149,43 @@ export const removeFromCart = async (req, res) => {
       });
     }
 
+    const initialLength = cart.products.length;
+
+    // Remove product
     cart.products = cart.products.filter(
-      (item) => item.productId.toString() !== productId
+      (item) => item.productId?.toString() !== productId,
     );
+
+    // Product not found
+    if (cart.products.length === initialLength) {
+      return res.status(400).json({
+        success: false,
+        message: "Product not found in cart",
+      });
+    }
 
     await cart.save();
 
-    // 🔥 UPDATE CACHE
+    // ✅ Populate before caching for frontend consistency
+    const populatedCart = await Cart.findById(cart._id).populate(
+      "products.productId",
+    );
+
+    // ✅ Update Redis with populated data
     await redisClient.setEx(
       `cart_${userId}`,
       300,
-      JSON.stringify(cart)
+      JSON.stringify(populatedCart),
     );
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: "Product removed from cart",
-      cart,
+      cart: populatedCart,
     });
   } catch (err) {
     console.error("Remove Cart Error:", err);
+
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -196,88 +231,175 @@ export const clearCart = async (req, res) => {
 // Move a product to Save for Later
 export const saveForLater = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
     const { productId } = req.body;
     const userId = req.user.id;
 
     if (!productId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Product ID is required" });
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required",
+      });
     }
 
     const cart = await Cart.findOne({ user: userId });
+
     if (!cart) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Cart not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
     }
 
     const index = cart.products.findIndex(
-      (p) => p.productId.toString() === productId,
+      (p) => p.productId?.toString() === productId,
     );
+
     if (index === -1) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Product not in cart" });
+      return res.status(400).json({
+        success: false,
+        message: "Product not in cart",
+      });
     }
 
-    // Move product to saveForLater
     const item = cart.products[index];
-    cart.saveForLater.push(item);
+
+    // ✅ Prevent duplicate in saveForLater
+    const savedIndex = cart.saveForLater.findIndex(
+      (p) => p.productId?.toString() === productId,
+    );
+
+    if (savedIndex > -1) {
+      cart.saveForLater[savedIndex].qty += item.qty;
+    } else {
+      cart.saveForLater.push({
+        productId: item.productId,
+        qty: item.qty,
+      });
+    }
 
     // Remove from cart
     cart.products.splice(index, 1);
 
     await cart.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Product saved for later", cart });
+    // ✅ Clear both caches to prevent stale data
+    await redisClient.del(`cart_${userId}`);
+    await redisClient.del(`saved_${userId}`);
+
+    // ✅ Return populated cart
+    const updatedCart = await Cart.findById(cart._id)
+      .populate("products.productId")
+      .populate("saveForLater.productId");
+
+    return res.status(200).json({
+      success: true,
+      message: "Product saved for later",
+      cart: updatedCart,
+    });
   } catch (err) {
     console.error("Save for later error:", err);
-    res
-      .status(500)
-      .json({ success: false, message: "Server error", error: err.message });
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
 };
 
 // Move product back from Save for Later to cart
 export const moveToCart = async (req, res) => {
   try {
-    const { productId, qty } = req.body;
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    let { productId, qty } = req.body;
     const userId = req.user.id;
 
+    if (!productId) {
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required",
+      });
+    }
+
+    qty = qty ? Number(qty) : null;
+
     const cart = await Cart.findOne({ user: userId });
-    if (!cart)
-      return res
-        .status(404)
-        .json({ success: false, message: "Cart not found" });
+
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
+    }
 
     const index = cart.saveForLater.findIndex(
-      (p) => p.productId.toString() === productId,
+      (p) => p.productId?.toString() === productId,
     );
-    if (index === -1)
-      return res
-        .status(400)
-        .json({ success: false, message: "Product not in Save for Later" });
 
-    // Move to cart
+    if (index === -1) {
+      return res.status(400).json({
+        success: false,
+        message: "Product not in Save for Later",
+      });
+    }
+
     const item = cart.saveForLater[index];
-    cart.products.push({ productId: item.productId, qty: qty || item.qty });
+    const moveQty = qty && qty > 0 ? qty : item.qty;
+
+    // ✅ Prevent duplicate in cart
+    const existingIndex = cart.products.findIndex(
+      (p) => p.productId?.toString() === productId,
+    );
+
+    if (existingIndex > -1) {
+      cart.products[existingIndex].qty += moveQty;
+    } else {
+      cart.products.push({
+        productId: item.productId,
+        qty: moveQty,
+      });
+    }
 
     // Remove from saveForLater
     cart.saveForLater.splice(index, 1);
 
     await cart.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Product moved to cart", cart });
+    // ✅ Clear caches
+    await redisClient.del(`cart_${userId}`);
+    await redisClient.del(`saved_${userId}`);
+
+    // ✅ Return populated cart
+    const updatedCart = await Cart.findById(cart._id)
+      .populate("products.productId")
+      .populate("saveForLater.productId");
+
+    return res.status(200).json({
+      success: true,
+      message: "Product moved to cart",
+      cart: updatedCart,
+    });
   } catch (err) {
     console.error("Move to cart error:", err);
-    res
-      .status(500)
-      .json({ success: false, message: "Server error", error: err.message });
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
 };
 
@@ -303,7 +425,7 @@ export const getSavedItems = async (req, res) => {
     }
 
     const cart = await Cart.findOne({ user: userId }).populate(
-      "saveForLater.productId"
+      "saveForLater.productId",
     );
 
     if (!cart || cart.saveForLater.length === 0) {
@@ -314,11 +436,7 @@ export const getSavedItems = async (req, res) => {
     }
 
     // 🔥 SAVE TO REDIS
-    await redisClient.setEx(
-      cacheKey,
-      300,
-      JSON.stringify(cart.saveForLater)
-    );
+    await redisClient.setEx(cacheKey, 300, JSON.stringify(cart.saveForLater));
 
     res.status(200).json({
       success: true,
@@ -338,6 +456,13 @@ export const getSavedItems = async (req, res) => {
 // Remove a product from Save for Later
 export const removeSavedItem = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
     const userId = req.user.id;
     const { productId } = req.params;
 
@@ -360,7 +485,7 @@ export const removeSavedItem = async (req, res) => {
     const initialLength = cart.saveForLater.length;
 
     cart.saveForLater = cart.saveForLater.filter(
-      (item) => item.productId.toString() !== productId
+      (item) => item.productId?.toString() !== productId,
     );
 
     if (cart.saveForLater.length === initialLength) {
@@ -372,21 +497,23 @@ export const removeSavedItem = async (req, res) => {
 
     await cart.save();
 
-    // 🔥 UPDATE CACHE
-    await redisClient.setEx(
-      `saved_${userId}`,
-      300,
-      JSON.stringify(cart.saveForLater)
+    // ✅ Clear cache instead of partial stale cache
+    await redisClient.del(`saved_${userId}`);
+
+    // ✅ Return updated populated saved items
+    const updatedCart = await Cart.findById(cart._id).populate(
+      "saveForLater.productId",
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Product removed from Save for Later",
-      savedItems: cart.saveForLater,
+      savedItems: updatedCart.saveForLater,
     });
   } catch (err) {
     console.error("Remove saved item error:", err);
-    res.status(500).json({
+
+    return res.status(500).json({
       success: false,
       message: "Server error",
       error: err.message,
