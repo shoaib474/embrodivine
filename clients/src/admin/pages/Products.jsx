@@ -190,7 +190,7 @@ const AdminProducts = () => {
           {/* Add Button */}
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-4 sm:px-6 py-2 sm:py-3 bg-[#D4AF37] text-[#101010] rounded-lg font-semibold hover:bg-[#E8D7B5] transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap text-sm sm:text-base"
+            className="px-4 sm:px-6 py-2 sm:py-3 bg-yellow-500 text-[#101010] rounded-lg font-semibold hover:bg-[#E8D7B5] transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap text-sm sm:text-base"
           >
             <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
             <span className="inline">Add Product</span>
