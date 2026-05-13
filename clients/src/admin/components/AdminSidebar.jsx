@@ -7,6 +7,7 @@ import {
   X,
   Bell,
   User,
+  Ticket,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -20,6 +21,7 @@ const menuItems = [
   { id: "notify", icon: Bell, label: "Notify", badge: null },
   { id: "users", icon: User, label: "Users", badge: null },
   { id: "quote", icon: FileText, label: "Quote Requests", badge: null },
+  { id: "coupon", icon: Ticket, label: "Coupon Code", badge: null },
 ];
 
 const AdminSidebar = ({
@@ -124,7 +126,7 @@ const AdminSidebar = ({
             text-black font-semibold hover:opacity-90 transition"
           >
             <User className="w-5 h-5" />
-            Go to User
+            Go to Site
           </button>
 
           <button

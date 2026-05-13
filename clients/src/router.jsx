@@ -23,7 +23,9 @@ const CategoryDetail = React.lazy(() => import("./user/pages/CategoryDetail"));
 const Payment = React.lazy(() => import("./user/pages/Payment"));
 const OrderSuccess = React.lazy(() => import("./user/pages/OrderSuccess"));
 const Checkout = React.lazy(() => import("./user/pages/Checkout"));
-const UserProductView = React.lazy(() => import("./user/pages/UserProductView"));
+const UserProductView = React.lazy(
+  () => import("./user/pages/UserProductView"),
+);
 
 // ADMIN
 const AdminLayout = React.lazy(() => import("./layouts/AdminLayout"));
@@ -36,13 +38,12 @@ const ProductView = React.lazy(() => import("./admin/pages/ProductView"));
 const NotifyEmails = React.lazy(() => import("./admin/pages/NotifyEmails"));
 const QuoteRequests = React.lazy(() => import("./admin/pages/QuoteRequests"));
 const AdminUsers = React.lazy(() => import("./admin/pages/User"));
+const Coupons = React.lazy(() => import("./admin/pages/Coupon"));
 
-import SpinnerLoader from "./user/components/SpinnerLoader"
+import SpinnerLoader from "./user/components/SpinnerLoader";
 
 const wrap = (element) => (
-  <Suspense fallback={<SpinnerLoader/>}>
-    {element}
-  </Suspense>
+  <Suspense fallback={<SpinnerLoader />}>{element}</Suspense>
 );
 
 export const router = createBrowserRouter([
@@ -66,7 +67,7 @@ export const router = createBrowserRouter([
         element: wrap(
           <AuthRedirect>
             <Auth />
-          </AuthRedirect>
+          </AuthRedirect>,
         ),
       },
 
@@ -75,7 +76,7 @@ export const router = createBrowserRouter([
         element: wrap(
           <ProtectedRoute>
             <Dashboard />
-          </ProtectedRoute>
+          </ProtectedRoute>,
         ),
       },
 
@@ -84,7 +85,7 @@ export const router = createBrowserRouter([
         element: wrap(
           <ProtectedRoute>
             <Cart />
-          </ProtectedRoute>
+          </ProtectedRoute>,
         ),
       },
 
@@ -93,7 +94,7 @@ export const router = createBrowserRouter([
         element: wrap(
           <ProtectedRoute>
             <Checkout />
-          </ProtectedRoute>
+          </ProtectedRoute>,
         ),
       },
 
@@ -102,7 +103,7 @@ export const router = createBrowserRouter([
         element: wrap(
           <ProtectedRoute>
             <Payment />
-          </ProtectedRoute>
+          </ProtectedRoute>,
         ),
       },
 
@@ -120,7 +121,7 @@ export const router = createBrowserRouter([
     element: wrap(
       <ProtectedRoute adminOnly>
         <AdminLayout />
-      </ProtectedRoute>
+      </ProtectedRoute>,
     ),
     children: [
       { index: true, element: wrap(<AdminDashboard />) },
@@ -130,6 +131,7 @@ export const router = createBrowserRouter([
       { path: "notify", element: wrap(<NotifyEmails />) },
       { path: "users", element: wrap(<AdminUsers />) },
       { path: "quote", element: wrap(<QuoteRequests />) },
+      { path: "coupon", element: wrap(<Coupons />) },
     ],
   },
 

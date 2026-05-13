@@ -18,10 +18,11 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-
-const API = import.meta.env.VITE_API_URL;
+import { useSubmitContact } from "../../hooks/useContact";
 
 const Contact = () => {
+  const { mutate: sendMessage, isPending } = useSubmitContact();
+
   const {
     register,
     handleSubmit,
@@ -30,20 +31,16 @@ const Contact = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    try {
-      // Send form data to backend
-      const response = await axios.post(`${API}/api/send-email`, data);
-
-      if (response.data.success) {
-        toast.success("Email sent successfully");
-      }
-    } catch (error) {
-      console.error("Error sending email:", error);
-      alert("An error occurred while sending the email.");
-    }
-
-    // Reset form after submit
-    reset();
+    sendMessage(data, {
+      onSuccess: (response) => {
+        toast.success(response.message || "Message sent successfully!");
+        // Reset form after submit
+        reset();
+      },
+      onError: (error) => {
+        toast.error("Failed to send message. Please try again.");
+      },
+    });
   };
 
   const contactInfo = [
@@ -310,13 +307,13 @@ const Contact = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isPending}
                 className="w-full px-8 py-4 bg-yellow-500 text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
               >
-                {isSubmitting ? (
+                {isPending ? (
                   <>
                     <CheckCircle2 className="w-5 h-5" />
-                    Message Sent!
+                    Message Sent...
                   </>
                 ) : (
                   <>

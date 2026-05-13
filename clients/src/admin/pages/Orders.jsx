@@ -55,7 +55,10 @@ const AdminOrders = () => {
     },
     {
       title: "Revenue",
-      value: `$${orders.reduce((sum, o) => sum + o.amount, 0).toFixed(2)}`,
+      value: `$${orders
+        .filter((o) => o.paymentStatus === "paid")
+        .reduce((sum, o) => sum + o.amount, 0)
+        .toFixed(2)}`,
       icon: DollarSign,
       color: "#32CD32",
       change: "+18%",

@@ -19,13 +19,27 @@ export const useProducts = () => {
   return useInfiniteQuery({
     queryKey: ["products"],
 
-    queryFn: ({ pageParam = null }) => getProducts({ cursor: pageParam }),
+    // pageParam automatically nextCursor receive karega
+    queryFn: ({ pageParam = null }) =>
+      getProducts({
+        pageParam,
+        limit: 8,
+      }),
 
+    // backend se nextCursor lo
     getNextPageParam: (lastPage) => {
-      return lastPage.hasMore ? lastPage.nextCursor : undefined;
+      if (!lastPage?.hasMore) return undefined;
+      return lastPage.nextCursor;
     },
 
-    staleTime: 1000 * 60 * 5,
+    initialPageParam: null,
+
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    gcTime: 1000 * 60 * 10, // cache cleanup
+    retry: 2,
+
+    // duplicate requests avoid
+    refetchOnWindowFocus: false,
   });
 };
 

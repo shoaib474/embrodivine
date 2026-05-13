@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ShoppingCart,
@@ -33,13 +33,17 @@ const Store = () => {
   const count = useCartCount();
   const { data: cartData, isLoading: isCartLoading } = useCart();
   const {
-    data: productsData,
-    isLoading,
-    isError,
+    data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isLoading,
+    isError,
+    error,
   } = useProducts();
+
+  const observer = useRef();
+
   const { mutate, isPending } = useAddToCart();
   const { data: favData } = useFavorites();
   const { mutate: toggleFavorite } = useToggleFavorite();
@@ -51,7 +55,25 @@ const Store = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
 
-  const products = productsData?.pages.flatMap((page) => page.products) || [];
+  const lastProductRef = useCallback(
+    (node) => {
+      if (isFetchingNextPage) return;
+
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage],
+  );
+
+  const products = data?.pages?.flatMap((page) => page.products) || [];
+  console.log("Fetched products:", products);
 
   const cart = cartData?.products || [];
 
@@ -375,145 +397,166 @@ const Store = () => {
                     : "space-y-4"
                 }
               >
-                {filteredProducts.map((product, idx) => (
-                  <article
-                    key={product._id}
-                    onClick={() => handleView(product._id)}
-                    className={`group bg-[#1A1A1A] rounded-xl overflow-hidden border border-[#D4AF37]/20 hover:border-[#D4AF37] transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/20 cursor-pointer ${
-                      viewMode === "grid"
-                        ? "transform hover:-translate-y-2"
-                        : "flex gap-4"
-                    }`}
-                    style={{
-                      animation: `fadeInUp 0.6s ease-out ${idx * 0.05}s both`,
-                    }}
-                  >
-                    {/* Image */}
-                    <div
-                      className={`relative overflow-hidden ${
+                {filteredProducts.map((product, idx) => {
+                  const isLast = idx === filteredProducts.length - 1;
+
+                  return (
+                    <article
+                      key={product._id}
+                      ref={isLast ? lastProductRef : null}
+                      onClick={() => handleView(product._id)}
+                      className={`group bg-[#1A1A1A] rounded-xl overflow-hidden border border-[#D4AF37]/20 hover:border-[#D4AF37] transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/20 cursor-pointer ${
                         viewMode === "grid"
-                          ? "aspect-square"
-                          : "w-32 h-32 flex-shrink-0"
+                          ? "transform hover:-translate-y-2"
+                          : "flex gap-4"
                       }`}
+                      style={{
+                        animation: `fadeInUp 0.6s ease-out ${idx * 0.05}s both`,
+                      }}
                     >
-                      <img
-                        src={product.image.url}
-                        alt={product.name}
-                        loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#101010] via-transparent to-transparent opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
+                      {/* Image */}
+                      <div
+                        className={`relative overflow-hidden ${
+                          viewMode === "grid"
+                            ? "aspect-square"
+                            : "w-32 h-32 flex-shrink-0"
+                        }`}
+                      >
+                        <img
+                          src={product.image?.url}
+                          alt={product.name}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        />
 
-                      {/* Badges */}
-                      {product.badge && (
-                        <div
-                          className={`absolute top-2 left-2 px-2 py-1 rounded-full text-xs font-bold uppercase ${
-                            product.badge.toLowerCase() === "hot seller"
-                              ? "bg-yellow-500 text-[#101010]"
-                              : product.badge.toLowerCase() === "popular"
-                                ? "bg-[#FF6347] text-white"
-                                : product.badge.toLowerCase() === "top rated"
-                                  ? "bg-[#4169E1] text-white"
-                                  : product.badge.toLowerCase() === "premium"
-                                    ? "bg-[#800080] text-white"
-                                    : "bg-gray-500 text-white" // default
-                          }`}
-                        >
-                          {product.badge}
-                        </div>
-                      )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#101010] via-transparent to-transparent opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
 
-                      {/* Quick Actions */}
-                      <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {/* Favorite */}
-
-                        <button
-                          onClick={() => handleToggleFavorite(product._id)}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm border transition-all ${
-                            favorites.includes(product._id)
-                              ? "bg-yellow-500/20 border-yellow-500"
-                              : "bg-[#101010]/90 border-yellow-500/30 hover:bg-yellow-500/20"
-                          }`}
-                        >
-                          <Heart
-                            className={`w-5 h-5 transition-colors ${
-                              favorites.includes(product._id)
-                                ? "text-yellow-500"
-                                : "text-white/70 hover:text-yellow-500"
-                            }`}
-                            fill={
-                              favorites.includes(product._id)
-                                ? "#D4AF37"
-                                : "transparent"
-                            }
-                          />
-                        </button>
-
-                        {/* View */}
-                        <button
-                          onClick={() => handleView(product._id)}
-                          className="w-10 h-10 bg-[#101010]/90 backdrop-blur-sm border border-yellow-500/30 rounded-full flex items-center justify-center text-yellow-500 hover:bg-yellow-500/20 transition-all"
-                        >
-                          <Eye className="w-5 h-5" />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-4 flex-1 flex flex-col">
-                      <div className="flex-1">
-                        <h3 className="text-white font-bold text-lg mt-1 group-hover:text-gray-300 transition-colors line-clamp-2">
-                          {product.name}
-                        </h3>
-                        <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-                          {product.category}
-                        </span>
-
-                        <div className="flex items-center justify-between gap-2 py-2">
-                          <div className="flex items-center gap-1">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-4 h-4 ${
-                                  i < Math.floor(product.rating)
-                                    ? "text-yellow-500 fill-current"
-                                    : "text-yellow-500/30"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-gray-400 text-sm">
-                            ({product.rating})
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#D4AF37]/20">
-                        <span className="text-2xl font-bold text-white">
-                          ${product.price}
-                        </span>
-                        {user && (
-                          <button
-                            onClick={() => {
-                              if (!isProductInCart(product._id)) {
-                                mutate({ productId: product._id, qty: 1 });
-                              }
-                            }}
-                            disabled={isPending || isProductInCart(product._id)}
-                            className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
-                              isProductInCart(product._id)
-                                ? "bg-green-600 text-white cursor-not-allowed"
-                                : "bg-yellow-500 text-[#101010] hover:bg-[#E8D7B5] cursor-pointer"
+                        {/* Badges */}
+                        {product.badge && (
+                          <div
+                            className={`absolute top-2 left-2 px-2 py-1 rounded-full text-xs font-bold uppercase ${
+                              product.badge.toLowerCase() === "hot seller"
+                                ? "bg-yellow-500 text-[#101010]"
+                                : product.badge.toLowerCase() === "popular"
+                                  ? "bg-[#FF6347] text-white"
+                                  : product.badge.toLowerCase() === "top rated"
+                                    ? "bg-[#4169E1] text-white"
+                                    : product.badge.toLowerCase() === "premium"
+                                      ? "bg-[#800080] text-white"
+                                      : "bg-gray-500 text-white"
                             }`}
                           >
-                            <ShoppingCart className="w-4 h-4" />
-                            {isProductInCart(product._id) ? "In Cart" : "Add"}
-                          </button>
+                            {product.badge}
+                          </div>
                         )}
+
+                        {/* Quick Actions */}
+                        <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          {/* Favorite */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleFavorite(product._id);
+                            }}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm border transition-all ${
+                              favorites.includes(product._id)
+                                ? "bg-yellow-500/20 border-yellow-500"
+                                : "bg-[#101010]/90 border-yellow-500/30 hover:bg-yellow-500/20"
+                            }`}
+                          >
+                            <Heart
+                              className={`w-5 h-5 transition-colors ${
+                                favorites.includes(product._id)
+                                  ? "text-yellow-500"
+                                  : "text-white/70 hover:text-yellow-500"
+                              }`}
+                              fill={
+                                favorites.includes(product._id)
+                                  ? "#D4AF37"
+                                  : "transparent"
+                              }
+                            />
+                          </button>
+
+                          {/* View */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleView(product._id);
+                            }}
+                            className="w-10 h-10 bg-[#101010]/90 backdrop-blur-sm border border-yellow-500/30 rounded-full flex items-center justify-center text-yellow-500 hover:bg-yellow-500/20 transition-all"
+                          >
+                            <Eye className="w-5 h-5" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </article>
-                ))}
+
+                      {/* Content */}
+                      <div className="p-4 flex-1 flex flex-col">
+                        <div className="flex-1">
+                          <h3 className="text-white font-bold text-lg mt-1 group-hover:text-gray-300 transition-colors line-clamp-2">
+                            {product.name}
+                          </h3>
+
+                          <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
+                            {product.category}
+                          </span>
+
+                          <div className="flex items-center justify-between gap-2 py-2">
+                            <div className="flex items-center gap-1">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`w-4 h-4 ${
+                                    i < Math.floor(product.rating || 0)
+                                      ? "text-yellow-500 fill-current"
+                                      : "text-yellow-500/30"
+                                  }`}
+                                />
+                              ))}
+                            </div>
+
+                            <span className="text-gray-400 text-sm">
+                              ({product.rating || 0})
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#D4AF37]/20">
+                          <span className="text-2xl font-bold text-white">
+                            ${product.price}
+                          </span>
+
+                          {user && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+
+                                if (!isProductInCart(product._id)) {
+                                  mutate({
+                                    productId: product._id,
+                                    qty: 1,
+                                  });
+                                }
+                              }}
+                              disabled={
+                                isPending || isProductInCart(product._id)
+                              }
+                              className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
+                                isProductInCart(product._id)
+                                  ? "bg-green-600 text-white cursor-not-allowed"
+                                  : "bg-yellow-500 text-[#101010] hover:bg-[#E8D7B5] cursor-pointer"
+                              }`}
+                            >
+                              <ShoppingCart className="w-4 h-4" />
+                              {isProductInCart(product._id) ? "In Cart" : "Add"}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-20">
@@ -526,71 +569,48 @@ const Store = () => {
           </main>
         </div>
       </div>
-      <button
-        onClick={() => fetchNextPage()}
-        disabled={!hasNextPage || isFetchingNextPage}
-        className="relative px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 
-             bg-black text-white border border-gray-700
-             hover:bg-white hover:text-black hover:border-black
-             disabled:opacity-50 disabled:cursor-not-allowed
-             flex items-center justify-center gap-2 min-w-[160px] m-auto mb-12"
-      >
-        {isFetchingNextPage ? (
-          <>
-            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-            Loading...
-          </>
-        ) : hasNextPage ? (
-          "Load More"
-        ) : (
-          "No More Products"
-        )}
-      </button>
+      {isFetchingNextPage && (
+        <div className="text-center py-6 text-gray-400">
+          more loading...
+        </div>
+      )}
 
-      <section
+      {/* End Message */}
+      {!hasNextPage && products.length > 0 && (
+        <div className="text-center py-6 text-red-400">
+          No more products available
+        </div>
+      )}
+
+      {/* <section
         className="py-32 px-4 flex flex-col items-center text-center"
         style={{ backgroundColor: "#0A0A0A" }}
       >
         <div className="mb-6">
-          <span
-            className="text-sm tracking-widest font-light text-yellow-500 uppercase"
-            
-          >
+          <span className="text-sm tracking-widest font-light text-yellow-500 uppercase">
             JOIN THE EXCLUSIVE CIRCLE
           </span>
         </div>
-        <h2
-          className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white"
-       
-        >
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
           Experience Luxury Embroidery
           <br />
           <span className="text-yellow-500">Tailored Just For You</span>
         </h2>
-        <p
-          className="text-lg md:text-xl mb-12 max-w-2xl font-light text-white"
-          
-        >
+        <p className="text-lg md:text-xl mb-12 max-w-2xl font-light text-white">
           Subscribe to our newsletter and be the first to discover exclusive
           collections and bespoke designs.
         </p>
-
-        {/* Email Input + Button */}
         <div className="flex flex-col px-4 sm:flex-row gap-4 w-full md:max-w-xl mx-auto">
           <input
             type="email"
             placeholder="Your Email Address"
             className="px-6 py-4 w-full sm:flex-1 focus:outline-none border font-light bg-black text-white placeholder:text-[#E8D7B5]/50"
-            
           />
-          <button
-            className="px-8 py-4 font-semibold tracking-widest text-sm transform hover:scale-105 transition-all border hover:bg-white hover:text-black bg-yellow-500 text-[#101010]"
-            
-          >
+          <button className="px-8 py-4 font-semibold tracking-widest text-sm transform hover:scale-105 transition-all border hover:bg-white hover:text-black bg-yellow-500 text-[#101010]">
             GET EXCLUSIVE ACCESS
           </button>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

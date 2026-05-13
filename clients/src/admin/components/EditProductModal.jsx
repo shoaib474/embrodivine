@@ -71,11 +71,6 @@ const EditProductModal = ({ setShowEditModal, product }) => {
         formData.append(key, String(value));
       });
 
-      // 🔍 Debug (RUN ONCE)
-      for (let [k, v] of formData.entries()) {
-        console.log(k, v);
-      }
-
       updateProduct(
         { id: product._id, data: formData },
         {
