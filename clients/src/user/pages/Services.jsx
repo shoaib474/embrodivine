@@ -17,115 +17,11 @@ import {
   Layers,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import ServicesSec from "../components/ServicesSec";
 
 const Services = () => {
   const [activeService, setActiveService] = useState(null);
   const [activeFaq, setActiveFaq] = useState(null);
-
-  const mainServices = [
-    {
-      id: 1,
-      title: "Graphic Digitizing",
-      description:
-        "Transform artwork, custom designs, and creative concepts into flawless stitch-ready embroidery files with precision and style.",
-      icon: Scissors,
-      features: [
-        "Custom artwork digitizing",
-        "Vector to embroidery conversion",
-        "Detailed stitch mapping",
-        "Fabric-specific optimization",
-        "Color blending",
-        "Left chest & jacket back sizing",
-      ],
-      image: "/images/services1.jpeg",
-      color: "#D4AF37",
-    },
-    {
-      id: 2,
-      title: "Logo Digitizing",
-      description:
-        "Professional logo conversion for businesses, brands, and uniforms with clean stitching, sharp detailing, and production-ready files.",
-      icon: Palette,
-      features: [
-        "Corporate logo digitizing",
-        "Cap & flat logo formats",
-        "Unlimited edits",
-        "DST, PES, EMB & more",
-        "Fast turnaround",
-        "High-detail precision",
-      ],
-      image: "/images/services2.webp",
-      color: "#E8D7B5",
-    },
-    {
-      id: 3,
-      title: "Applique Digitizing",
-      description:
-        "Creative applique embroidery solutions for bold designs, patches, sportswear, and fashion garments.",
-      icon: Layers,
-      features: [
-        "Tackle twill applique",
-        "Patch-style embroidery",
-        "Fabric placement guides",
-        "Clean border stitching",
-        "Sports jersey designs",
-        "Cost-effective large fills",
-      ],
-      image: "/images/services3.webp",
-      color: "#C9A227",
-    },
-    {
-      id: 4,
-      title: "3D Puff Digitizing",
-      description:
-        "Bold, raised embroidery crafted for caps and apparel with clean depth, sharp edges, and premium dimensional impact.",
-      icon: Zap,
-      features: [
-        "Raised foam embroidery",
-        "Perfect for caps & hats",
-        "Clean edge precision",
-        "Premium 3D finish",
-        "Bold lettering",
-        "Structured cap optimization",
-      ],
-      image: "/images/services4.jpeg",
-      color: "#DAA520",
-    },
-    {
-      id: 5,
-      title: "Patch Digitizing",
-      description:
-        "Premium embroidered patches for uniforms, biker clubs, brands, and custom merchandise with durable stitch quality.",
-      icon: Shield,
-      features: [
-        "Merrow border patches",
-        "Velcro patch ready",
-        "Iron-on compatible",
-        "Custom badge designs",
-        "High durability",
-        "Detailed emblem stitching",
-      ],
-      image: "/images/patches.jpeg",
-      color: "#B8860B",
-    },
-    {
-      id: 6,
-      title: "Custom Digitizing (Quote Based)",
-      description:
-        "We convert your artwork into professional embroidery digitizing files based on your requirements with custom pricing for every order.",
-      icon: Package,
-      features: [
-        "Custom quote for every design",
-        "High-quality embroidery digitizing",
-        "Machine-ready file formats",
-        "Fast turnaround time",
-        "Accurate stitch conversion",
-        "Support for all design types",
-      ],
-      image: "/images/services6.jpeg",
-      color: "#0B1F3B",
-    },
-  ];
 
   const additionalServices = [
     {
@@ -260,74 +156,7 @@ const Services = () => {
       </section>
 
       {/* Main Services */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-3xl sm:text-4xl font-bold text-yellow-500">
-            Our Core Services
-          </h2>
-          <p className="text-white text-lg max-w-2xl mx-auto">
-            Professional embroidery solutions tailored to your needs
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {mainServices.map((service, idx) => {
-            const Icon = service.icon;
-            return (
-              <article
-                key={service.id}
-                onMouseEnter={() => setActiveService(service.id)}
-                onMouseLeave={() => setActiveService(null)}
-                className="group relative overflow-hidden rounded-2xl bg-[#1A1A1A] border border-yellow-500/20 hover:border-yellow-500 transition-all duration-500 hover:shadow-lg hover:shadow-[#D4AF37]/20 transform hover:-translate-y-2"
-                style={{
-                  animation: `fadeInUp 0.6s ease-out ${idx * 0.15}s both`,
-                }}
-              >
-                {/* Image */}
-                <div className="relative h-80 overflow-hidden">
-                  <img
-                    src={service.image}
-                    alt={`${service.title} embroidery service`}
-                    loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 "></div>
-
-                  {/* Icon */}
-                  <div className="absolute top-4 right-4 w-14 h-14 bg-yellow-500 rounded-full flex items-center justify-center transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-lg shadow-[#D4AF37]/50">
-                    <Icon className="w-7 h-7 text-[#101010]" strokeWidth={2} />
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6 space-y-4">
-                  <div>
-                    <h3 className="text-2xl font-bold text-yellow-500 group-hover:text-yellow-500 transition-colors duration-300 mb-2">
-                      {service.title}
-                    </h3>
-                    <p className="text-white leading-relaxed">
-                      {service.description}
-                    </p>
-                  </div>
-
-                  {/* Features */}
-                  <ul className="space-y-2">
-                    {service.features.map((feature, i) => (
-                      <li
-                        key={i}
-                        className="flex items-center gap-2 text-white text-sm"
-                      >
-                        <CheckCircle className="w-4 h-4 text-yellow-500 flex-shrink-0" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+      <ServicesSec />
 
       {/* Additional Services */}
       <section className="bg-[#1A1A1A] border-y border-yellow-500/20">
