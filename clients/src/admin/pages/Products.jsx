@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, Search, Package, Archive } from "lucide-react";
 
@@ -26,14 +26,35 @@ const AdminProducts = () => {
 
   const {
     data: productsData,
-    isLoading,
-    isError,
+    fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    fetchNextPage,
+    isLoading,
+    isError,
+    error,
   } = useProducts();
+
+  const observer = useRef();
+
   const { mutate: addProduct, isPending } = useAddProduct();
   const { mutate: deleteProduct } = useDeleteProduct();
+
+  const lastProductRef = useCallback(
+    (node) => {
+      if (isFetchingNextPage) return;
+
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage],
+  );
 
   const products = productsData?.pages.flatMap((page) => page.products) || [];
 
@@ -203,17 +224,23 @@ const AdminProducts = () => {
           <SpinnerLoader />
         ) : filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard
-                key={product._id}
-                product={product}
-                onEdit={handleEditProduct}
-                onDelete={() => handleDeleteProduct(product._id)}
-                onView={() => handleViewProduct(product)}
-                isLoading={isLoading}
-                isError={isError}
-              />
-            ))}
+            {filteredProducts.map((product, idx) => {
+              const isLast = idx === filteredProducts.length - 1;
+              return (
+                <ProductCard
+                  key={product._id}
+                  ref={isLast ? lastProductRef : null}
+                  product={product}
+                  onEdit={handleEditProduct}
+                  onDelete={() => handleDeleteProduct(product._id)}
+                  onView={() => handleViewProduct(product)}
+                  isLoading={isLoading}
+                  isError={isError}
+                  isFetchingNextPage={isFetchingNextPage}
+                  hasNextPage={hasNextPage}
+                />
+              );
+            })}
             <button
               onClick={() => fetchNextPage()}
               disabled={!hasNextPage || isFetchingNextPage}

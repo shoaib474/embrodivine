@@ -2,10 +2,19 @@ import React from "react";
 import { Edit, Trash2, Eye, Star } from "lucide-react";
 import SpinnerLoader from "../../user/components/SpinnerLoader";
 
-const ProductCard = ({ product, onEdit, onDelete, onView, isLoading, isError }) => {
-  if(isLoading) return <SpinnerLoader />;
-  if(isError) return <p className="text-red-500">Failed to load product</p>;
-  if(!product) return null;
+const ProductCard = ({
+  product,
+  onEdit,
+  onDelete,
+  onView,
+  isLoading,
+  isError,
+  isFetchingNextPage,
+  hasNextPage,
+}) => {
+  if (isLoading) return <SpinnerLoader />;
+  if (isError) return <p className="text-red-500">Failed to load product</p>;
+  if (!product) return null;
   return (
     <div
       className="bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-xl overflow-hidden hover:border-[#D4AF37] transition-all duration-300 group"
@@ -99,6 +108,16 @@ const ProductCard = ({ product, onEdit, onDelete, onView, isLoading, isError }) 
           </button>
         </div>
       </div>
+      {isFetchingNextPage && (
+        <div className="text-center py-6 text-gray-400">more loading...</div>
+      )}
+
+      {/* End Message */}
+      {!hasNextPage && product.length > 0 && (
+        <div className="text-center py-6 text-red-400">
+          No more products available
+        </div>
+      )}
     </div>
   );
 };

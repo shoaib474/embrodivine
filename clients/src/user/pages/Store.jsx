@@ -570,9 +570,7 @@ const Store = () => {
         </div>
       </div>
       {isFetchingNextPage && (
-        <div className="text-center py-6 text-gray-400">
-          more loading...
-        </div>
+        <div className="text-center py-6 text-gray-400">more loading...</div>
       )}
 
       {/* End Message */}
