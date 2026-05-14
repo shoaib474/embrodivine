@@ -20,17 +20,25 @@
     />
 
     <meta name="author" content="Embrodivine" />
-
     <meta name="robots" content="index, follow" />
 
+    <!-- GEO / LOCAL SEO -->
+    <meta name="geo.region" content="PK-SD" />
+    <meta name="geo.placename" content="Karachi" />
+    <meta name="geo.position" content="24.8607;67.0011" />
+    <meta name="ICBM" content="24.8607, 67.0011" />
+
+    <!-- FAVICONS -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
+    <!-- CANONICAL -->
     <link rel="canonical" href="https://embrodivine.com/" />
 
+    <!-- OPEN GRAPH -->
     <meta
       property="og:title"
       content="Embrodivine | Premium Embroidery Digitizing Services"
@@ -45,6 +53,7 @@
     <meta property="og:site_name" content="Embrodivine" />
     <meta property="og:locale" content="en_US" />
 
+    <!-- TWITTER -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
@@ -57,6 +66,8 @@
     <meta name="twitter:image" content="https://embrodivine.com/preview.png" />
     <meta name="twitter:site" content="@Embrodivine" />
     <meta name="twitter:creator" content="@Embrodivine" />
+
+    <!-- WEBSITE SCHEMA -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -75,7 +86,7 @@
       }
     </script>
 
-    <!-- Organization Schema -->
+    <!-- ORGANIZATION SCHEMA -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -83,7 +94,110 @@
         "name": "Embrodivine",
         "url": "https://embrodivine.com/",
         "logo": "https://embrodivine.com/apple-touch-icon.png",
-        "sameAs": []
+        "description": "Professional embroidery digitizing, custom patches, vector conversion, and apparel branding services.",
+        "email": "support@embrodivine.com",
+        "sameAs": [
+          "https://facebook.com/embrodivine",
+          "https://instagram.com/embrodivine"
+        ]
+      }
+    </script>
+
+    <!-- LOCAL BUSINESS SCHEMA -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Embrodivine",
+        "image": "https://embrodivine.com/preview.png",
+        "url": "https://embrodivine.com/",
+        "telephone": "+92XXXXXXXXXX",
+        "email": "support@embrodivine.com",
+        "priceRange": "$$",
+        "description": "Premium embroidery digitizing services for logos, caps, patches, jacket backs, vector art, and bulk branding solutions.",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Majeed Colony, Landhi, Karachi",
+          "addressLocality": "Karachi",
+          "addressRegion": "Sindh",
+          "postalCode": "74000",
+          "addressCountry": "PK"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "24.8607",
+          "longitude": "67.0011"
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ],
+            "opens": "09:00",
+            "closes": "18:00"
+          }
+        ],
+        "sameAs": [
+          "https://facebook.com/embrodivine",
+          "https://instagram.com/embrodivine"
+        ]
+      }
+    </script>
+
+    <!-- SERVICES SCHEMA -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "serviceType": "Embroidery Digitizing",
+        "provider": {
+          "@type": "Organization",
+          "name": "Embrodivine"
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "Worldwide"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Embroidery Services",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Logo Digitizing"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "3D Puff Digitizing"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Cap Digitizing"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Custom Patch Digitizing"
+              }
+            }
+          ]
+        }
       }
     </script>
   </head>
