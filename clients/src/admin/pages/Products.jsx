@@ -236,31 +236,21 @@ const AdminProducts = () => {
                   onView={() => handleViewProduct(product)}
                   isLoading={isLoading}
                   isError={isError}
-                  isFetchingNextPage={isFetchingNextPage}
-                  hasNextPage={hasNextPage}
                 />
               );
             })}
-            <button
-              onClick={() => fetchNextPage()}
-              disabled={!hasNextPage || isFetchingNextPage}
-              className="relative px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 
-             bg-black text-white border border-gray-700
-             hover:bg-white hover:text-black hover:border-black
-             disabled:opacity-50 disabled:cursor-not-allowed
-             flex items-center justify-center gap-2 min-w-[160px] m-auto mb-12"
-            >
-              {isFetchingNextPage ? (
-                <>
-                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                  Loading...
-                </>
-              ) : hasNextPage ? (
-                "Load More"
-              ) : (
-                "No More Products"
-              )}
-            </button>
+            {isFetchingNextPage && (
+              <div className="text-center py-6 text-gray-400">
+                more loading...
+              </div>
+            )}
+
+            {/* End Message */}
+            {!hasNextPage && products.length > 0 && (
+              <div className="text-center py-6 text-red-400">
+                No more products available
+              </div>
+            )}
           </div>
         ) : (
           <NoProducts />

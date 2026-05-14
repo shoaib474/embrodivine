@@ -9,8 +9,7 @@ const ProductCard = ({
   onView,
   isLoading,
   isError,
-  isFetchingNextPage,
-  hasNextPage,
+
 }) => {
   if (isLoading) return <SpinnerLoader />;
   if (isError) return <p className="text-red-500">Failed to load product</p>;
@@ -108,16 +107,7 @@ const ProductCard = ({
           </button>
         </div>
       </div>
-      {isFetchingNextPage && (
-        <div className="text-center py-6 text-gray-400">more loading...</div>
-      )}
-
-      {/* End Message */}
-      {!hasNextPage && product.length > 0 && (
-        <div className="text-center py-6 text-red-400">
-          No more products available
-        </div>
-      )}
+      
     </div>
   );
 };
