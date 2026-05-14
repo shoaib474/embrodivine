@@ -38,11 +38,6 @@
   scrollbar-width: none; /* Firefox */
 }
 
-/* ===============================
-   Luxury Gold Scrollbar
-   Theme: #101010 / #1A1A1A / #D4AF37
-================================ */
-
 /* Chrome, Edge, Safari */
 ::-webkit-scrollbar {
   width: 10px;
