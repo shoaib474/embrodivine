@@ -10,7 +10,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-12 h-12 bg-gray-300 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
-              <img src="/logo.png" alt="logo" />
+              <img src="/logo.webp" alt="logo" />
             </div>
               <span className="text-2xl font-bold text-white">Embrodivine</span>
             </div>

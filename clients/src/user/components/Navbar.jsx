@@ -94,7 +94,7 @@ const Navbar = () => {
           {/* LOGO */}
           <Link to="/" className="flex items-center gap-2 group">
             <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center group-hover:scale-110 transition">
-              <img src="/logo.png" alt="logo" />
+              <img src="/logo.webp" alt="logo" />
             </div>
             <span className="text-xl md:text-2xl font-bold text-white">
               Embrodivine

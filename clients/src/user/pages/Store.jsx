@@ -73,7 +73,6 @@ const Store = () => {
   );
 
   const products = data?.pages?.flatMap((page) => page.products) || [];
-  console.log("Fetched products:", products);
 
   const cart = cartData?.products || [];
 

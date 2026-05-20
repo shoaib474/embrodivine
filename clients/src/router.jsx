@@ -39,6 +39,7 @@ const NotifyEmails = React.lazy(() => import("./admin/pages/NotifyEmails"));
 const QuoteRequests = React.lazy(() => import("./admin/pages/QuoteRequests"));
 const AdminUsers = React.lazy(() => import("./admin/pages/User"));
 const Coupons = React.lazy(() => import("./admin/pages/Coupon"));
+const AdminContact = React.lazy(() => import("./admin/pages/Contact"));
 
 import SpinnerLoader from "./user/components/SpinnerLoader";
 
@@ -131,6 +132,7 @@ export const router = createBrowserRouter([
       { path: "notify", element: wrap(<NotifyEmails />) },
       { path: "users", element: wrap(<AdminUsers />) },
       { path: "quote", element: wrap(<QuoteRequests />) },
+      { path: "contact", element: wrap(<AdminContact />) },
       { path: "coupon", element: wrap(<Coupons />) },
     ],
   },

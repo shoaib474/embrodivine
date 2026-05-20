@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CheckCircle , Scissors , Palette, Shield , } from "lucide-react";
+import { CheckCircle, Scissors, Palette, Shield } from "lucide-react";
 
 const ServicesSec = () => {
   const [active, setActive] = useState(null);
@@ -10,7 +10,7 @@ const ServicesSec = () => {
       title: "Digitizing",
       description:
         "Professional embroidery digitizing services covering all types of stitch-ready file creation for garments, caps, patches, and creative apparel.",
-      image:"/images/digitizing.png",
+      image: "/images/digitizing.webp",
       services: [
         {
           name: "Graphic",
@@ -86,7 +86,7 @@ const ServicesSec = () => {
       title: "Vector Services",
       description:
         "High-quality vector conversion services for printing, branding, and scalable design needs.",
-      image: "/images/vector.png",
+      image: "/images/vector.webp",
       services: [
         {
           name: "Vector Conversion",
@@ -118,7 +118,7 @@ const ServicesSec = () => {
       title: "Patch Production",
       description:
         "Durable and premium-quality patch manufacturing for brands, uniforms, and merchandise.",
-      image: "/images/patches.jpeg",
+      image: "/images/patches.webp",
       services: [
         {
           name: "Embroidered Patches",
@@ -147,93 +147,93 @@ const ServicesSec = () => {
   ];
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-  {/* Header */}
-  <div className="text-center mb-16 space-y-4">
-    <h2 className="text-3xl sm:text-4xl font-bold text-yellow-500">
-      Our Core Services
-    </h2>
-    <p className="text-white text-lg max-w-2xl mx-auto">
-      Professional embroidery solutions tailored to your needs
-    </p>
-  </div>
+      {/* Header */}
+      <div className="text-center mb-16 space-y-4">
+        <h2 className="text-3xl sm:text-4xl font-bold text-yellow-500">
+          Our Core Services
+        </h2>
+        <p className="text-white text-lg max-w-2xl mx-auto">
+          Professional embroidery solutions tailored to your needs
+        </p>
+      </div>
 
-  {/* Accordion */}
-  <div className="space-y-6">
-    {mainServices.map((service) => {
-      const isOpen = active === service.id;
+      {/* Accordion */}
+      <div className="space-y-6">
+        {mainServices.map((service) => {
+          const isOpen = active === service.id;
 
-      return (
-        <div
-          key={service.id}
-          className="rounded-2xl border border-yellow-500/20 bg-[#1A1A1A] overflow-hidden transition-all duration-500"
-        >
-          {/* HEADER */}
-          <button
-            onClick={() => setActive(isOpen ? null : service.id)}
-            className="w-full flex flex-col md:flex-row gap-6 p-6 text-left hover:bg-[#222] transition"
-          >
-            {/* IMAGE (ONLY MAIN SERVICE) */}
-            <div className="md:w-40 w-full h-40 flex-shrink-0 rounded-xl overflow-hidden border border-yellow-500/20">
-              <img
-                src={service.image}
-                alt={service.title}
-                className="w-full h-full object-cover hover:scale-110 transition duration-700"
-              />
-            </div>
-
-            {/* TEXT */}
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold text-yellow-500">
-                {service.title}
-              </h3>
-
-              <p className="text-white text-sm mt-2 leading-relaxed">
-                {service.description}
-              </p>
-            </div>
-
-            {/* ICON */}
-            <div className="text-yellow-500 text-3xl self-start md:self-center">
-              {isOpen ? "−" : "+"}
-            </div>
-          </button>
-
-          {/* BODY */}
-          <div
-            className={`transition-all duration-500 ease-in-out ${
-              isOpen ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
-            } overflow-hidden`}
-          >
-            <div className="px-6 pb-6 grid md:grid-cols-2 gap-6">
-              {service.services.map((sub, idx) => (
-                <div
-                  key={idx}
-                  className="bg-[#111] border border-yellow-500/10 rounded-xl p-5"
-                >
-                  <h4 className="text-lg font-semibold text-yellow-500 mb-3">
-                    {sub.name}
-                  </h4>
-
-                  <ul className="space-y-2">
-                    {sub.features.map((f, i) => (
-                      <li
-                        key={i}
-                        className="flex items-center gap-2 text-white text-sm"
-                      >
-                        <CheckCircle className="w-4 h-4 text-yellow-500 flex-shrink-0" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
+          return (
+            <div
+              key={service.id}
+              className="rounded-2xl border border-yellow-500/20 bg-[#1A1A1A] overflow-hidden transition-all duration-500"
+            >
+              {/* HEADER */}
+              <button
+                onClick={() => setActive(isOpen ? null : service.id)}
+                className="w-full flex flex-col md:flex-row gap-6 p-6 text-left hover:bg-[#222] transition"
+              >
+                {/* IMAGE (ONLY MAIN SERVICE) */}
+                <div className="md:w-40 w-full h-40 flex-shrink-0 rounded-xl overflow-hidden border border-yellow-500/20">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover hover:scale-110 transition duration-700"
+                  />
                 </div>
-              ))}
+
+                {/* TEXT */}
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-yellow-500">
+                    {service.title}
+                  </h3>
+
+                  <p className="text-white text-sm mt-2 leading-relaxed">
+                    {service.description}
+                  </p>
+                </div>
+
+                {/* ICON */}
+                <div className="text-yellow-500 text-3xl self-start md:self-center">
+                  {isOpen ? "−" : "+"}
+                </div>
+              </button>
+
+              {/* BODY */}
+              <div
+                className={`transition-all duration-500 ease-in-out ${
+                  isOpen ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
+                } overflow-hidden`}
+              >
+                <div className="px-6 pb-6 grid md:grid-cols-2 gap-6">
+                  {service.services.map((sub, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-[#111] border border-yellow-500/10 rounded-xl p-5"
+                    >
+                      <h4 className="text-lg font-semibold text-yellow-500 mb-3">
+                        {sub.name}
+                      </h4>
+
+                      <ul className="space-y-2">
+                        {sub.features.map((f, i) => (
+                          <li
+                            key={i}
+                            className="flex items-center gap-2 text-white text-sm"
+                          >
+                            <CheckCircle className="w-4 h-4 text-yellow-500 flex-shrink-0" />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      );
-    })}
-  </div>
-</section>
+          );
+        })}
+      </div>
+    </section>
   );
 };
 

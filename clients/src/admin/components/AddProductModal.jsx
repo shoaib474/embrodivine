@@ -24,7 +24,7 @@ const AddProductModal = ({
       formData.append(key, data[key]);
     }
 
-    handleAddProduct(data); // send FormData to backend
+    handleAddProduct(data); // send FormData to backend 
     reset();
   };
 

@@ -2,19 +2,19 @@ const ServicesSection = () => {
   const services = [
     {
       title: "Digitizing",
-      image: "/images/digitizing.png",
+      image: "/images/digitizing.webp",
       description:
         "Premium embroidery digitizing for logos, caps, jackets, 3D puff and custom designs with sharp stitch quality and fast turnaround.",
     },
     {
       title: "Vector",
-      image: "/images/vector.png",
+      image: "/images/vector.webp",
       description:
         "High-quality vector conversion of logos and images into scalable, print-ready files for branding and professional use.",
     },
     {
       title: "Patches",
-      image: "/images/patches.jpeg",
+      image: "/images/patches.webp",
       description:
         "Custom embroidered patches with detailed stitching, durable finish, and options like iron-on, sew-on, and Velcro backing.",
     },

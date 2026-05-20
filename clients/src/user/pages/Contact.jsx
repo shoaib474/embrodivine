@@ -23,17 +23,20 @@ import { useSubmitContact } from "../../hooks/useContact";
 const Contact = () => {
   const { mutate: sendMessage, isPending } = useSubmitContact();
 
+  const [submitted, setSubmitted] = useState(false);
+
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const onSubmit = async (data) => {
     sendMessage(data, {
       onSuccess: (response) => {
         toast.success(response.message || "Message sent successfully!");
+        setSubmitted(true);
         // Reset form after submit
         reset();
       },
@@ -324,7 +327,7 @@ const Contact = () => {
               </button>
 
               {/* Success Message */}
-              {isSubmitSuccessful && (
+              {submitted && (
                 <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 animate-fade-in">
                   <p className="text-yellow-500 text-center font-semibold">
                     Thank you! We'll get back to you within 24 hours.

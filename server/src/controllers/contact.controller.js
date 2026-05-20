@@ -1,5 +1,5 @@
 import Contact from "../models/Contact.model.js";
-import { sendContactEmail } from "../utils/sendEmail.js";
+import { sendContactEmail, sendReplyToContact } from "../utils/sendEmail.js";
 
 // CREATE CONTACT MESSAGE
 export const submitContactForm = async (req, res) => {
@@ -81,6 +81,58 @@ export const getSingleContact = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server Error",
+    });
+  }
+};
+
+// ADMIN REPLY TO USER MESSAGE
+export const replyToContact = async (req, res) => {
+  try {
+    const { replyText } = req.body;
+
+    if (!replyText) {
+      return res.status(400).json({
+        success: false,
+        message: "Reply text is required",
+      });
+    }
+
+    const contact = await Contact.findById(req.params.id);
+
+    if (!contact) {
+      return res.status(404).json({
+        success: false,
+        message: "Contact not found",
+      });
+    }
+
+    // SEND EMAIL
+    await sendReplyToContact({
+      name: contact.name,
+      email: contact.email,
+      subject: contact.subject,
+      originalMessage: contact.message,
+      replyMessage: replyText,
+    });
+
+    // SAVE REPLY
+    contact.reply = replyText;
+    contact.status = "resolved";
+    contact.repliedAt = new Date();
+
+    await contact.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Reply sent successfully",
+      contact,
+    });
+  } catch (error) {
+    console.error("Reply Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };

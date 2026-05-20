@@ -8,6 +8,7 @@ import {
   Bell,
   User,
   Ticket,
+  Contact,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,6 +22,7 @@ const menuItems = [
   { id: "notify", icon: Bell, label: "Notify", badge: null },
   { id: "users", icon: User, label: "Users", badge: null },
   { id: "quote", icon: FileText, label: "Quote Requests", badge: null },
+  { id: "contact", icon: Contact, label: "Contact", badge: null },
   { id: "coupon", icon: Ticket, label: "Coupon Code", badge: null },
 ];
 

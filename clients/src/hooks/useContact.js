@@ -5,6 +5,7 @@ import {
   getSingleContact,
   updateContactStatus,
   deleteContact,
+  replyToContact,
 } from "../API/contactApi";
 
 // 📨 SUBMIT CONTACT FORM
@@ -28,6 +29,17 @@ export const useSingleContact = (id) => {
     queryKey: ["contact", id],
     queryFn: () => getSingleContact(id),
     enabled: !!id,
+  });
+};
+
+// REPLY TO CONTACT
+export const useReplyToContact = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: replyToContact,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
+    },
   });
 };
 

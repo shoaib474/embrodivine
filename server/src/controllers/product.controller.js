@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import cloudinary from "../config/cloudinary.js";
 import { redisClient } from "../config/redis.js";
 import Product from "../models/Product.model.js";
+import User from "../models/User.model.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 
 // CREATE PRODUCT
@@ -309,8 +310,10 @@ export const updateProduct = async (req, res) => {
 // DELETE SINGLE PRODUCT
 export const deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const { id } = req.params;
 
+    // Product exists check
+    const product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({
         success: false,
@@ -318,31 +321,30 @@ export const deleteProduct = async (req, res) => {
       });
     }
 
-    // 1️⃣ Delete image from Cloudinary first
-    if (product.image?.public_id) {
-      await cloudinary.uploader.destroy(product.image.public_id);
-    }
+    // 1️⃣ Delete product from products collection
+    await Product.findByIdAndDelete(id);
 
-    if (product.pdf?.public_id) {
-      await cloudinary.uploader.destroy(product.pdf.public_id);
-    }
-
-    // 2️⃣ Delete product from DB
-    await product.deleteOne();
-
-    await redisClient.del("all_products");
-    await redisClient.del(`product_${req.params.id}`);
+    // 2️⃣ Remove from all users carts
+    await User.updateMany(
+      {},
+      {
+        $pull: {
+          cart: { product: id }, // if cart items stored like {product, quantity}
+          favorites: id, // if favorites is array of product IDs
+        },
+      }
+    );
 
     res.status(200).json({
       success: true,
-      message: "Product deleted successfully",
+      message:
+        "Product deleted successfully from products, carts, and favorites",
     });
-  } catch (err) {
-    console.error("Delete Product Error:", err);
-
+  } catch (error) {
+    console.error("Delete Product Error:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to delete product",
+      message: "Server error while deleting product",
     });
   }
 };

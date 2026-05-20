@@ -4,6 +4,7 @@ import {
   submitContactForm,
   getAllContacts,
   getSingleContact,
+  replyToContact,
   updateContactStatus,
   deleteContact,
 } from "../controllers/contact.controller.js";
@@ -17,6 +18,7 @@ router.post("/submit", submitContactForm);
 // Admin
 router.get("/", authVerification, admin, getAllContacts);
 router.get("/:id", authVerification, admin, getSingleContact);
+router.post("/:id/reply", authVerification, admin, replyToContact);
 router.put("/:id/status", authVerification, admin, updateContactStatus);
 router.delete("/:id", authVerification, admin, deleteContact);
 
