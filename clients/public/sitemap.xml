@@ -1,88 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- 🏠 Main Pages (Indexable Only) -->
   <url>
-    <loc>https://embrodivine.com/Auth</loc>
-    <priority>0.8</priority>
+    <loc>https://embrodivine.com/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
   </url>
+
   <url>
-    <loc>https://embrodivine.com/Cart</loc>
-    <priority>0.8</priority>
+    <loc>https://embrodivine.com/category</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
+
   <url>
-    <loc>https://embrodivine.com/Category</loc>
-    <priority>0.8</priority>
+    <loc>https://embrodivine.com/collection</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
+
   <url>
-    <loc>https://embrodivine.com/CategoryDetail</loc>
-    <priority>0.8</priority>
+    <loc>https://embrodivine.com/store</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
+
   <url>
-    <loc>https://embrodivine.com/Checkout</loc>
-    <priority>0.8</priority>
+    <loc>https://embrodivine.com/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
+
   <url>
-    <loc>https://embrodivine.com/CheckoutUnavailable</loc>
-    <priority>0.8</priority>
+    <loc>https://embrodivine.com/services</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
+
   <url>
-    <loc>https://embrodivine.com/Collection</loc>
-    <priority>0.8</priority>
+    <loc>https://embrodivine.com/quotes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
+
+  <!-- 🧾 User Pages (ONLY if SEO needed, otherwise REMOVE) -->
   <url>
-    <loc>https://embrodivine.com/Contact</loc>
-    <priority>0.8</priority>
+    <loc>https://embrodivine.com/orders</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
   </url>
+
+  <!-- ⚠️ Important: Product Pages (MOST IMPORTANT FOR SEO) -->
+  <!-- These should be dynamic from backend -->
   <url>
-    <loc>https://embrodivine.com/Dashboard</loc>
-    <priority>0.8</priority>
+    <loc>https://embrodivine.com/product/sample-product</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
-  <url>
-    <loc>https://embrodivine.com/Favorites</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/Home</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/NotFound</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/Orders</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/OrderSuccess</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/Payment</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/Profile</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/Quotes</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/Services</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/Settings</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/Store</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://embrodivine.com/UserProductView</loc>
-    <priority>0.8</priority>
-  </url>
+
 </urlset>

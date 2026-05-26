@@ -32,7 +32,8 @@
     "react-medium-image-zoom": "^5.4.0",
     "react-router-dom": "^7.10.1",
     "sweetalert2": "^11.26.24",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "vite-plugin-compression": "^0.5.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

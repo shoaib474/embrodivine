@@ -5,6 +5,7 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/dashboard
 Disallow: /checkout-success
+Disallow: /shop?filter_
 
 # Sitemap location (VERY IMPORTANT)
 Sitemap: https://embrodivine.com/sitemap.xml
