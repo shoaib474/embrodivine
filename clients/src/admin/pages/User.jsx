@@ -128,8 +128,6 @@ const AdminUsers = () => {
   };
 
   const handleDeleteUser = (id) => {
-    console.log(id);
-
     deleteUser(id, {
       onSuccess: () => {
         toast.success("User delete successfully");

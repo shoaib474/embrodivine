@@ -19,6 +19,7 @@ import quoteRouter from "./routes/quote.routes.js";
 import profileRouter from "./routes/profile.routes.js";
 import userRouter from "./routes/user.routes.js";
 import contactRouter from "./routes/contact.routes.js";
+import couponRouter from "./routes/coupon.routes.js";
 
 const app = express();
 
@@ -66,5 +67,6 @@ app.use("/api/paypal", paypalRouter);
 app.use("/api", notifyRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/contact", contactRouter);
+app.use("/api/coupons", couponRouter);
 
 export default app;

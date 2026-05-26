@@ -28,10 +28,12 @@ import PayPalButton from "../components/PayPalButton";
 
 import { useCart } from "../../hooks/useCart";
 import { useCheckout } from "../context/CheckoutContext";
+import { useValidateCoupon } from "../../hooks/useCoupon";
 
 const Payment = () => {
   const { data, isLoading, isError } = useCart();
   const { checkoutData } = useCheckout();
+  const { mutate, isPending } = useValidateCoupon();
 
   const [paymentMethod, setPaymentMethod] = useState("paypal");
   const [savedCard, setSavedCard] = useState(null);
@@ -39,6 +41,7 @@ const Payment = () => {
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState(null);
   const [promoError, setPromoError] = useState("");
+  const [couponType, setCouponType] = useState(null);
 
   const [formData, setFormData] = useState({
     cardNumber: "",
@@ -82,13 +85,20 @@ const Payment = () => {
     },
   ];
 
+  let discount = 0;
+
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
-  const discount = appliedPromo ? (subtotal * appliedPromo.discount) / 100 : 0;
-  const tax = (subtotal - discount) * 0.08;
-  const total = subtotal - discount + tax;
+
+  if (couponType === "percentage") {
+    discount = (cartTotal * appliedPromo.discount) / 100;
+  } else if (couponType === "fixed") {
+    discount = appliedPromo.discount;
+  }
+
+  const total = subtotal - discount;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -142,16 +152,27 @@ const Payment = () => {
   };
 
   const applyPromo = async () => {
-    try {
-      const res = await axios.post(`${API}/api/promo/verify`, {
+    mutate(
+      {
         code: promoCode.trim().toUpperCase(),
-      });
-      setAppliedPromo(res.data); // { code, discount }
-      setPromoError("");
-    } catch (err) {
-      setAppliedPromo(null);
-      setPromoError("Invalid promo code");
-    }
+        cartTotal: subtotal,
+      },
+      {
+        onSuccess: (data) => {
+          setAppliedPromo({
+            code: promoCode,
+            discount: data.data.coupon.value,
+          });
+          setCouponType(data.data.coupon.type);
+          setPromoError("");
+        },
+
+        onError: (error) => {
+          toast.error(error.response?.data?.message || "Invalid promo code");
+          setPromoError(error.response?.data?.message || "Invalid promo code");
+        },
+      },
+    );
   };
 
   const handlePlaceOrder = () => {
@@ -379,9 +400,10 @@ const Payment = () => {
                       />
                       <button
                         onClick={applyPromo}
+                        disabled={!promoCode.trim() || isPending}
                         className="px-4 py-2 bg-yellow-600 text-[#101010] rounded-lg font-semibold hover:bg-white transition-all"
                       >
-                        Apply
+                        {isPending ? "Applying..." : "Apply"}
                       </button>
                     </div>
                     {promoError && (
@@ -402,10 +424,6 @@ const Payment = () => {
                 <div className="flex items-center justify-between text-yellow-500/70">
                   <span>Subtotal</span>
                   <span className="text-white">${subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex items-center justify-between text-yellow-500/70">
-                  <span>Tax</span>
-                  <span className="text-white">${tax.toFixed(2)}</span>
                 </div>
                 {discount > 0 && (
                   <div className="flex items-center justify-between text-green-500">

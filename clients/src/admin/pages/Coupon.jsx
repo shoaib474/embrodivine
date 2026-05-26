@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 import {
   Tag,
   Plus,
@@ -23,7 +24,23 @@ import {
   EyeOff,
 } from "lucide-react";
 
+import {
+  useCoupons,
+  useCreateCoupon,
+  useDeleteCoupon,
+  useUpdateCoupon,
+} from "../../hooks/useCoupon";
+
+import Loader from "../components/Loader";
+
 const AdminCoupons = () => {
+  const { mutate, isPending } = useCreateCoupon();
+  const { data, isLoading, error } = useCoupons();
+  const { mutate: updateMutate, isPending: isUpdatePending } =
+    useUpdateCoupon();
+  const { mutate: deleteMutate, isPending: isDeletePending } =
+    useDeleteCoupon();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
@@ -44,100 +61,10 @@ const AdminCoupons = () => {
     startDate: "",
     endDate: "",
     description: "",
+    status: "active",
   });
 
-  const [coupons, setCoupons] = useState([
-    {
-      id: 1,
-      code: "SAVE20",
-      type: "percentage",
-      value: 20,
-      minPurchase: 50,
-      maxDiscount: 100,
-      usageLimit: 100,
-      used: 45,
-      perUserLimit: 1,
-      startDate: "2024-01-01",
-      endDate: "2024-12-31",
-      status: "active",
-      description: "20% off on orders above $50",
-    },
-    {
-      id: 2,
-      code: "WELCOME10",
-      type: "fixed",
-      value: 10,
-      minPurchase: 0,
-      maxDiscount: null,
-      usageLimit: 500,
-      used: 234,
-      perUserLimit: 1,
-      startDate: "2024-01-01",
-      endDate: "2024-12-31",
-      status: "active",
-      description: "Welcome discount for new customers",
-    },
-    {
-      id: 3,
-      code: "SUMMER25",
-      type: "percentage",
-      value: 25,
-      minPurchase: 100,
-      maxDiscount: 50,
-      usageLimit: 50,
-      used: 50,
-      perUserLimit: 2,
-      startDate: "2024-06-01",
-      endDate: "2024-08-31",
-      status: "expired",
-      description: "Summer sale - 25% off",
-    },
-    {
-      id: 4,
-      code: "FREESHIP",
-      type: "free_shipping",
-      value: 0,
-      minPurchase: 30,
-      maxDiscount: null,
-      usageLimit: 1000,
-      used: 567,
-      perUserLimit: 3,
-      startDate: "2024-01-01",
-      endDate: "2024-12-31",
-      status: "active",
-      description: "Free shipping on orders above $30",
-    },
-    {
-      id: 5,
-      code: "VIP50",
-      type: "fixed",
-      value: 50,
-      minPurchase: 200,
-      maxDiscount: null,
-      usageLimit: 20,
-      used: 8,
-      perUserLimit: 1,
-      startDate: "2024-01-15",
-      endDate: "2024-12-31",
-      status: "active",
-      description: "VIP exclusive - $50 off",
-    },
-    {
-      id: 6,
-      code: "FLASH15",
-      type: "percentage",
-      value: 15,
-      minPurchase: 0,
-      maxDiscount: 30,
-      usageLimit: 200,
-      used: 156,
-      perUserLimit: 1,
-      startDate: "2024-02-01",
-      endDate: "2024-02-07",
-      status: "expired",
-      description: "Flash sale - limited time",
-    },
-  ]);
+  const coupons = data?.data || [];
 
   const stats = [
     {
@@ -186,39 +113,46 @@ const AdminCoupons = () => {
   };
 
   const handleCreateCoupon = () => {
-    const newCoupon = {
-      id: coupons.length + 1,
-      ...formData,
-      value: parseFloat(formData.value),
-      minPurchase: parseFloat(formData.minPurchase) || 0,
-      maxDiscount: formData.maxDiscount
-        ? parseFloat(formData.maxDiscount)
-        : null,
-      usageLimit: parseInt(formData.usageLimit),
-      used: 0,
-      perUserLimit: parseInt(formData.perUserLimit),
-      status: "active",
-    };
-    setCoupons([...coupons, newCoupon]);
-    setShowCreateModal(false);
-    resetForm();
+    mutate(formData, {
+      onSuccess: (data) => {
+        setShowCreateModal(false);
+        resetForm();
+        toast.success("Coupon created");
+      },
+    });
   };
 
-  const handleUpdateCoupon = () => {
-    setCoupons(
-      coupons.map((c) =>
-        c.id === selectedCoupon.id ? { ...selectedCoupon, ...formData } : c,
-      ),
+  const handleUpdateCoupon = (id) => {
+    updateMutate(
+      {
+        id,
+        data: formData,
+      },
+      {
+        onSuccess: (data) => {
+          setShowEditModal(false);
+          setSelectedCoupon(null);
+          resetForm();
+          toast.success("Coupon updated successfully");
+        },
+
+        onError: (error) => {
+          console.log(error);
+
+          toast.error(error.response?.data?.message);
+        },
+      },
     );
-    setShowEditModal(false);
-    setSelectedCoupon(null);
-    resetForm();
   };
 
   const handleDeleteCoupon = (id) => {
-    setCoupons(coupons.filter((c) => c.id !== id));
-    setShowDeleteModal(false);
-    setSelectedCoupon(null);
+    deleteMutate(id, {
+      onSuccess: () => {
+        setShowDeleteModal(false);
+        setSelectedCoupon(null);
+        toast.success("Coupon deleted");
+      },
+    });
   };
 
   const handleCopyCode = (code) => {
@@ -273,12 +207,6 @@ const AdminCoupons = () => {
         color: "text-green-500",
         bg: "bg-green-500/10",
       },
-      free_shipping: {
-        icon: Package,
-        label: "Free Shipping",
-        color: "text-purple-500",
-        bg: "bg-purple-500/10",
-      },
     };
     const config = typeConfig[type];
     const Icon = config.icon;
@@ -316,6 +244,10 @@ const AdminCoupons = () => {
     );
   };
 
+  if (isLoading) return <Loader />;
+
+  if (error) return <div>Error loading coupons</div>;
+
   const CouponForm = ({ isEdit = false }) => (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -323,6 +255,7 @@ const AdminCoupons = () => {
           <label className="block text-[#D4AF37]/70 text-sm mb-2">
             Coupon Code
           </label>
+
           <input
             type="text"
             name="code"
@@ -332,10 +265,12 @@ const AdminCoupons = () => {
             className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37] transition-all uppercase"
           />
         </div>
+
         <div>
           <label className="block text-[#D4AF37]/70 text-sm mb-2">
             Discount Type
           </label>
+
           <select
             name="type"
             value={formData.type}
@@ -343,27 +278,49 @@ const AdminCoupons = () => {
             className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37] transition-all"
           >
             <option value="percentage">Percentage</option>
+
             <option value="fixed">Fixed Amount</option>
-            <option value="free_shipping">Free Shipping</option>
           </select>
         </div>
-      </div>
 
-      {formData.type !== "free_shipping" && (
         <div>
           <label className="block text-[#D4AF37]/70 text-sm mb-2">
-            Discount Value {formData.type === "percentage" ? "(%)" : "($)"}
+            Discount Value
+            {formData.type === "percentage" ? " (%)" : " ($)"}
           </label>
+
           <input
             type="number"
             name="value"
             value={formData.value}
             onChange={handleInputChange}
-            placeholder={formData.type === "percentage" ? "20" : "10"}
+            placeholder={formData.type === "percentage" ? "20" : "100"}
             className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37] transition-all"
           />
         </div>
-      )}
+
+        {/* STATUS */}
+        {isEdit && (
+          <div>
+            <label className="block text-[#D4AF37]/70 text-sm mb-2">
+              Status
+            </label>
+
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37] transition-all"
+            >
+              <option value="active">Active</option>
+
+              <option value="expired">Expired</option>
+
+              <option value="disabled">Disabled</option>
+            </select>
+          </div>
+        )}
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -481,10 +438,18 @@ const AdminCoupons = () => {
           Cancel
         </button>
         <button
-          onClick={isEdit ? handleUpdateCoupon : handleCreateCoupon}
+          onClick={() => {
+            isEdit
+              ? handleUpdateCoupon(selectedCoupon._id)
+              : handleCreateCoupon();
+          }}
           className="flex-1 px-6 py-3 bg-[#D4AF37] text-[#101010] rounded-lg font-semibold hover:bg-[#E8D7B5] transition-all"
         >
-          {isEdit ? "Update Coupon" : "Create Coupon"}
+          {isEdit
+            ? isUpdatePending
+              ? "Updating..."
+              : "Update Coupon"
+            : "Create Coupon"}
         </button>
       </div>
     </div>
@@ -569,7 +534,6 @@ const AdminCoupons = () => {
               <option value="all">All Types</option>
               <option value="percentage">Percentage</option>
               <option value="fixed">Fixed Amount</option>
-              <option value="free_shipping">Free Shipping</option>
             </select>
 
             <select
@@ -589,7 +553,7 @@ const AdminCoupons = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {filteredCoupons.map((coupon, index) => (
             <motion.div
-              key={coupon.id}
+              key={coupon._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
@@ -649,7 +613,6 @@ const AdminCoupons = () => {
                   <span className="text-[#E8D7B5] font-semibold">
                     {coupon.type === "percentage" && `${coupon.value}%`}
                     {coupon.type === "fixed" && `$${coupon.value}`}
-                    {coupon.type === "free_shipping" && "Free Shipping"}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -679,7 +642,8 @@ const AdminCoupons = () => {
                     Valid Period:
                   </span>
                   <span className="text-[#E8D7B5] text-sm">
-                    {coupon.startDate} to {coupon.endDate}
+                    {new Date(coupon.startDate).toLocaleDateString("en-GB")} to{" "}
+                    {new Date(coupon.endDate).toLocaleDateString("en-GB")}
                   </span>
                 </div>
               </div>
@@ -808,10 +772,11 @@ const AdminCoupons = () => {
                     Cancel
                   </button>
                   <button
-                    onClick={() => handleDeleteCoupon(selectedCoupon.id)}
+                    onClick={() => handleDeleteCoupon(selectedCoupon._id)}
+                    disabled={isDeletePending}
                     className="flex-1 px-6 py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-all"
                   >
-                    Delete
+                    {isDeletePending ? "Deleting..." : "Delete Coupon"}
                   </button>
                 </div>
               </motion.div>
