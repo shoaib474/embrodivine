@@ -54,10 +54,10 @@ const Hero = () => {
           </Link>
 
           <Link
-            to="/collection"
+            to="/store"
             className="inline-flex items-center justify-center border border-yellow-500 text-yellow-500 px-8 py-4 rounded-full font-semibold text-lg hover:bg-yellow-500 hover:text-black transition-all"
           >
-            View Collection
+            View Products
           </Link>
         </div>
       </motion.div>

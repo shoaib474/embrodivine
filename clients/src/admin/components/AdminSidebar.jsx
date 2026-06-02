@@ -9,6 +9,7 @@ import {
   User,
   Ticket,
   Contact,
+  LayoutGrid,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -18,6 +19,7 @@ const API = import.meta.env.VITE_API_URL;
 const menuItems = [
   { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", badge: null },
   { id: "orders", icon: ShoppingCart, label: "Orders", badge: null },
+  { id: "categories", icon: LayoutGrid, label: "Categories", badge: null },
   { id: "products", icon: Package, label: "Products", badge: null },
   { id: "notify", icon: Bell, label: "Notify", badge: null },
   { id: "users", icon: User, label: "Users", badge: null },

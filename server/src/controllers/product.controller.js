@@ -332,7 +332,7 @@ export const deleteProduct = async (req, res) => {
           cart: { product: id }, // if cart items stored like {product, quantity}
           favorites: id, // if favorites is array of product IDs
         },
-      }
+      },
     );
 
     res.status(200).json({

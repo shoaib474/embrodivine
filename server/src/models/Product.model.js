@@ -30,9 +30,9 @@ const productSchema = new mongoose.Schema(
     },
 
     category: {
-      type: String,
-      default: "General",
-      maxlength: [50, "Category name too long"],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
     },
 
     rating: {
