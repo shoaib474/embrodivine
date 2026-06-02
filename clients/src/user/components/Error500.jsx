@@ -13,7 +13,7 @@ const Error500 = () => {
   return (
     <div className="min-h-screen bg-[#101010] flex items-center justify-center p-4 sm:px-6 pt-32">
       <div className="max-w-2xl w-full text-center">
-        {/* Error Icon */}
+       
         <div className="mb-8 relative">
           <div className="w-32 h-32 mx-auto bg-[#D4AF37]/10 rounded-full flex items-center justify-center border-2 border-[#D4AF37]/30 animate-pulse">
             <AlertCircle className="w-20 h-20 text-[#D4AF37]" strokeWidth={1.5} />
