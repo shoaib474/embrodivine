@@ -7,6 +7,7 @@ import ServicesSection from "../components/ServicesSection";
 import FeaturedProducts from "../components/Featured";
 
 import { useProducts } from "../../hooks/useProduct";
+import ReviewSection from "../components/ReviewSection";
 
 const Home = () => {
   const { data } = useProducts();
@@ -135,9 +136,7 @@ const Home = () => {
                 <h3 className="text-xl font-bold text-yellow-500 mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-white text-sm">
-                  {feature.description}
-                </p>
+                <p className="text-white text-sm">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -145,25 +144,59 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section
-        className="py-20 text-[#1A1A1A]"
-        style={{ backgroundColor: "#101010" }}
-      >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-yellow-500">
-            Ready to Get Started?
-          </h2>
-          <p className="text-xl mb-8 text-white">
-            Get your free quote today and experience professional digitizing
-          </p>
-          <Link
-            to="/quote"
-            className="inline-flex items-center bg-yellow-500 text-[#1A1A1A] px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transform hover:scale-105 transition-all"
-          >
-            Request a Quote <ArrowRight className="ml-2" size={20} />
-          </Link>
+      <section className="bg-[#101010] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 py-20">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Mobile Images */}
+            <div className="flex justify-center">
+              <img
+                src="/images/website-mobile-mockup.png"
+                alt="EmbroDivine Mobile"
+                className="max-w-full"
+              />
+            </div>
+
+            {/* Content */}
+            <div className="text-center lg:text-left">
+              <h2 className="mt-4 text-5xl font-bold text-white leading-tight ">
+                Premium Embroidery Designs
+                <br />
+                Ready To Download
+              </h2>
+
+              <p className="mt-6 text-gray-300 text-lg leading-relaxed">
+                Discover thousands of professionally crafted embroidery designs
+                compatible with DST, PES, JEF and more.
+              </p>
+
+              <ul className="mt-8 space-y-4 text-gray-300">
+                <li>✓ Instant Digital Downloads</li>
+                <li>✓ Commercial Use Designs</li>
+                <li>✓ Premium Stitch Quality</li>
+                <li>✓ Multiple Machine Formats</li>
+              </ul>
+
+              <div className="flex flex-wrap gap-4 mt-10">
+                <Link
+                  to="/store"
+                  className="px-8 py-4 bg-[#D4AF37] text-black font-semibold rounded-lg"
+                >
+                  Browse Designs
+                </Link>
+
+                <Link
+                  to="/quote"
+                  className="px-8 py-4 border border-[#D4AF37] text-[#D4AF37] rounded-lg"
+                >
+                  Get A Quote
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
+
+      <ReviewSection />
     </>
   );
 };

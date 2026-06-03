@@ -95,3 +95,30 @@ html {
 .animate-shimmer {
   animation: shimmer 1.5s infinite;
 }
+
+.swiper-pagination {
+  margin-top: 40px !important;
+  position: relative !important;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #666 !important;
+}
+
+.swiper-pagination-bullet-active {
+  width: 30px;
+  height: 8px;
+  background: #d4af37 !important;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #d4af37 !important;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 22px !important;
+}
