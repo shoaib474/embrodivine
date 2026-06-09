@@ -55,24 +55,27 @@ const Store = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
 
-  const lastProductRef = useCallback(
-    (node) => {
-      if (isFetchingNextPage) return;
+  // const lastProductRef = useCallback(
+  //   (node) => {
+  //     if (isFetchingNextPage) return;
 
-      if (observer.current) observer.current.disconnect();
+  //     if (observer.current) observer.current.disconnect();
 
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasNextPage) {
-          fetchNextPage();
-        }
-      });
+  //     observer.current = new IntersectionObserver((entries) => {
+  //       if (entries[0].isIntersecting && hasNextPage) {
+  //         fetchNextPage();
+  //       }
+  //     });
 
-      if (node) observer.current.observe(node);
-    },
-    [isFetchingNextPage, hasNextPage, fetchNextPage],
-  );
+  //     if (node) observer.current.observe(node);
+  //   },
+  //   [isFetchingNextPage, hasNextPage, fetchNextPage],
+  // );
 
-  const products = data?.pages?.flatMap((page) => page.products) || [];
+  // const products = data?.pages?.flatMap((page) => page.products) || [];
+
+  const products = data?.products || [];
+  console.log(data)
 
   const cart = cartData?.products || [];
 
@@ -368,12 +371,12 @@ const Store = () => {
                 }
               >
                 {filteredProducts.map((product, idx) => {
-                  const isLast = idx === filteredProducts.length - 1;
+                  // const isLast = idx === filteredProducts.length - 1;
 
                   return (
                     <article
                       key={product._id}
-                      ref={isLast ? lastProductRef : null}
+                      // ref={isLast ? lastProductRef : null}
                       onClick={() => handleView(product._id)}
                       className={`group bg-[#1A1A1A] rounded-xl overflow-hidden border border-[#D4AF37]/20 hover:border-[#D4AF37] transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/20 cursor-pointer ${
                         viewMode === "grid"
@@ -539,16 +542,15 @@ const Store = () => {
           </main>
         </div>
       </div>
-      {isFetchingNextPage && (
+      {/* {isFetchingNextPage && (
         <div className="text-center py-6 text-gray-400">more loading...</div>
       )}
 
-      {/* End Message */}
       {!hasNextPage && products.length > 0 && (
         <div className="text-center py-6 text-red-400">
           No more products available
         </div>
-      )}
+      )} */}
 
       {/* <section
         className="py-32 px-4 flex flex-col items-center text-center"

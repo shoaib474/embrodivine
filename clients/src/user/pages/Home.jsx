@@ -12,7 +12,7 @@ import ReviewSection from "../components/ReviewSection";
 const Home = () => {
   const { data } = useProducts();
 
-  const products = data?.pages.flatMap((page) => page.products) || [];
+  const products = data?.products || [];
 
   const steps = [
     {

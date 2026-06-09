@@ -56,7 +56,7 @@ const CategoryDetail = () => {
     default: Sparkles,
   };
 
-  const allProducts = data?.pages.flatMap((page) => page.products) || [];
+  const allProducts = data?.products || [];
   const cart = cartData?.products || [];
 
   const categories = useMemo(() => {

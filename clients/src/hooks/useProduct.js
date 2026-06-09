@@ -15,30 +15,15 @@ import {
 import toast from "react-hot-toast";
 
 // 🛍️ GET ALL PRODUCTS
+
 export const useProducts = () => {
-  return useInfiniteQuery({
+  return useQuery({
     queryKey: ["products"],
+    queryFn: getProducts,
 
-    // pageParam automatically nextCursor receive karega
-    queryFn: ({ pageParam = null }) =>
-      getProducts({
-        pageParam,
-        limit: 8,
-      }),
-
-    // backend se nextCursor lo
-    getNextPageParam: (lastPage) => {
-      if (!lastPage?.hasMore) return undefined;
-      return lastPage.nextCursor;
-    },
-
-    initialPageParam: null,
-
-    staleTime: 1000 * 60 * 5, // 5 min cache
-    gcTime: 1000 * 60 * 10, // cache cleanup
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
     retry: 2,
-
-    // duplicate requests avoid
     refetchOnWindowFocus: false,
   });
 };

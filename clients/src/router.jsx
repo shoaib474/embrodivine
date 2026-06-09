@@ -26,6 +26,7 @@ const Checkout = React.lazy(() => import("./user/pages/Checkout"));
 const UserProductView = React.lazy(
   () => import("./user/pages/UserProductView"),
 );
+const EmbroideryDigitizing = React.lazy(() => import("./user/pages/EmbroideryDigitizing"));
 
 // ADMIN
 const AdminLayout = React.lazy(() => import("./layouts/AdminLayout"));
@@ -63,6 +64,7 @@ export const router = createBrowserRouter([
       { path: "quote", element: wrap(<Quotes />) },
       { path: "contact", element: wrap(<Contact />) },
       { path: "store/:id", element: wrap(<UserProductView />) },
+      { path: "embroidery-digitizing", element: wrap(<EmbroideryDigitizing />) },
 
       {
         path: "auth",

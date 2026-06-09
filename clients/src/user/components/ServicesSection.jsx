@@ -7,7 +7,7 @@ const ServicesSection = () => {
       description:
         "We specialize in creating precision embroidery designs that combine quality, efficiency, and durability. Each design is thoughtfully digitized to run seamlessly on embroidery machines, minimize production time, and achieve crisp, detailed stitching that brings your artwork to life..",
       image: "/images/services1.png",
-      link: "/services/digitizing",
+      link: "/embroidery-digitizing",
     },
     {
       title: "Vector Conversion",

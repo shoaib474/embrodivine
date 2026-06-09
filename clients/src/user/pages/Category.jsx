@@ -41,7 +41,7 @@ const Categories = () => {
 
   const { data, isLoading, isError } = useProducts();
 
-  const products = data?.pages.flatMap((page) => page.products) || [];
+  const products = data?.products || [];
 
   const categories = useMemo(() => {
     if (!products.length) return [];

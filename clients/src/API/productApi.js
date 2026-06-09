@@ -3,24 +3,14 @@ import axios from "axios";
 const API = import.meta.env.VITE_API_URL;
 
 // GET products
-export const getProducts = async ({ pageParam = null, limit = 8 }) => {
-  try {
+export const getProducts = async () => {
+  
     const res = await axios.get(`${API}/api/products`, {
-      params: {
-        limit,
-        cursor: pageParam, // backend cursor
-      },
       withCredentials: true,
     });
 
-    return res.data;
-  } catch (error) {
-    console.error(
-      "Error fetching products:",
-      error.response?.data || error.message,
-    );
-    throw error;
-  }
+    return res.data
+ 
 };
 
 // GET product by ID

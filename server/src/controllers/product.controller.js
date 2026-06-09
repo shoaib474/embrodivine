@@ -100,10 +100,7 @@ export const createProduct = async (req, res) => {
 // GET ALL PRODUCTS
 export const getProduct = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 12;
-    const cursor = req.query.cursor;
-
-    const cacheKey = `products_cursor_${cursor || "start"}_${limit}`;
+    const cacheKey = "all_products";
 
     const cached = await redisClient.get(cacheKey);
 
@@ -111,48 +108,19 @@ export const getProduct = async (req, res) => {
       return res.json({
         success: true,
         source: "redis",
-        ...JSON.parse(cached),
+        products: JSON.parse(cached),
       });
     }
 
-    let query = {};
-
-    // Cursor pagination
-    if (cursor) {
-      query._id = {
-        $lt: new mongoose.Types.ObjectId(cursor),
-      };
-    }
-
-    // Extra 1 product fetch for hasMore check
-    const products = await Product.find(query)
-      .sort({ _id: -1 })
-      .limit(limit + 1)
-      .lean();
-
-    const hasMore = products.length > limit;
-
-    // Extra item remove
-    if (hasMore) {
-      products.pop();
-    }
-
-    const nextCursor =
-      products.length > 0 ? products[products.length - 1]._id : null;
-
-    const response = {
-      products,
-      nextCursor,
-      hasMore,
-    };
+    const products = await Product.find({}).sort({ _id: -1 }).lean();
 
     // Redis cache
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(response));
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
 
     return res.json({
       success: true,
       source: "mongodb",
-      ...response,
+      products,
     });
   } catch (err) {
     return res.status(500).json({
