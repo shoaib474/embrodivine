@@ -176,17 +176,17 @@ const Home = () => {
                 <li>✓ Multiple Machine Formats</li>
               </ul>
 
-              <div className="flex flex-wrap gap-4 mt-10">
+              <div className="flex flex-wrap gap-4 mt-10 justify-center lg:justify-start">
                 <Link
                   to="/store"
-                  className="px-8 py-4 bg-[#D4AF37] text-black font-semibold rounded-lg"
+                  className="px-8 py-4 bg-yellow-500 text-black font-semibold rounded-lg"
                 >
                   Browse Designs
                 </Link>
 
                 <Link
                   to="/quote"
-                  className="px-8 py-4 border border-[#D4AF37] text-[#D4AF37] rounded-lg"
+                  className="px-8 py-4 border border-yellow-500 text-yellow-500 rounded-lg"
                 >
                   Get A Quote
                 </Link>

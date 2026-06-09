@@ -53,14 +53,12 @@ const ReviewSection = () => {
         <div className="max-w-7xl mx-auto px-6">
           {/* Heading */}
           <div className="text-center mb-14">
-           
-
             <h2 className="text-4xl md:text-5xl font-bold text-white mt-4">
               Trusted by thousands of happy customers
             </h2>
 
             <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
-             Don’t just believe us… see what others say
+              Don’t just believe us… see what others say
             </p>
           </div>
 
@@ -117,7 +115,7 @@ const ReviewSection = () => {
                       <Star
                         key={i}
                         size={16}
-                        className="fill-[#D4AF37] text-[#D4AF37]"
+                        className="fill-yellow-500 text-yellow-500"
                       />
                     ))}
                   </div>
@@ -135,7 +133,7 @@ const ReviewSection = () => {
                   {/* See More */}
                   <button
                     onClick={() => setSelectedReview(review)}
-                    className="text-[#D4AF37] font-medium mt-6 hover:underline m-auto"
+                    className="text-yellow-500 font-medium mt-6 hover:underline m-auto"
                   >
                     See More
                   </button>
@@ -151,8 +149,8 @@ const ReviewSection = () => {
                         px-3
                         py-1
                         rounded-full
-                        bg-[#D4AF37]/10
-                        text-[#D4AF37]
+                        bg-yellow-500/10
+                        text-yellow-500
                         text-xs
                         font-medium
                       "
@@ -170,7 +168,7 @@ const ReviewSection = () => {
       {/* Modal */}
       {selectedReview && (
         <div className="fixed inset-0 bg-black/70 z-50 flex justify-center items-center p-4">
-          <div className="bg-[#1F1F1F] max-w-xl w-full rounded-3xl p-8 relative border border-[#D4AF37]/20">
+          <div className="bg-[#1F1F1F] max-w-xl w-full rounded-3xl p-8 relative border border-yellow-500/20">
             <button
               onClick={() => setSelectedReview(null)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white cursor-pointer transition-colors"
@@ -183,7 +181,7 @@ const ReviewSection = () => {
                 <Star
                   key={i}
                   size={18}
-                  className="fill-[#D4AF37] text-[#D4AF37]"
+                  className="fill-yellow-500 text-yellow-500"
                 />
               ))}
             </div>
@@ -201,7 +199,7 @@ const ReviewSection = () => {
                 {selectedReview.author}
               </p>
 
-              <span className="text-[#D4AF37] text-sm">
+              <span className="text-yellow-500 text-sm">
                 {selectedReview.source}
               </span>
             </div>

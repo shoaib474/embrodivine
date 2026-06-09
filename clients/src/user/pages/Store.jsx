@@ -232,7 +232,23 @@ const Store = () => {
         </div>
       )}
 
-      <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex items-center justify-between gap-4 max-w-[90%] mx-auto pt-6 md:hidden">
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="lg:hidden flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] text-[#D4AF37] border border-[#D4AF37]/30 rounded-lg hover:bg-[#D4AF37]/10 transition-all"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          Filters
+        </button>
+        <p className="text-white">
+          <span className="font-bold text-yellow-500">
+            {filteredProducts.length}
+          </span>{" "}
+          Products
+        </p>
+      </div>
+
+      <div className="max-w-[90%] mx-auto sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Filters */}
           <aside
@@ -252,7 +268,13 @@ const Store = () => {
                     {categories.map((cat) => (
                       <button
                         key={cat.value}
-                        onClick={() => setSelectedCategory(cat.value)}
+                        onClick={() => {
+                          setSelectedCategory(cat.value);
+
+                          if (window.innerWidth < 1024) {
+                            setShowFilters(false);
+                          }
+                        }}
                         className={`w-full text-left px-4 py-2 rounded-lg flex justify-between transition ${
                           selectedCategory === cat.value
                             ? "bg-yellow-500 text-[#101010]"
@@ -269,50 +291,6 @@ const Store = () => {
                   <div className="pointer-events-none absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                 </div>
               </div>
-
-              {/* Price Range */}
-              <div className="bg-[#1A1A1A] rounded-xl p-6 border border-[#D4AF37]/20">
-                <h3 className="text-lg font-bold text-white mb-4">
-                  Price Range
-                </h3>
-                <div className="space-y-4">
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={priceRange[1]}
-                    onChange={(e) =>
-                      setPriceRange([0, parseInt(e.target.value)])
-                    }
-                    className="w-full accent-yellow-500"
-                  />
-                  <div className="flex items-center justify-between text-sm text-gray-300">
-                    <span>${priceRange[0]}</span>
-                    <span>${priceRange[1]}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Badges */}
-              <div className="bg-[#1A1A1A] rounded-xl p-6 border border-[#D4AF37]/20">
-                <h3 className="text-lg font-bold text-white mb-4">
-                  Quick Filters
-                </h3>
-                <div className="space-y-2">
-                  <button className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-yellow-500 hover:bg-yellow-500/10 transition-all">
-                    <TrendingUp className="w-4 h-4" />
-                    <span className="text-sm">Trending</span>
-                  </button>
-                  <button className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-yellow-500 hover:bg-yellow-500/10 transition-all">
-                    <Award className="w-4 h-4" />
-                    <span className="text-sm">Bestsellers</span>
-                  </button>
-                  <button className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-yellow-500 hover:bg-yellow-500/10 transition-all">
-                    <Star className="w-4 h-4" />
-                    <span className="text-sm">New Arrivals</span>
-                  </button>
-                </div>
-              </div>
             </div>
           </aside>
 
@@ -320,14 +298,7 @@ const Store = () => {
           <main className="flex-1">
             {/* Toolbar */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="lg:hidden flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] text-[#D4AF37] border border-[#D4AF37]/30 rounded-lg hover:bg-[#D4AF37]/10 transition-all"
-                >
-                  <SlidersHorizontal className="w-4 h-4" />
-                  Filters
-                </button>
+              <div className="hidden md:flex items-center gap-4 ">
                 <p className="text-white">
                   <span className="font-bold text-yellow-500">
                     {filteredProducts.length}
