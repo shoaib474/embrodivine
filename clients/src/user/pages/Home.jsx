@@ -5,9 +5,11 @@ import { Zap, Award, DollarSign, Check, ArrowRight } from "lucide-react";
 import Hero from "../components/Hero";
 import ServicesSection from "../components/ServicesSection";
 import FeaturedProducts from "../components/Featured";
+import ReviewSection from "../components/ReviewSection";
+import HowItWorks from "../components/HowItWorks";
+import WhyChooseUs from "../components/WhyChooseUs";
 
 import { useProducts } from "../../hooks/useProduct";
-import ReviewSection from "../components/ReviewSection";
 
 const Home = () => {
   const { data } = useProducts();
@@ -66,91 +68,22 @@ const Home = () => {
       <ServicesSection />
 
       {/* How It Works */}
-      <section className="py-20 bg-[#101010]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Heading */}
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-yellow-500 mb-4">
-              How It Works
-            </h2>
-            <p className="text-lg text-white">
-              Simple, fast, and reliable process
-            </p>
-          </div>
-
-          {/* Steps */}
-          <div className="grid md:grid-cols-3 gap-10 relative">
-            {steps.map((step, index) => (
-              <div key={index} className="relative flex flex-col items-center">
-                {/* Connector line (desktop only) */}
-                {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-10 left-full w-full h-0.5 border-t-2 border-dashed border-[#D4AF37]/30 -translate-x-1/2 z-0"></div>
-                )}
-
-                {/* Card */}
-                <div className="bg-[#1A1A1A] p-8 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 relative z-10 w-full">
-                  {/* Number Circle */}
-                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-500  rounded-full flex items-center justify-center text-[#1A1A1A] text-2xl font-bold mb-6 mx-auto shadow-sm">
-                    {step.number}
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-2xl font-bold text-yellow-500 mb-3 text-center">
-                    {step.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-white text-center leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HowItWorks />
 
       {/* FEATUED PRODUCTS */}
       <FeaturedProducts products={products} />
 
       {/* Why Choose Us */}
-      <section className="py-20" style={{ backgroundColor: "#1A1A1A" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-yellow-500 mb-4">
-              Why Choose Us
-            </h2>
-            <p className="text-lg text-white">
-              Quality and service you can trust
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="bg-[#1A1A1A] p-6 rounded-xl text-center hover:shadow-lg transition-shadow"
-              >
-                <div className="w-14 h-14 bg-gradient-to-br from-yellow-500 rounded-full flex items-center justify-center text-white mx-auto mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-bold text-yellow-500 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-white text-sm">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <WhyChooseUs />
 
       {/* CTA Section */}
-      <section className="bg-[#101010] overflow-hidden">
+      <section className="bg-[#1A1A1A] overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 py-20">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Mobile Images */}
             <div className="flex justify-center">
               <img
-                src="/images/website-mobile-mockup.png"
+                src="/images/website-mobile-mockup.webp"
                 alt="EmbroDivine Mobile"
                 className="max-w-full"
               />

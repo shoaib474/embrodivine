@@ -691,7 +691,7 @@ const EmbroideryDigitizing = () => {
         </div>
       </section>
 
-      {/* ── CTA ──────────────────────────────── */}
+      {/* ── CTA ──────────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden border-t border-yellow-500/20 py-20">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-yellow-500/4" />

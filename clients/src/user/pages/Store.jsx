@@ -75,7 +75,6 @@ const Store = () => {
   // const products = data?.pages?.flatMap((page) => page.products) || [];
 
   const products = data?.products || [];
-  console.log(data)
 
   const cart = cartData?.products || [];
 

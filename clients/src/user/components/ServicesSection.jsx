@@ -6,22 +6,22 @@ const ServicesSection = () => {
       title: "Digitizing",
       description:
         "We specialize in creating precision embroidery designs that combine quality, efficiency, and durability. Each design is thoughtfully digitized to run seamlessly on embroidery machines, minimize production time, and achieve crisp, detailed stitching that brings your artwork to life..",
-      image: "/images/services1.png",
+      image: "/images/services1.webp",
       link: "/embroidery-digitizing",
     },
     {
       title: "Vector Conversion",
       description:
         "Turn your raster images into precise, high-resolution vector artwork designed for maximum versatility. Our expertly crafted vector files can be resized without losing quality, making them ideal for apparel printing, promotional products, laser cutting, digital media, large-format printing, and more.",
-      image: "/images/services2.png",
-      link: "/services/vector",
+      image: "/images/services2.webp",
+      // link: "/services/vector",
     },
     {
-      title: "Patches",
+      title: "Custom Embroidery Designs",
       description:
-        "Our custom embroidered patches are crafted with precision stitching and premium materials to ensure durability and sharp detailing. Choose from iron-on, sew-on, or Velcro backing options to suit your needs for uniforms, branding, or personal customization.",
-      image: "/images/patches.webp",
-      link: "/services/custom",
+        "Unique and premium embroidery designs created specifically for your business, brand, or personal projects. Our custom digitizing services ensure your artwork is transformed into machine-ready files that produce stunning, high-quality embroidery results on any fabric or garment.",
+      image: "/images/servi3.png",
+      // link: "/services/custom",
     },
   ];
 
