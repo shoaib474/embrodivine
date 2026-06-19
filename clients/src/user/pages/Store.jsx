@@ -98,7 +98,7 @@ const Store = () => {
 
   const categories = useMemo(() => {
     const counts = products.reduce((acc, p) => {
-      acc[p.category] = (acc[p.category] || 0) + 1;
+      acc[p.category?.name] = (acc[p.category?.name] || 0) + 1;
       return acc;
     }, {});
 
@@ -123,7 +123,7 @@ const Store = () => {
   const filteredProducts = useMemo(() => {
     let filtered = products.filter((p) => {
       const matchesCategory =
-        selectedCategory === "all" || p.category === selectedCategory;
+        selectedCategory === "all" || p.category?.name === selectedCategory;
 
       const matchesSearch = p.name
         .toLowerCase()
@@ -471,7 +471,7 @@ const Store = () => {
                           </h3>
 
                           <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-                            {product.category}
+                            {product?.category?.name}
                           </span>
 
                           <div className="flex items-center justify-between gap-2 py-2">

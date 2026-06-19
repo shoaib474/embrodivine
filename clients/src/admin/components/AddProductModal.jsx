@@ -24,7 +24,7 @@ const AddProductModal = ({
       formData.append(key, data[key]);
     }
 
-    handleAddProduct(data); // send FormData to backend 
+    handleAddProduct(data); // send FormData to backend
     reset();
   };
 
@@ -93,17 +93,22 @@ const AddProductModal = ({
             <label className="block text-[#E8D7B5] font-semibold mb-2 text-sm sm:text-base">
               Category
             </label>
-            <input
-              {...register("category")}
-              type="text"
+
+            <select
+              {...register("category", { required: true })}
               className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37] text-sm sm:text-base"
-              placeholder="Enter Category name"
-            />
+            >
+              <option value="">Select Category</option>
+
+              {categories?.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
 
             {errors.category && (
-              <p className="text-red-500 text-sm">
-                Name is required (min 3 chars)
-              </p>
+              <p className="text-red-500 text-sm">Category is required</p>
             )}
           </div>
 

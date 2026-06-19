@@ -37,6 +37,7 @@ const AdminCategory = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedFileName, setSelectedFileName] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -178,38 +179,42 @@ const AdminCategory = () => {
   );
 
   const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value, files, type, checked } = e.target;
 
     setFormData((prev) => {
       const updated = {
         ...prev,
-        [name]: files ? files[0] : value,
+        [name]: type === "checkbox" ? checked : files ? files[0] : value,
       };
 
-      // slug only for name
       if (name === "name" && !selectedCategory) {
         updated.slug = value.toLowerCase().replace(/\s+/g, "-");
       }
 
       return updated;
     });
+
+    if (files?.length) {
+      setSelectedFileName(files[0].name);
+    }
   };
 
   const handleCreateCategory = async () => {
     const data = new FormData();
 
     data.append("name", formData.name);
+    data.append("slug", formData.slug);
     data.append("description", formData.description);
     data.append("status", formData.status);
-    data.append("featured", Boolean(formData.featured));
+    data.append("featured", formData.featured ? "true" : "false");
     data.append("seoTitle", formData.seoTitle);
     data.append("seoDescription", formData.seoDescription);
 
-    if (formData.image) {
+    if (formData.image instanceof File) {
       data.append("thumbnail", formData.image);
     }
 
-    mutate(formData, {
+    mutate(data, {
       onSuccess: () => {
         setShowCreateModal(false);
         resetForm();
@@ -221,24 +226,19 @@ const AdminCategory = () => {
     const data = new FormData();
 
     data.append("name", formData.name);
+    data.append("slug", formData.slug);
     data.append("description", formData.description);
     data.append("status", formData.status);
-    data.append(
-      "featured",
-      formData.featured === "true" || formData.featured === true,
-    );
+    data.append("featured", formData.featured ? "true" : "false");
     data.append("seoTitle", formData.seoTitle);
     data.append("seoDescription", formData.seoDescription);
 
-    if (formData.image) {
+    if (formData.image instanceof File) {
       data.append("thumbnail", formData.image);
     }
 
     updateCategoryMutate(
-      {
-        id,
-        data,
-      },
+      { id, data },
       {
         onSuccess: () => {
           setShowEditModal(false);
@@ -247,9 +247,7 @@ const AdminCategory = () => {
           toast.success("Category updated successfully");
         },
         onError: (error) => {
-          toast.error(
-            error.response?.data?.message || "Failed to update category",
-          );
+          toast.error(error.response?.data?.message || "Update failed");
         },
       },
     );
@@ -263,7 +261,7 @@ const AdminCategory = () => {
       },
       onError: (error) => {
         console.error("Error deleting category:", error);
-        toast.error("Failed to delete category. Please try again.");
+        toast.error(error.response?.data?.message || "Failed to delete category. Please try again.");
       },
     });
   };
@@ -274,11 +272,14 @@ const AdminCategory = () => {
       slug: "",
       description: "",
       image: "",
-      featured: "",
+      featured: false,
       status: "active",
       seoTitle: "",
       seoDescription: "",
     });
+
+    setSelectedFileName("");
+    setSelectedCategory(null);
   };
 
   const openEditModal = (category) => {
@@ -292,6 +293,7 @@ const AdminCategory = () => {
       seoTitle: category.seoTitle,
       seoDescription: category.seoDescription,
     });
+    setSelectedFileName(category.image?.split("/").pop() || "");
     setShowEditModal(true);
   };
 
@@ -349,7 +351,6 @@ const AdminCategory = () => {
             onChange={handleInputChange}
             className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37]"
           >
-            <option value="">Select an featured</option>
             <option value="true">True</option>
             <option value="false">False</option>
           </select>
@@ -369,16 +370,39 @@ const AdminCategory = () => {
       </div>
 
       <div>
-        <label className="block text-[#D4AF37]/70 text-sm mb-2">
-          Image URL
+        <label className="block text-[#D4AF37]/70 text-sm mb-2">Image</label>
+
+        <label
+          htmlFor="image-upload"
+          className="flex items-center justify-between w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg cursor-pointer hover:border-[#D4AF37] transition-colors"
+        >
+          <span
+            className={`truncate ${
+              selectedFileName ? "text-[#E8D7B5]" : "text-[#D4AF37]/50"
+            }`}
+          >
+            {selectedFileName || "Choose an image..."}
+          </span>
+
+          <span className="px-3 py-1 text-sm bg-[#D4AF37] text-black rounded-md font-medium">
+            Browse
+          </span>
         </label>
+
         <input
+          id="image-upload"
           type="file"
           name="image"
           accept="image/*"
           onChange={handleInputChange}
-          className="w-full px-4 py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37]"
+          className="hidden"
         />
+
+        {selectedFileName && (
+          <p className="mt-2 text-xs text-green-400">
+            ✓ File selected: {selectedFileName}
+          </p>
+        )}
       </div>
 
       <div className="border-t border-[#D4AF37]/20 pt-4">
@@ -710,12 +734,13 @@ const AdminCategory = () => {
 
         {/* Create Modal */}
         {showCreateModal && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-[#1A1A1A] border-2 border-[#D4AF37]/30 rounded-2xl max-w-2xl w-full p-6 my-8">
-              <div className="flex items-center justify-between mb-6">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-[#1A1A1A] border-2 border-[#D4AF37]/30 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col">
+              <div className="flex items-center justify-between p-6 border-b border-[#D4AF37]/20">
                 <h3 className="text-2xl font-bold text-[#E8D7B5]">
                   Create New Category
                 </h3>
+
                 <button
                   onClick={() => {
                     setShowCreateModal(false);
@@ -726,7 +751,10 @@ const AdminCategory = () => {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <CategoryForm />
+
+              <div className="flex-1 overflow-y-auto p-6">
+                <CategoryForm />
+              </div>
             </div>
           </div>
         )}

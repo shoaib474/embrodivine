@@ -156,10 +156,10 @@ const UserProductView = () => {
           </Link>
           <span className="text-yellow-500/50">/</span>
           <Link
-            to={`/category/${product.category.toLocaleLowerCase().replace(/\s+/g, "-")}`}
+            to={`/category/${product.category?.name?.toLocaleLowerCase()?.replace(/\s+/g, "-")}`}
             className="text-yellow-500/70 hover:text-yellow-500 transition-colors"
           >
-            {product.category}
+            {product.category?.name}
           </Link>
           <span className="text-yellow-500/50">/</span>
           <span className="text-white">{product.name}</span>

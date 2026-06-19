@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import getAccessToken from "../utils/paypal.js";
 import PDFDocument from "pdfkit";
 
@@ -10,7 +9,7 @@ const PAYPAL_BASE_URL =
 
 const generateOrderId = () => {
   const year = new Date().getFullYear();
-  const randomHex = crypto.randomBytes(6).toString("hex").toUpperCase();
+  const randomHex = crypto.randomBytes(6).toString("hex").toUpperCase(); 
   return `ORD-${year}-${randomHex}`;
 };
 

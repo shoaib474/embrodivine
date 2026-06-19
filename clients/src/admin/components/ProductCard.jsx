@@ -11,6 +11,7 @@ const ProductCard = ({
   isError,
 
 }) => {
+  
   if (isLoading) return <SpinnerLoader />;
   if (isError) return <p className="text-red-500">Failed to load product</p>;
   if (!product) return null;
@@ -60,7 +61,7 @@ const ProductCard = ({
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1 min-w-0">
             <span className="text-xs text-[#D4AF37] uppercase tracking-wider font-semibold capitalize">
-              {product.category}
+              {product.category?.name || product.category}
             </span>
             <h3 className="text-base sm:text-lg font-bold text-[#E8D7B5] mt-1 truncate">
               {product.name}

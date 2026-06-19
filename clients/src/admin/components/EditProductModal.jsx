@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import { useUpdateProduct } from "../../hooks/useProduct";
 
-const EditProductModal = ({ setShowEditModal, product }) => {
+const EditProductModal = ({ setShowEditModal, product, categories }) => {
   const { mutate: updateProduct, isPending } = useUpdateProduct();
 
   const {
@@ -144,11 +144,23 @@ const EditProductModal = ({ setShowEditModal, product }) => {
             <label className="block text-[#E8D7B5] font-semibold mb-2 text-sm sm:text-base">
               Category
             </label>
-            <input
-              {...register("category")}
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37] capitalize text-sm sm:text-base"
-              type="text"
-            />
+
+            <select
+              {...register("category", { required: true })}
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37] text-sm sm:text-base"
+            >
+              <option value="">Select Category</option>
+
+              {categories?.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+
+            {errors.category && (
+              <p className="text-red-500 text-sm">Category is required</p>
+            )}
           </div>
 
           {/* Price */}

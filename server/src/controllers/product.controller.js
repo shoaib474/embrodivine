@@ -3,9 +3,12 @@ import cloudinary from "../config/cloudinary.js";
 import { redisClient } from "../config/redis.js";
 import Product from "../models/Product.model.js";
 import User from "../models/User.model.js";
+import Category from "../models/Category.model.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 
-// CREATE PRODUCT
+/* =========================
+   CREATE PRODUCT
+========================= */
 export const createProduct = async (req, res) => {
   try {
     const {
@@ -21,89 +24,81 @@ export const createProduct = async (req, res) => {
       zipUrl,
     } = req.body;
 
-    if (
-      !name ||
-      !description ||
-      !price ||
-      !rating ||
-      !productStatus ||
-      !badge ||
-      !dimensions ||
-      !colors
-    ) {
+    if (!name || !description || !category || !price) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required",
+        message: "Required fields missing",
       });
     }
 
-    // ===== IMAGE UPLOAD (Cloudinary image) =====
     let image = {};
     if (req.files?.image?.[0]) {
       const result = await uploadToCloudinary(req.files.image[0].path, "image");
       image = { url: result.secure_url, public_id: result.public_id };
     }
 
-    // ===== PDF UPLOAD (Cloudinary raw) =====
     let pdf = {};
     if (req.files?.pdf?.[0]) {
       const result = await uploadToCloudinary(req.files.pdf[0].path, "raw");
       pdf = { url: result.secure_url, public_id: result.public_id };
     }
 
-    // ===== EMBROIDERY FILES UPLOAD (Cloudinary raw, multiple files) =====
     let zip = [];
-    if (req.files?.embroidery && req.files.embroidery.length > 0) {
+    if (req.files?.embroidery?.length) {
       for (const file of req.files.embroidery) {
         const result = await uploadToCloudinary(file.path, "raw");
         zip.push({
           url: result.secure_url,
           public_id: result.public_id,
-          fileType: file.originalname.split(".").pop(), // e.g., dst / pes
+          fileType: file.originalname?.split(".").pop() || "unknown",
         });
       }
     }
 
-    // ===== CREATE PRODUCT =====
     const product = await Product.create({
       name,
       description,
-      price: Number(price),
       category,
-      rating: Number(rating),
+      price: Number(price) || 0,
+      rating: Number(rating) || 0,
       productStatus,
       badge,
       dimensions,
-      colors: Number(colors),
+      colors: colors || [],
       image,
       pdf,
       zip,
       zipUrl,
     });
 
+    await Category.findByIdAndUpdate(category, {
+      $inc: { productCount: 1 },
+    });
+
     await redisClient.del("all_products");
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Product created successfully",
       product,
     });
   } catch (error) {
     console.error("Create Product Error:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: error.message || "Internal Server Error",
+      message: error.message,
     });
   }
 };
 
-// GET ALL PRODUCTS
+/* =========================
+   GET ALL PRODUCTS
+========================= */
 export const getProduct = async (req, res) => {
   try {
     const cacheKey = "all_products";
 
     const cached = await redisClient.get(cacheKey);
-
     if (cached) {
       return res.json({
         success: true,
@@ -112,9 +107,27 @@ export const getProduct = async (req, res) => {
       });
     }
 
-    const products = await Product.find({}).sort({ _id: -1 }).lean();
+    const products = await Product.find({}).sort({ createdAt: -1 }).lean();
 
-    // Redis cache
+    const safeProducts = await Promise.all(
+      products.map(async (p) => {
+        try {
+          if (p.category && mongoose.Types.ObjectId.isValid(p.category)) {
+            await Product.populate(p, {
+              path: "category",
+              select: "name",
+            });
+          } else {
+            p.category = null;
+          }
+        } catch (e) {
+          p.category = null;
+        }
+
+        return p;
+      }),
+    );
+
     await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
 
     return res.json({
@@ -130,49 +143,54 @@ export const getProduct = async (req, res) => {
   }
 };
 
+/* =========================
+   GET PRODUCT BY ID
+========================= */
 export const getProductById = async (req, res) => {
   try {
     const cacheKey = `product_${req.params.id}`;
 
-    const cachedProduct = await redisClient.get(cacheKey);
-
-    if (cachedProduct) {
-      return res.status(200).json({
+    const cached = await redisClient.get(cacheKey);
+    if (cached) {
+      return res.json({
         success: true,
         source: "redis",
-        product: JSON.parse(cachedProduct),
+        product: JSON.parse(cached),
       });
     }
 
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate("category");
 
-    if (!product)
+    if (!product) {
       return res.status(404).json({
         success: false,
         message: "Product not found",
       });
+    }
 
     await redisClient.setEx(cacheKey, 3600, JSON.stringify(product));
 
-    res.status(200).json({
+    return res.json({
       success: true,
       source: "mongodb",
       product,
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Something went wrong",
-      error: err.message,
+      message: err.message,
     });
   }
 };
 
-// UPDATE PRODUCT
+/* =========================
+   UPDATE PRODUCT
+========================= */
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
+
+    let {
       name,
       category,
       description,
@@ -185,102 +203,6 @@ export const updateProduct = async (req, res) => {
       zipUrl,
     } = req.body;
 
-    if (!name || !price) {
-      return res.status(400).json({
-        success: false,
-        message: "Required fields missing",
-      });
-    }
-
-    const product = await Product.findById(id);
-    if (!product) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Product not found" });
-    }
-
-    // ===== IMAGE UPDATE =====
-    if (req.files?.image?.[0]) {
-      // optional: delete old image from Cloudinary
-      if (product.image?.public_id) {
-        await cloudinary.uploader.destroy(product.image.public_id);
-      }
-      const result = await uploadToCloudinary(req.files.image[0].path, "image");
-      product.image = { url: result.secure_url, public_id: result.public_id };
-    }
-
-    // ===== PDF UPDATE =====
-    if (req.files?.pdf?.[0]) {
-      // optional: delete old PDF from Cloudinary
-      if (product.pdf?.public_id) {
-        await cloudinary.uploader.destroy(product.pdf.public_id, {
-          resource_type: "raw",
-        });
-      }
-      const result = await uploadToCloudinary(req.files.pdf[0].path, "raw");
-      product.pdf = { url: result.secure_url, public_id: result.public_id };
-    }
-
-    // ===== EMBROIDERY FILES UPDATE =====
-    // if (req.files?.embroidery && req.files.embroidery.length > 0) {
-    //   // optional: delete old embroidery files
-    //   for (const file of product.embroideryFiles || []) {
-    //     if (file.public_id) {
-    //       await cloudinary.uploader.destroy(file.public_id, { resource_type: "raw" });
-    //     }
-    //   }
-
-    //   // upload new embroidery files
-    //   const newEmbroideryFiles = [];
-    //   for (const file of req.files.embroidery) {
-    //     const result = await uploadToCloudinary(file.path, "raw");
-    //     newEmbroideryFiles.push({
-    //       url: result.secure_url,
-    //       public_id: result.public_id,
-    //       fileType: file.originalname.split(".").pop(),
-    //     });
-    //   }
-    //   product.embroideryFiles = newEmbroideryFiles;
-    // }
-
-    // ===== UPDATE OTHER FIELDS =====
-    product.name = name;
-    product.category = category;
-    product.description = description;
-    product.price = Number(price);
-    product.rating = Number(rating);
-    product.productStatus = productStatus || product.productStatus;
-    product.badge = badge || product.badge;
-    product.dimensions = dimensions;
-    product.colors = Number(colors);
-    product.zipUrl = zipUrl || product.zipUrl;
-
-    await product.save();
-
-    await redisClient.del("all_products");
-    await redisClient.del(`product_${id}`);
-
-    res.status(200).json({
-      success: true,
-      message: "Product updated successfully",
-      product,
-    });
-  } catch (error) {
-    console.error("Update Product Error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error.message,
-    });
-  }
-};
-
-// DELETE SINGLE PRODUCT
-export const deleteProduct = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    // Product exists check
     const product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({
@@ -289,41 +211,181 @@ export const deleteProduct = async (req, res) => {
       });
     }
 
-    // 1️⃣ Delete product from products collection
-    await Product.findByIdAndDelete(id);
+    if (!name || !price) {
+      return res.status(400).json({
+        success: false,
+        message: "Name and price required",
+      });
+    }
 
-    // 2️⃣ Remove from all users carts
-    await User.updateMany(
-      {},
-      {
-        $pull: {
-          cart: { product: id }, // if cart items stored like {product, quantity}
-          favorites: id, // if favorites is array of product IDs
-        },
-      },
-    );
+    const oldCategory = product.category;
 
-    res.status(200).json({
+    // ✅ FIX: category parsing (form-data safe)
+    let newCategory = category;
+
+    if (typeof category === "string") {
+      try {
+        const parsed = JSON.parse(category);
+        newCategory = parsed._id || parsed;
+      } catch {
+        newCategory = category;
+      }
+    } else if (typeof category === "object") {
+      newCategory = category?._id;
+    }
+
+    // IMAGE UPDATE
+    if (req.files?.image?.[0]) {
+      if (product.image?.public_id) {
+        await cloudinary.uploader.destroy(product.image.public_id);
+      }
+
+      const result = await uploadToCloudinary(req.files.image[0].path, "image");
+
+      product.image = {
+        url: result.secure_url,
+        public_id: result.public_id,
+      };
+    }
+
+    // PDF UPDATE
+    if (req.files?.pdf?.[0]) {
+      if (product.pdf?.public_id) {
+        await cloudinary.uploader.destroy(product.pdf.public_id, {
+          resource_type: "raw",
+        });
+      }
+
+      const result = await uploadToCloudinary(req.files.pdf[0].path, "raw");
+
+      product.pdf = {
+        url: result.secure_url,
+        public_id: result.public_id,
+      };
+    }
+
+    // UPDATE FIELDS
+    product.name = name;
+    product.category = newCategory;
+    product.description = description;
+    product.price = Number(price) || product.price;
+    product.rating = rating ? Number(rating) : product.rating;
+    product.productStatus = productStatus || product.productStatus;
+    product.badge = badge || product.badge;
+    product.dimensions = dimensions;
+    product.colors = colors || product.colors;
+    product.zipUrl = zipUrl || product.zipUrl;
+
+    await product.save();
+
+    // ✅ CATEGORY COUNT FIX (always accurate)
+    const oldCatId = oldCategory?.toString();
+    const newCatId = newCategory?.toString();
+
+    if (oldCatId) {
+      const oldCount = await Product.countDocuments({
+        category: new mongoose.Types.ObjectId(oldCatId),
+      });
+
+      await Category.findByIdAndUpdate(oldCatId, {
+        productCount: oldCount,
+      });
+    }
+
+    if (newCatId && newCatId !== oldCatId) {
+      const newCount = await Product.countDocuments({
+        category: new mongoose.Types.ObjectId(newCatId),
+      });
+
+      await Category.findByIdAndUpdate(newCatId, {
+        productCount: newCount,
+      });
+    }
+
+    // CACHE CLEAR
+    await redisClient.del("all_products");
+    await redisClient.del(`product_${id}`);
+
+    return res.json({
       success: true,
-      message:
-        "Product deleted successfully from products, carts, and favorites",
+      message: "Product updated successfully",
+      product,
     });
   } catch (error) {
-    console.error("Delete Product Error:", error);
-    res.status(500).json({
+    console.error("Update Product Error:", error);
+    return res.status(500).json({
       success: false,
-      message: "Server error while deleting product",
+      message: error.message,
     });
   }
 };
 
+/* =========================
+   DELETE PRODUCT
+========================= */
+export const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    if (product.category) {
+      await Category.findByIdAndUpdate(product.category, {
+        $inc: { productCount: -1 },
+      });
+    }
+
+    await Product.findByIdAndDelete(id);
+
+    await User.updateMany(
+      {},
+      {
+        $pull: {
+          cart: { product: id },
+          favorites: id,
+        },
+      },
+    );
+
+    await redisClient.del("all_products");
+    await redisClient.del(`product_${id}`);
+
+    return res.json({
+      success: true,
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete Product Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+/* =========================
+   SEARCH PRODUCTS
+========================= */
 export const searchProducts = async (req, res) => {
   try {
-    const { query } = req.query;
+    const query = req.query.query?.trim();
+
+    if (!query) {
+      return res.status(400).json({
+        success: false,
+        message: "Search query required",
+      });
+    }
+
     const cacheKey = `search_${query}`;
 
     const cached = await redisClient.get(cacheKey);
-
     if (cached) {
       return res.json({
         success: true,
@@ -341,16 +403,15 @@ export const searchProducts = async (req, res) => {
 
     await redisClient.setEx(cacheKey, 300, JSON.stringify(products));
 
-    res.status(200).json({
+    return res.json({
       success: true,
       source: "mongodb",
       products,
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Something went wrong",
-      error: err.message,
+      message: err.message,
     });
   }
 };

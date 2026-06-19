@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   ];
 
   const orders = data?.orders || data || [];
-  const products = productsData?.pages.flatMap((page) => page.products) || [];
+  const products = productsData?.products || [];
 
   const stats = [
     {

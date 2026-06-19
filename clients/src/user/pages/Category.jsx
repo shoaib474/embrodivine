@@ -1,431 +1,396 @@
-import { useMemo } from "react";
-import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  Smile,
-  Sparkles,
-  ArrowRight,
-  Star,
-  Users,
-  Award,
-  Zap,
-  Check,
-  TrendingUp,
-  PawPrint,
-  Flower,
-  Flag,
-  Type,
-  Ghost,
-  MapPin,
-} from "lucide-react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Search, Grid3X3, List, Tag } from "lucide-react";
+import { useCategories } from "../../hooks/useCategory";
 
-import { useProducts } from "../../hooks/useProduct";
+// ─── Mock data (swap for real API hook) ────────────────────────────────────
+// const MOCK_CATEGORIES = [
+//   {
+//     id: 1,
+//     name: "Cartoon & Kids",
+//     slug: "cartoon-kids",
+//     description: "Fun and colorful designs for children",
+//     image:
+//       "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&h=400&fit=crop",
+//     icon: "baby",
+//     status: "active",
+//     productCount: 45,
+//     seoTitle: "Cartoon & Kids Embroidery Patches",
+//     seoDescription:
+//       "Browse our collection of cartoon and kids embroidery designs",
+//     createdDate: "2024-01-15",
+//   },
+//   {
+//     id: 2,
+//     name: "Floral & Nature",
+//     slug: "floral-nature",
+//     description: "Elegant botanical and nature-inspired embroidery",
+//     image:
+//       "https://images.unsplash.com/photo-1490750967868-88df5691cc9e?w=600&h=400&fit=crop",
+//     icon: "flower",
+//     status: "active",
+//     productCount: 78,
+//     seoTitle: "Floral & Nature Embroidery",
+//     seoDescription: "Discover beautiful floral and nature embroidery patterns",
+//     createdDate: "2024-01-18",
+//   },
+//   {
+//     id: 3,
+//     name: "Sports & Teams",
+//     slug: "sports-teams",
+//     description: "Athletic logos, team crests and sport emblems",
+//     image:
+//       "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&h=400&fit=crop",
+//     icon: "trophy",
+//     status: "active",
+//     productCount: 62,
+//     seoTitle: "Sports & Teams Embroidery",
+//     seoDescription: "Custom sports and team embroidery digitizing",
+//     createdDate: "2024-02-02",
+//   },
+//   {
+//     id: 4,
+//     name: "Monograms & Text",
+//     slug: "monograms-text",
+//     description: "Personalized lettering and custom monogram styles",
+//     image:
+//       "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&h=400&fit=crop",
+//     icon: "type",
+//     status: "active",
+//     productCount: 91,
+//     seoTitle: "Monograms & Text Embroidery",
+//     seoDescription: "Custom monogram and text embroidery digitizing services",
+//     createdDate: "2024-02-10",
+//   },
+//   {
+//     id: 5,
+//     name: "Animals & Wildlife",
+//     slug: "animals-wildlife",
+//     description: "Detailed animal portraits and wildlife art",
+//     image:
+//       "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&h=400&fit=crop",
+//     icon: "paw",
+//     status: "active",
+//     productCount: 53,
+//     seoTitle: "Animal Embroidery Designs",
+//     seoDescription: "Beautiful animal and wildlife embroidery digitizing",
+//     createdDate: "2024-03-05",
+//   },
+//   {
+//     id: 6,
+//     name: "Logos & Branding",
+//     slug: "logos-branding",
+//     description: "Professional logo digitizing for apparel and merchandise",
+//     image:
+//       "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&h=400&fit=crop",
+//     icon: "brand",
+//     status: "active",
+//     productCount: 120,
+//     seoTitle: "Logo Embroidery Digitizing",
+//     seoDescription: "High-quality logo embroidery digitizing for businesses",
+//     createdDate: "2024-03-12",
+//   },
+// ];
 
-import SpinnerLoader from "../components/SpinnerLoader";
+// ─── Simulated fetch hook ───────────────────────────────────────────────────
+// Replace this with your real hook e.g. useCategories()
+function useCategoriesMock() {
+  return {
+    data: MOCK_CATEGORIES,
+    isLoading: false,
+    isError: false,
+    error: null,
+  };
+}
 
+// ─── Skeleton Card ──────────────────────────────────────────────────────────
+const SkeletonCard = () => (
+  <div className="bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-2xl overflow-hidden animate-pulse">
+    <div className="h-52 bg-[#D4AF37]/10" />
+    <div className="p-5 space-y-3">
+      <div className="h-5 bg-[#D4AF37]/10 rounded w-2/3" />
+      <div className="h-3 bg-[#D4AF37]/10 rounded w-full" />
+      <div className="h-3 bg-[#D4AF37]/10 rounded w-4/5" />
+      <div className="h-8 bg-[#D4AF37]/10 rounded-lg w-1/3 mt-2" />
+    </div>
+  </div>
+);
+
+// ─── Category Card (grid) ───────────────────────────────────────────────────
+const CategoryCard = ({ category, onClick, index }) => (
+  <div
+    onClick={() => onClick(category)}
+    className="group bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-2xl overflow-hidden cursor-pointer hover:border-[#D4AF37] hover:shadow-[0_0_24px_rgba(212,175,55,0.15)] transition-all duration-300"
+    style={{ animation: `fadeInUp 0.5s ease-out ${index * 0.07}s both` }}
+  >
+    {/* Image */}
+    <div className="relative h-52 overflow-hidden">
+      <img
+        src={category.thumbnail.url}
+        alt={category.name}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        onError={(e) => {
+          e.target.src =
+            "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&h=400&fit=crop";
+        }}
+      />
+      {/* Overlay gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#101010]/80 via-transparent to-transparent" />
+
+      {/* Product count badge */}
+      <span className="absolute top-3 right-3 bg-[#D4AF37] text-[#101010] text-xs font-bold px-2.5 py-1 rounded-full">
+        {category.productCount} designs
+      </span>
+    </div>
+
+    {/* Content */}
+    <div className="p-5">
+      <h3 className="text-[#E8D7B5] font-bold text-lg mb-1.5 group-hover:text-[#D4AF37] transition-colors duration-200">
+        {category.name}
+      </h3>
+      <p className="text-[#D4AF37]/60 text-sm leading-relaxed line-clamp-2 mb-4">
+        {category.description}
+      </p>
+
+      <button
+        className="inline-flex items-center gap-1.5 text-[#D4AF37] text-sm font-semibold border border-[#D4AF37]/40 rounded-lg px-4 py-1.5 group-hover:bg-[#D4AF37] group-hover:text-[#101010] transition-all duration-200"
+        tabIndex={-1}
+      >
+        <Tag className="w-3.5 h-3.5" />
+        Browse
+      </button>
+    </div>
+  </div>
+);
+
+// ─── Category Row (list) ────────────────────────────────────────────────────
+const CategoryRow = ({ category, onClick, index }) => (
+  <div
+    onClick={() => onClick(category)}
+    className="group bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-xl overflow-hidden cursor-pointer hover:border-[#D4AF37] hover:shadow-[0_0_16px_rgba(212,175,55,0.12)] transition-all duration-300 flex items-center gap-0"
+    style={{ animation: `fadeInUp 0.4s ease-out ${index * 0.05}s both` }}
+  >
+    <div className="w-28 h-24 shrink-0 overflow-hidden">
+      <img
+        src={category.thumbnail.url}
+        alt={category.name}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        onError={(e) => {
+          e.target.src =
+            "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=300&h=200&fit=crop";
+        }}
+      />
+    </div>
+
+    <div className="flex-1 px-5 py-4">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-[#E8D7B5] font-bold text-base group-hover:text-[#D4AF37] transition-colors duration-200">
+            {category.name}
+          </h3>
+          <p className="text-[#D4AF37]/60 text-sm mt-0.5 line-clamp-1">
+            {category.description}
+          </p>
+        </div>
+        <span className="shrink-0 bg-[#D4AF37]/10 text-[#D4AF37] text-xs font-semibold px-2.5 py-1 rounded-full border border-[#D4AF37]/30">
+          {category.productCount} designs
+        </span>
+      </div>
+    </div>
+
+    <div className="pr-5">
+      <span className="text-[#D4AF37]/40 group-hover:text-[#D4AF37] text-xl transition-colors duration-200">
+        →
+      </span>
+    </div>
+  </div>
+);
+
+// ─── Main Page ──────────────────────────────────────────────────────────────
 const Categories = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState("grid"); // "grid" | "list"
 
-  const categoryIcons = {
-    cartoon: Smile,
-    anime: Star,
-    flower: Flower,
-    animal: PawPrint,
-    flag: Flag,
-    alphabets: Type,
-    halloween: Ghost,
-    landmark: MapPin,
-    custom: Sparkles,
-    default: Sparkles,
+  // const { data: categories = [], isLoading, isError } = useCategoriesMock();
+  // Replace useCategoriesMock() with your real hook:
+  const { data, isLoading, isError } = useCategories();
+
+  const categories = data?.categories || data || [];
+  console.log(categories);
+  
+
+  const filtered = categories.filter(
+    (cat) =>
+      cat.status === "active" &&
+      (cat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        cat.description.toLowerCase().includes(searchQuery.toLowerCase())),
+  );
+
+  const handleCategoryClick = (category) => {
+    navigate(`/category/${category.slug}`);
   };
-
-  const { data, isLoading, isError } = useProducts();
-
-  const products = data?.products || [];
-
-  const categories = useMemo(() => {
-    if (!products.length) return [];
-
-    const categoryMap = {};
-
-    products.forEach((product) => {
-      if (product.category && product.category.trim() !== "") {
-        const cat = product.category.trim();
-
-        if (!categoryMap[cat]) {
-          const count = products.filter((p) => p.category === cat).length;
-
-          categoryMap[cat] = {
-            title: cat,
-            subtitle: `${count}+ Designs`,
-            icon: categoryIcons[cat.toLowerCase()] || categoryIcons.default,
-            slug: cat.toLowerCase().replace(/\s+/g, "-"),
-            count: `${count}+ Designs`,
-          };
-        }
-      }
-    });
-
-    return Object.values(categoryMap);
-  }, [products]);
-
-  const stats = [
-    { icon: Users, label: "Happy Customers", value: "10,000+" },
-    { icon: Star, label: "5-Star Reviews", value: "2,500+" },
-    { icon: Award, label: "Premium Quality", value: "100%" },
-    { icon: TrendingUp, label: "Years Experience", value: "15+" },
-  ];
-
-  const features = [
-    "Premium Quality Materials",
-    "Custom Design Options",
-    "Fast Worldwide Shipping",
-    "100% Satisfaction Guarantee",
-  ];
-
-  const handleCategoryClick = (slug) => {
-    navigate(`/category/${slug}`);
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  if (isLoading) return <SpinnerLoader />;
-  if (isError) return <p>Error loading products</p>;
 
   return (
-    <div className="min-h-screen bg-[#101010] relative overflow-hidden">
-      <title>Embroidery Category | Custom & Ready-Made Designs</title>
-
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
-      </div>
-
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
+    <>
+      <div className="min-h-screen bg-[#101010] pt-28 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+          {/* ── Hero header ── */}
+          <div
+            className="mb-10 text-center"
+            style={{ animation: "fadeInUp 0.5s ease-out both" }}
           >
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500/10 border border-yellow-500/30 rounded-full mb-6"
-            >
-              <Zap className="w-4 h-4 text-yellow-500" />
-              <span className="text-yellow-500 text-sm font-semibold">
-                Premium Embroidery & Patches
-              </span>
-            </motion.div>
-
-            {/* Main Heading */}
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Discover Our
-              <span className="block text-transparent bg-clip-text bg-yellow-500 ">
-                Design Collections
-              </span>
+            <p className="text-[#D4AF37] text-sm font-semibold tracking-widest uppercase mb-3">
+              Embrodivine Collections
+            </p>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#E8D7B5] leading-tight">
+              Browse by Category
             </h1>
-
-            {/* Subtitle */}
-            <p className="text-gray-200 text-lg md:text-xl max-w-3xl mx-auto mb-8 leading-relaxed">
-              Explore premium embroidered patches and designs crafted with
-              precision. From classic styles to custom creations, find the
-              perfect piece for your project.
+            <p className="mt-4 text-[#D4AF37]/60 text-base sm:text-lg max-w-xl mx-auto">
+              Choose a category to explore our hand-crafted embroidery designs
             </p>
 
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
-              <button className="group px-8 py-4 bg-yellow-500 text-[#101010] rounded-lg font-bold hover:bg-yellow-600 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-yellow-500/20">
-                Browse Collections
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <Link
-                to="/quote"
-                className="px-8 py-4 bg-[#1A1A1A] border-2 border-yellow-500/30 text-yellow-500 rounded-lg font-bold hover:bg-yellow-500/10 hover:border-yellow-500 transition-all duration-300"
-              >
-                Custom Request
-              </Link>
-            </motion.div>
-
-            {/* Decorative Divider */}
-            <div className="flex items-center justify-center mt-12 gap-3">
-              <div className="h-px w-24 bg-gradient-to-r from-transparent to-yellow-500/50" />
-              <div className="flex gap-2">
-                <div className="w-2 h-2 rounded-full bg-yellow-500" />
-                <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
-                <div className="w-2 h-2 rounded-full bg-yellow-500/30" />
-              </div>
-              <div className="h-px w-24 bg-gradient-to-l from-transparent to-yellow-500/50" />
+            {/* Decorative rule */}
+            <div className="flex items-center justify-center gap-3 mt-6">
+              <div className="h-px w-16 bg-[#D4AF37]/30" />
+              <div className="w-2 h-2 rounded-full bg-[#D4AF37]/60" />
+              <div className="h-px w-16 bg-[#D4AF37]/30" />
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
 
-      {/* Stats Section */}
-      <section className="relative py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-6"
+          {/* ── Stats strip ── */}
+          <div
+            className="flex justify-center gap-8 mb-10"
+            style={{ animation: "fadeInUp 0.5s ease-out 0.1s both" }}
           >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-[#1A1A1A]/50 backdrop-blur-sm border border-yellow-500/20 rounded-xl p-6 text-center hover:border-yellow-500/50 transition-all duration-300"
-              >
-                <stat.icon className="w-8 h-8 text-yellow-500 mx-auto mb-3" />
-                <div className="text-3xl font-bold text-[#E8D7B5] mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-yellow-500/60 text-sm">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Categories Grid Section */}
-      <section className="relative py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#E8D7B5] mb-4">
-              Shop by Category
-            </h2>
-            <p className="text-yellow-500/70 text-lg max-w-2xl mx-auto">
-              Choose from our carefully curated collections
-            </p>
-          </motion.div>
-
-          {/* Categories Grid */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-          >
-            {categories.map((category, index) => {
-              const IconComponent = category.icon;
-
-              return (
-                <motion.div
-                  key={category.slug}
-                  whileHover={{
-                    scale: 1.05,
-                    transition: { duration: 0.3 },
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleCategoryClick(category.slug)}
-                  className="group relative cursor-pointer"
-                >
-                  {/* Card */}
-                  <div className="relative bg-[#1A1A1A]/80 backdrop-blur-sm border border-yellow-500/20 rounded-2xl p-8 h-full transition-all duration-300 group-hover:border-yellow-500 group-hover:shadow-2xl group-hover:shadow-yellow-500/20">
-                    {/* Hover Glow */}
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-yellow-500/0 via-yellow-500/0 to-yellow-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                    {/* Content */}
-                    <div className="relative z-10 flex flex-col items-center text-center space-y-4">
-                      {/* Icon */}
-                      <motion.div
-                        whileHover={{ rotate: 5 }}
-                        transition={{ duration: 0.3 }}
-                        className="w-20 h-20 bg-yellow-500/10 rounded-2xl flex items-center justify-center border border-yellow-500/30 group-hover:bg-yellow-500/20 group-hover:border-yellow-500 transition-all duration-300"
-                      >
-                        <IconComponent className="w-10 h-10 text-yellow-500 group-hover:scale-110 transition-transform duration-300" />
-                      </motion.div>
-
-                      {/* Title */}
-                      <h3 className="text-2xl font-bold text-[#E8D7B5] group-hover:text-yellow-500 transition-colors duration-300">
-                        {category.title}
-                      </h3>
-
-                      {/* Subtitle */}
-                      <p className="text-yellow-500/70 text-sm group-hover:text-yellow-500/90 transition-colors duration-300">
-                        {category.subtitle}
-                      </p>
-
-                      {/* Count Badge */}
-                      <div className="px-4 py-1.5 bg-yellow-500/10 rounded-full">
-                        <span className="text-yellow-500 text-xs font-semibold">
-                          {category.count}
-                        </span>
-                      </div>
-
-                      {/* Arrow Icon */}
-                      <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <ArrowRight className="w-5 h-5 text-yellow-500" />
-                      </div>
-                    </div>
-
-                    {/* Bottom Accent */}
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent group-hover:w-3/4 transition-all duration-500 rounded-full" />
-                  </div>
-
-                  {/* Accessibility Link */}
-                  <Link
-                    to={`/category/${category.slug}`}
-                    className="absolute inset-0 z-20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-[#101010]"
-                    aria-label={`Browse ${category.title} - ${category.subtitle}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleCategoryClick(category.slug);
-                    }}
-                  >
-                    <span className="sr-only">
-                      {category.title} - {category.subtitle}
-                    </span>
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="relative py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-[#1A1A1A] to-[#101010] border border-yellow-500/20 rounded-3xl p-8 md:p-12"
-          >
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              {/* Left Content */}
-              <div>
-                <h3 className="text-3xl md:text-4xl font-bold text-[#E8D7B5] mb-4">
-                  Why Choose Our Patches?
-                </h3>
-                <p className="text-yellow-500/70 mb-6 leading-relaxed">
-                  We're committed to delivering the highest quality embroidered
-                  patches with attention to every detail. Join thousands of
-                  satisfied customers worldwide.
-                </p>
-                <ul className="space-y-3">
-                  {features.map((feature, index) => (
-                    <motion.li
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="flex items-center gap-3"
-                    >
-                      <div className="w-6 h-6 bg-yellow-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Check className="w-4 h-4 text-yellow-500" />
-                      </div>
-                      <span className="text-[#E8D7B5]">{feature}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Right Content - Image Placeholder */}
-              <div className="relative">
-                <div className="aspect-square bg-gradient-to-br from-yellow-500/20 to-yellow-500/5 rounded-2xl flex items-center justify-center border border-yellow-500/30">
-                  <div className="text-center">
-                    <Star className="w-20 h-20 text-yellow-500 mx-auto mb-4" />
-                    <p className="text-[#E8D7B5] font-semibold">
-                      Premium Quality
-                    </p>
-                    <p className="text-yellow-500/60 text-sm">
-                      Crafted with Excellence
-                    </p>
-                  </div>
-                </div>
-              </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-[#D4AF37]">
+                {categories.length}
+              </p>
+              <p className="text-[#E8D7B5]/50 text-xs uppercase tracking-wider mt-0.5">
+                Categories
+              </p>
             </div>
-          </motion.div>
-        </div>
-      </section>
+            <div className="w-px bg-[#D4AF37]/20" />
+            <div className="text-center">
+              <p className="text-2xl font-bold text-[#D4AF37]">
+                {categories.reduce((s, c) => s + c.productCount, 0)}+
+              </p>
+              <p className="text-[#E8D7B5]/50 text-xs uppercase tracking-wider mt-0.5">
+                Designs
+              </p>
+            </div>
+            <div className="w-px bg-[#D4AF37]/20" />
+            <div className="text-center">
+              <p className="text-2xl font-bold text-[#D4AF37]">100%</p>
+              <p className="text-[#E8D7B5]/50 text-xs uppercase tracking-wider mt-0.5">
+                Custom
+              </p>
+            </div>
+          </div>
 
-      {/* Final CTA Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-r from-yellow-500/10 via-yellow-500/5 to-yellow-500/10 border border-yellow-500/30 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden"
+          {/* ── Search & view toggle ── */}
+          <div
+            className="bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-xl p-4 mb-8 flex flex-col sm:flex-row gap-3 items-center"
+            style={{ animation: "fadeInUp 0.5s ease-out 0.15s both" }}
           >
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-5">
-              <div
-                className="absolute inset-0"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle, #D4AF37 1px, transparent 1px)",
-                  backgroundSize: "30px 30px",
-                }}
+            <div className="relative flex-1 w-full">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#D4AF37]/60" />
+              <input
+                type="text"
+                placeholder="Search categories…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/40 focus:outline-none focus:border-[#D4AF37] transition-colors text-sm"
               />
             </div>
 
-            <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#E8D7B5] mb-4">
-                Need a Custom Design?
-              </h2>
-              <p className="text-yellow-500/70 text-lg mb-8 max-w-2xl mx-auto">
-                Can't find exactly what you're looking for? Our design team is
-                ready to bring your unique vision to life with premium quality
-                craftsmanship.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  to="/quote"
-                  className="group px-8 py-4 bg-yellow-500 text-[#101010] rounded-lg font-bold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-yellow-500/20"
-                >
-                  Start Custom Order
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-                <Link
-                  to="/contact"
-                  className="px-8 py-4 bg-transparent border-2 border-yellow-500 text-yellow-500 rounded-lg font-bold hover:bg-yellow-500/10 transition-all duration-300"
-                >
-                  Contact Us
-                </Link>
-              </div>
+            {/* View toggle */}
+            <div className="flex gap-1 bg-[#101010] border border-[#D4AF37]/20 rounded-lg p-1 shrink-0">
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`p-2 rounded-md transition-all duration-200 ${
+                  viewMode === "grid"
+                    ? "bg-[#D4AF37] text-[#101010]"
+                    : "text-[#D4AF37]/50 hover:text-[#D4AF37]"
+                }`}
+                aria-label="Grid view"
+              >
+                <Grid3X3 className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode("list")}
+                className={`p-2 rounded-md transition-all duration-200 ${
+                  viewMode === "list"
+                    ? "bg-[#D4AF37] text-[#101010]"
+                    : "text-[#D4AF37]/50 hover:text-[#D4AF37]"
+                }`}
+                aria-label="List view"
+              >
+                <List className="w-4 h-4" />
+              </button>
             </div>
-          </motion.div>
+          </div>
+
+          {/* ── Result count ── */}
+          {!isLoading && (
+            <p className="text-[#D4AF37]/50 text-sm mb-5">
+              {filtered.length === categories.length
+                ? `${filtered.length} categories`
+                : `${filtered.length} of ${categories.length} categories`}
+            </p>
+          )}
+
+          {/* ── Content ── */}
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <SkeletonCard key={i} />
+              ))}
+            </div>
+          ) : isError ? (
+            <div className="text-center py-24 text-[#D4AF37]/50">
+              <p className="text-lg font-semibold text-[#E8D7B5]">
+                Unable to load categories
+              </p>
+              <p className="text-sm mt-1">Please try refreshing the page.</p>
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="text-center py-24">
+              <Search className="w-10 h-10 text-[#D4AF37]/30 mx-auto mb-4" />
+              <p className="text-[#E8D7B5] font-semibold text-lg">
+                No categories found
+              </p>
+              <p className="text-[#D4AF37]/50 text-sm mt-1">
+                Try a different search term.
+              </p>
+            </div>
+          ) : viewMode === "grid" ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filtered.map((cat, idx) => (
+                <CategoryCard
+                  key={cat.id}
+                  category={cat}
+                  onClick={handleCategoryClick}
+                  index={idx}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {filtered.map((cat, idx) => (
+                <CategoryRow
+                  key={cat.id}
+                  category={cat}
+                  onClick={handleCategoryClick}
+                  index={idx}
+                />
+              ))}
+            </div>
+          )}
         </div>
-      </section>
-    </div>
+      </div>
+    </>
   );
 };
 

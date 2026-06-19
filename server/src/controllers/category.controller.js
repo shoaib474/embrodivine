@@ -4,22 +4,26 @@ import slugify from "slugify";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import cloudinary from "../config/cloudinary.js";
 
-// CREATE CATEGORY
+/* =========================
+   CREATE CATEGORY
+========================= */
 export const createCategory = async (req, res) => {
- 
   try {
     const { name, description, status, featured, seoTitle, seoDescription } =
       req.body;
 
-    if (!name || !name.trim()) {
+    const cleanName = name?.trim();
+
+    if (!cleanName) {
       return res.status(400).json({
         success: false,
         message: "Category name is required",
       });
     }
 
+    // case-insensitive duplicate check
     const existingCategory = await Category.findOne({
-      name: name.trim(),
+      name: { $regex: `^${cleanName}$`, $options: "i" },
     });
 
     if (existingCategory) {
@@ -31,9 +35,8 @@ export const createCategory = async (req, res) => {
 
     let thumbnail = {};
 
-    if (req.file) {
+    if (req.file?.path) {
       const result = await uploadToCloudinary(req.file.path, "image");
-      console.log("result ayaa ha",result);
 
       thumbnail = {
         url: result.secure_url,
@@ -42,59 +45,54 @@ export const createCategory = async (req, res) => {
     }
 
     const category = await Category.create({
-      name: name.trim(),
-      slug: slugify(name, {
-        lower: true,
-        strict: true,
-      }),
+      name: cleanName,
+      slug: slugify(cleanName, { lower: true, strict: true }),
       description,
       thumbnail,
-      status,
-      featured,
+      status: status ?? true,
+      featured: featured ?? false,
       seoTitle,
       seoDescription,
+      productCount: 0,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Category created successfully",
       category,
     });
   } catch (error) {
     console.error("CREATE CATEGORY ERROR:", error);
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Failed to create category",
-      error: error.message,
+      message: error.message,
     });
   }
 };
 
-// GET ALL CATEGORIES
+/* =========================
+   GET ALL CATEGORIES
+========================= */
 export const getCategories = async (req, res) => {
   try {
-    const categories = await Category.find().sort({
-      createdAt: -1,
-    });
+    const categories = await Category.find().sort({ createdAt: -1 });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       count: categories.length,
       categories,
     });
   } catch (error) {
-    console.error("GET CATEGORIES ERROR:", error);
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Failed to fetch categories",
-      error: error.message,
+      message: error.message,
     });
   }
 };
 
-// GET SINGLE CATEGORY
+/* =========================
+   GET SINGLE CATEGORY
+========================= */
 export const getSingleCategory = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
@@ -106,22 +104,21 @@ export const getSingleCategory = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       category,
     });
   } catch (error) {
-    console.error("GET SINGLE CATEGORY ERROR:", error);
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Failed to fetch category",
-      error: error.message,
+      message: error.message,
     });
   }
 };
 
-// UPDATE CATEGORY
+/* =========================
+   UPDATE CATEGORY
+========================= */
 export const updateCategory = async (req, res) => {
   try {
     const { name, description, status, featured, seoTitle, seoDescription } =
@@ -136,21 +133,27 @@ export const updateCategory = async (req, res) => {
       });
     }
 
-    if (name && name.trim()) {
-      const existingCategory = await Category.findOne({
-        name: name.trim(),
+    const cleanName = name?.trim();
+
+    if (cleanName) {
+      const duplicate = await Category.findOne({
+        name: { $regex: `^${cleanName}$`, $options: "i" },
         _id: { $ne: req.params.id },
       });
 
-      if (existingCategory) {
+      if (duplicate) {
         return res.status(400).json({
           success: false,
           message: "Another category already exists with this name",
         });
       }
+
+      category.name = cleanName;
+      category.slug = slugify(cleanName, { lower: true, strict: true });
     }
 
-    if (req.file) {
+    // IMAGE UPDATE
+    if (req.file?.path) {
       if (category.thumbnail?.public_id) {
         await cloudinary.uploader.destroy(category.thumbnail.public_id);
       }
@@ -163,13 +166,6 @@ export const updateCategory = async (req, res) => {
       };
     }
 
-    category.name = name?.trim() || category.name;
-
-    category.slug = slugify(category.name, {
-      lower: true,
-      strict: true,
-    });
-
     category.description = description ?? category.description;
     category.status = status ?? category.status;
     category.featured = featured ?? category.featured;
@@ -178,23 +174,23 @@ export const updateCategory = async (req, res) => {
 
     await category.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Category updated successfully",
       category,
     });
   } catch (error) {
     console.error("UPDATE CATEGORY ERROR:", error);
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Failed to update category",
-      error: error.message,
+      message: error.message,
     });
   }
 };
 
-// DELETE CATEGORY
+/* =========================
+   DELETE CATEGORY
+========================= */
 export const deleteCategory = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
@@ -206,34 +202,93 @@ export const deleteCategory = async (req, res) => {
       });
     }
 
-    const productsUsingCategory = await Product.countDocuments({
-      category: category._id,
-    });
+    // safer + faster check
+    const hasProducts = await Product.exists({ category: category._id });
 
-    if (productsUsingCategory > 0) {
+    if (hasProducts) {
       return res.status(400).json({
         success: false,
         message: "Cannot delete category because products are using it",
       });
     }
 
+    // delete image safely
     if (category.thumbnail?.public_id) {
       await cloudinary.uploader.destroy(category.thumbnail.public_id);
     }
 
     await category.deleteOne();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Category deleted successfully",
     });
   } catch (error) {
     console.error("DELETE CATEGORY ERROR:", error);
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Failed to delete category",
-      error: error.message,
+      message: error.message,
+    });
+  }
+};
+
+// GET CATEGORY BY SLUG
+export const getCategoryBySlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    const category = await Category.findOne({ slug });
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      category,
+    });
+  } catch (error) {
+    console.error("getCategoryBySlug error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+// GET PRODUCTS BY CATEGORY SLUG
+export const getProductsByCategorySlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    // find category first
+    const category = await Category.findOne({ slug });
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+      });
+    }
+
+    // get products using category _id (recommended)
+    const products = await Product.find({ category: category._id })
+      .populate("category", "name slug")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      category,
+      products,
+    });
+  } catch (error) {
+    console.error("getProductsByCategorySlug error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
     });
   }
 };

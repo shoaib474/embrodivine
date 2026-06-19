@@ -14,6 +14,7 @@ import {
   useDeleteProduct,
   useProducts,
 } from "../../hooks/useProduct";
+import { useCategories } from "../../hooks/useCategory";
 
 const AdminProducts = () => {
   const navigate = useNavigate();
@@ -34,35 +35,38 @@ const AdminProducts = () => {
     error,
   } = useProducts();
 
-  const observer = useRef();
+  // const observer = useRef();
 
   const { mutate: addProduct, isPending } = useAddProduct();
   const { mutate: deleteProduct } = useDeleteProduct();
 
-  const lastProductRef = useCallback(
-    (node) => {
-      if (isFetchingNextPage) return;
+  // const lastProductRef = useCallback(
+  //   (node) => {
+  //     if (isFetchingNextPage) return;
 
-      if (observer.current) observer.current.disconnect();
+  //     if (observer.current) observer.current.disconnect();
 
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasNextPage) {
-          fetchNextPage();
-        }
-      });
+  //     observer.current = new IntersectionObserver((entries) => {
+  //       if (entries[0].isIntersecting && hasNextPage) {
+  //         fetchNextPage();
+  //       }
+  //     });
 
-      if (node) observer.current.observe(node);
-    },
-    [isFetchingNextPage, hasNextPage, fetchNextPage],
-  );
+  //     if (node) observer.current.observe(node);
+  //   },
+  //   [isFetchingNextPage, hasNextPage, fetchNextPage],
+  // );
 
-  const products = productsData?.pages.flatMap((page) => page.products) || [];
+  const products = productsData?.products || productsData || [];
 
-  const categories = React.useMemo(() => {
-    if (!products?.length) return ["all"];
+  const {
+    data: categoriesData,
+    isLoading: isCategoriesLoading,
+    error: categoriesError,
+  } = useCategories();
 
-    return ["all", ...new Set(products.map((p) => p.category))];
-  }, [products]);
+  const categories = categoriesData?.categories || categoriesData || [];
+  console.log("Categories:", categories);
 
   const filteredProducts = products.filter((product) => {
     const name = product.name || ""; // fallback to empty string
@@ -70,7 +74,7 @@ const AdminProducts = () => {
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesCategory =
-      categoryFilter === "all" || product.category === categoryFilter;
+      categoryFilter === "all" || product.category?.name === categoryFilter;
 
     return matchesSearch && matchesCategory;
   });
@@ -128,7 +132,7 @@ const AdminProducts = () => {
     // },
     {
       title: "Categories",
-      value: new Set(products.map((p) => p.category)).size,
+      value: new Set(products.map((p) => p.category?.name)).size,
       icon: Archive,
       color: "#FF69B4",
     },
@@ -201,9 +205,11 @@ const AdminProducts = () => {
             onChange={(e) => setCategoryFilter(e.target.value)}
             className="px-3 sm:px-4 py-2 sm:py-3 bg-[#101010] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] focus:outline-none focus:border-[#D4AF37] transition-colors capitalize text-sm sm:text-base"
           >
+            <option value="all">All Categories</option>
+
             {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
+              <option key={cat._id} value={cat.name}>
+                {cat.name}
               </option>
             ))}
           </select>
@@ -225,11 +231,9 @@ const AdminProducts = () => {
         ) : filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {filteredProducts.map((product, idx) => {
-              const isLast = idx === filteredProducts.length - 1;
               return (
                 <ProductCard
                   key={product._id}
-                  ref={isLast ? lastProductRef : null}
                   product={product}
                   onEdit={handleEditProduct}
                   onDelete={() => handleDeleteProduct(product._id)}
@@ -239,18 +243,6 @@ const AdminProducts = () => {
                 />
               );
             })}
-            {isFetchingNextPage && (
-              <div className="text-center py-6 text-gray-400">
-                more loading...
-              </div>
-            )}
-
-            {/* End Message */}
-            {!hasNextPage && products.length > 0 && (
-              <div className="text-center py-6 text-red-400">
-                No more products available
-              </div>
-            )}
           </div>
         ) : (
           <NoProducts />
@@ -271,6 +263,7 @@ const AdminProducts = () => {
           <EditProductModal
             setShowEditModal={setShowEditModal}
             product={selectedProduct} // product to edit
+            categories={categories.filter((c) => c !== "all")}
           />
         )}
       </div>
