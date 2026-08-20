@@ -15,12 +15,9 @@ import {
   Trash2,
 } from "lucide-react";
 
-import DeleteAccountModal from "../components/DeleteAccountModal";
-
 const Profile = ({ userData, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Initialize react-hook-form with userData
   const { register, handleSubmit, reset, watch } = useForm({
@@ -54,7 +51,7 @@ const Profile = ({ userData, onSave }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#101010]">
+    <div className="min-h-screen bg-[#F5F7FA]">
       <div className="max-w-6xl mx-auto ">
         {/* Header */}
         <motion.div
@@ -62,10 +59,10 @@ const Profile = ({ userData, onSave }) => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-[#222222] mb-2">
             My Profile
           </h1>
-          <p className="text-yellow-500/70">
+          <p className="text-[#4B5563]">
             Manage your account settings and preferences
           </p>
         </motion.div>
@@ -75,23 +72,24 @@ const Profile = ({ userData, onSave }) => {
             onSubmit={handleSubmit(handleSave)}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#1A1A1A] border border-yellow-500/20 rounded-xl p-6 md:p-8"
+            className="bg-[#ffffff] border border-slate-200 rounded-3xl p-6 md:p-8"
           >
             {/* Header with Edit Button */}
             <div className="flex items-center justify-between flex-col md:flex-row gap-5 mb-8">
               <div className="text-center md:text-left">
-                <h2 className="text-2xl font-bold text-white mb-1">
+                <h2 className="text-2xl font-bold text-[#222222] mb-1">
                   Personal Information
                 </h2>
-                <p className="text-yellow-500/60 text-sm">
+                <p className="text-[#6B7280] text-sm">
                   Update your personal details
                 </p>
               </div>
+
               {!isEditing ? (
                 <button
                   type="submit"
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-2 px-6 py-3 bg-yellow-500 text-[#101010] rounded-lg font-semibold hover:bg-white transition-all"
+                  className="flex items-center gap-2 px-6 py-3 bg-[#007BFF] text-white rounded-lg font-semibold hover:bg-[#0066CC] transition-all"
                 >
                   <Edit className="w-4 h-4" />
                   Edit Profile
@@ -100,18 +98,19 @@ const Profile = ({ userData, onSave }) => {
                 <div className="flex gap-2">
                   <button
                     type="submit"
-                    className="flex items-center gap-2 px-6 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition-all"
+                    className="flex items-center gap-2 px-6 py-3 bg-[#10B981] text-white rounded-lg font-semibold hover:bg-[#059669] transition-all"
                   >
                     <Save className="w-4 h-4" />
                     Save
                   </button>
+
                   <button
                     type="button"
                     onClick={() => {
                       reset(userData); // revert changes
                       setIsEditing(false);
                     }}
-                    className="flex items-center gap-2 px-6 py-3 bg-red-500/10 border border-red-500/30 text-red-500 rounded-lg font-semibold hover:bg-red-500/20 transition-all"
+                    className="flex items-center gap-2 px-6 py-3 bg-red-50 border border-red-200 text-red-600 rounded-lg font-semibold hover:bg-red-100 transition-all"
                   >
                     <X className="w-4 h-4" />
                     Cancel
@@ -121,9 +120,9 @@ const Profile = ({ userData, onSave }) => {
             </div>
 
             {/* Profile Image */}
-            <div className="flex flex-col items-center mb-8 pb-8 border-b border-yellow-500/20">
+            <div className="flex flex-col items-center mb-8 pb-8 border-b border-[#D1D5DB]">
               <div className="relative">
-                <div className="w-32 h-32 bg-gradient-to-br from-yellow-500 rounded-full flex items-center justify-center overflow-hidden">
+                <div className="w-32 h-32 bg-gradient-to-br from-[#007BFF] to-[#3B82F6] rounded-full flex items-center justify-center overflow-hidden">
                   {profileImage ? (
                     <img
                       src={profileImage}
@@ -132,7 +131,7 @@ const Profile = ({ userData, onSave }) => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="text-[#101010] text-4xl font-bold">
+                    <span className="text-white text-4xl font-bold">
                       {watchedFields.name
                         ? watchedFields.name
                             .split(" ")
@@ -142,9 +141,10 @@ const Profile = ({ userData, onSave }) => {
                     </span>
                   )}
                 </div>
+
                 {isEditing && (
-                  <label className="absolute bottom-0 right-0 w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-white transition-all">
-                    <Camera className="w-5 h-5 text-[#101010]" />
+                  <label className="absolute bottom-0 right-0 w-10 h-10 bg-[#007BFF] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#0066CC] transition-all">
+                    <Camera className="w-5 h-5 text-white" />
                     <input
                       type="file"
                       accept="image/*"
@@ -154,15 +154,18 @@ const Profile = ({ userData, onSave }) => {
                   </label>
                 )}
               </div>
-              <h3 className="text-xl font-bold text-white mt-4">
+
+              <h3 className="text-xl font-bold text-[#222222] mt-4">
                 {watchedFields.name || "User Name"}
               </h3>
-              <p className="text-yellow-500/70 text-sm">
+
+              <p className="text-[#6B7280] text-sm">
                 {watchedFields.email || "user@example.com"}
               </p>
-              <div className="flex items-center gap-2 mt-3 px-4 py-2 bg-yellow-500/10 border border-yellow-500/30 rounded-full">
-                <Zap className="w-4 h-4 text-yellow-500" />
-                <span className="text-yellow-500 text-sm font-semibold">
+
+              <div className="flex items-center gap-2 mt-3 px-4 py-2 bg-[#007BFF]/10 border border-[#007BFF]/20 rounded-full">
+                <Zap className="w-4 h-4 text-[#007BFF]" />
+                <span className="text-[#007BFF] text-sm font-semibold">
                   Premium Member
                 </span>
               </div>
@@ -173,42 +176,44 @@ const Profile = ({ userData, onSave }) => {
               {/* Contact Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-white font-semibold mb-2 text-sm">
+                  <label className="block text-[#222222] font-semibold mb-2 text-sm">
                     Full Name
                   </label>
                   <input
                     type="text"
                     {...register("name", { required: true, maxLength: 100 })}
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    className="w-full px-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-white font-semibold mb-2 text-sm">
+                  <label className="block text-[#222222] font-semibold mb-2 text-sm">
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/50" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#6B7280]" />
                     <input
                       type="email"
                       {...register("email")}
                       disabled
-                      className="w-full pl-11 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                      className="w-full pl-11 pr-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                     />
                   </div>
                 </div>
+
                 <div>
-                  <label className="block text-white font-semibold mb-2 text-sm">
+                  <label className="block text-[#222222] font-semibold mb-2 text-sm">
                     Phone Number
                   </label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/50" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#6B7280]" />
                     <input
                       type="tel"
                       {...register("phone")}
                       disabled={!isEditing}
                       placeholder="+1 (555) 123-4567"
-                      className="w-full pl-11 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                      className="w-full pl-11 pr-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                     />
                   </div>
                 </div>
@@ -217,25 +222,26 @@ const Profile = ({ userData, onSave }) => {
               {/* Personal Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-white font-semibold mb-2 text-sm">
+                  <label className="block text-[#222222] font-semibold mb-2 text-sm">
                     Date of Birth
                   </label>
                   <input
                     type="date"
                     {...register("dateOfBirth")}
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    className="w-full px-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-white font-semibold mb-2 text-sm">
+                  <label className="block text-[#222222] font-semibold mb-2 text-sm">
                     Gender
                   </label>
                   <select
                     {...register("gender")}
                     value={watchedFields.gender || ""}
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    className="w-full px-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                   >
                     <option value="" disabled>
                       Select Gender
@@ -250,34 +256,34 @@ const Profile = ({ userData, onSave }) => {
 
               {/* Company */}
               <div>
-                <label className="block text-white font-semibold mb-2 text-sm">
+                <label className="block text-[#222222] font-semibold mb-2 text-sm">
                   Company (Optional)
                 </label>
                 <div className="relative">
-                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/50" />
+                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#6B7280]" />
                   <input
                     type="text"
                     {...register("company")}
                     placeholder="e.g., Creative Designs Co."
                     disabled={!isEditing}
-                    className="w-full pl-11 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    className="w-full pl-11 pr-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                   />
                 </div>
               </div>
 
               {/* Address */}
               <div>
-                <label className="block text-white font-semibold mb-2 text-sm">
+                <label className="block text-[#222222] font-semibold mb-2 text-sm">
                   Street Address
                 </label>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-3.5 w-5 h-5 text-yellow-500/50" />
+                  <MapPin className="absolute left-3 top-3.5 w-5 h-5 text-[#6B7280]" />
                   <input
                     type="text"
                     {...register("address")}
                     placeholder="123 Main St, Apt 4B"
                     disabled={!isEditing}
-                    className="w-full pl-11 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    className="w-full pl-11 pr-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                   />
                 </div>
               </div>
@@ -285,7 +291,7 @@ const Profile = ({ userData, onSave }) => {
               {/* Location Row */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <label className="block text-white font-semibold mb-2 text-sm">
+                  <label className="block text-[#222222] font-semibold mb-2 text-sm">
                     City
                   </label>
                   <input
@@ -293,11 +299,12 @@ const Profile = ({ userData, onSave }) => {
                     {...register("city")}
                     disabled={!isEditing}
                     placeholder="e.g., New York"
-                    className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    className="w-full px-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-white font-semibold mb-2 text-sm">
+                  <label className="block text-[#222222] font-semibold mb-2 text-sm">
                     State
                   </label>
                   <input
@@ -305,11 +312,12 @@ const Profile = ({ userData, onSave }) => {
                     {...register("state")}
                     placeholder="e.g., California"
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    className="w-full px-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-white font-semibold mb-2 text-sm">
+                  <label className="block text-[#222222] font-semibold mb-2 text-sm">
                     ZIP Code
                   </label>
                   <input
@@ -317,31 +325,31 @@ const Profile = ({ userData, onSave }) => {
                     {...register("zipCode")}
                     placeholder="12345"
                     disabled={!isEditing}
-                    className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    className="w-full px-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                   />
                 </div>
               </div>
 
               {/* Country */}
               <div>
-                <label className="block text-white font-semibold mb-2 text-sm">
+                <label className="block text-[#222222] font-semibold mb-2 text-sm">
                   Country
                 </label>
                 <div className="relative">
-                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/50" />
+                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#6B7280]" />
                   <input
                     type="text"
                     {...register("country")}
                     placeholder="United States"
                     disabled={!isEditing}
-                    className="w-full pl-11 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                    className="w-full pl-11 pr-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                   />
                 </div>
               </div>
 
               {/* Bio */}
               <div>
-                <label className="block text-white font-semibold mb-2 text-sm">
+                <label className="block text-[#222222] font-semibold mb-2 text-sm">
                   Bio
                 </label>
                 <textarea
@@ -349,36 +357,12 @@ const Profile = ({ userData, onSave }) => {
                   placeholder="Tell us about yourself..."
                   disabled={!isEditing}
                   rows={4}
-                  className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all resize-none"
+                  className="w-full px-4 py-3 bg-[#f5f7fa] border border-[#D1D5DB] rounded-lg text-[#222222] focus:outline-none focus:border-[#007BFF] disabled:opacity-60 disabled:cursor-not-allowed transition-all resize-none"
                 />
               </div>
             </div>
           </motion.form>
-
-          {/* Danger Zone */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-8 bg-[#1A1A1A] border border-red-500/30 rounded-xl p-6 md:p-8"
-          >
-            <h2 className="text-2xl font-bold text-red-500 mb-4">
-              Danger Zone
-            </h2>
-            <p className="text-red-400/70 text-sm mb-6">
-              Deleting your account is permanent and cannot be undone.
-            </p>
-
-            <button onClick={()=>setShowDeleteModal(true)} className="flex items-center gap-3 px-6 py-3 bg-red-500/10 border border-red-500 text-red-500 rounded-lg font-semibold hover:bg-red-500/20 transition-all">
-              <Trash2 className="w-5 h-5" />
-              Delete Account
-            </button>
-          </motion.div>
         </div>
-
-        <DeleteAccountModal
-          isOpen={showDeleteModal}
-          onClose={() => setShowDeleteModal(false)}
-        />
       </div>
     </div>
   );

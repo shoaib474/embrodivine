@@ -22,7 +22,7 @@ router.post("/", upload.array("attachments", 5), createQuote);
 router.get("/", authVerification, admin, getAllQuotes);
 router.get("/:id", authVerification, admin, getQuoteById);
 router.put("/:id", authVerification, admin, updateQuote);
-router.patch("/:id/status",authVerification,admin, updateQuoteStatus);
+router.patch("/:id/status", authVerification, admin, updateQuoteStatus);
 router.delete("/:id", authVerification, admin, deleteQuote);
 router.post("/delete-selected", authVerification, admin, deleteSelectedQuotes);
 

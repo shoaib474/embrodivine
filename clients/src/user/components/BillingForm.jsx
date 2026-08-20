@@ -45,46 +45,42 @@ const BillingForm = ({ onSubmit }) => {
     <div className="lg:col-span-2 space-y-6">
       <form
         onSubmit={handleSubmit(handleFormSubmit)}
-        className="bg-[#1A1A1A] border border-yellow-500/20 rounded-xl p-6 sm:p-8 animate-fade-in space-y-4"
+        className="bg-[#ffffff] border border-[#DDE5EE] rounded-xl p-6 sm:p-8 animate-fade-in space-y-4"
       >
         <div className="flex items-center gap-3 mb-6">
-          <MapPin className="w-6 h-6 text-yellow-500" />
-          <h2 className="text-2xl font-bold text-white">Billing details</h2>
+          <MapPin className="w-6 h-6 text-[#007BFF]" />
+          <h2 className="text-2xl font-bold text-[#222222]">Billing details</h2>
         </div>
 
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">
+            <label className="block text-[#333333] font-semibold mb-2 text-sm">
               Full Name *
             </label>
             <input
               type="text"
               {...register("name", { required: "First name is required" })}
-              className={`w-full px-4 py-3 bg-[#101010] border rounded-lg text-white placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors ${
-                errors.name ? "border-red-500" : "border-yellow-500/30"
+              className={`w-full px-4 py-3 bg-[#F5F7FA] border rounded-lg text-[#222222] placeholder-[#007BFF]/50 focus:outline-none focus:border-[#007BFF] transition-colors ${
+                errors.name ? "border-red-500" : "border-[#DDE5EE]"
               }`}
               placeholder="John"
             />
             {errors.name && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.name.message}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
             )}
           </div>
-
-        
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">
+            <label className="block text-[#333333] font-semibold mb-2 text-sm">
               Email Address *
             </label>
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
-              className={`w-full px-4 py-3 bg-[#101010] border rounded-lg text-white placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors ${
-                errors.email ? "border-red-500" : "border-yellow-500/30"
+              className={`w-full px-4 py-3 bg-[#F5F7FA] border rounded-lg text-[#222222] placeholder-[#007BFF]/50 focus:outline-none focus:border-[#007BFF] transition-colors ${
+                errors.email ? "border-red-500" : "border-[#DDE5EE]"
               }`}
               placeholder="john@example.com"
             />
@@ -96,14 +92,14 @@ const BillingForm = ({ onSubmit }) => {
           </div>
 
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">
+            <label className="block text-[#333333] font-semibold mb-2 text-sm">
               Phone Number *
             </label>
             <input
               type="tel"
               {...register("phone", { required: "Phone number is required" })}
-              className={`w-full px-4 py-3 bg-[#101010] border rounded-lg text-white placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors ${
-                errors.phone ? "border-red-500" : "border-yellow-500/30"
+              className={`w-full px-4 py-3 bg-[#F5F7FA] border rounded-lg text-[#222222] placeholder-[#007BFF]/50 focus:outline-none focus:border-[#007BFF] transition-colors ${
+                errors.phone ? "border-red-500" : "border-[#DDE5EE]"
               }`}
               placeholder="+1 (555) 000-0000"
             />
@@ -116,14 +112,14 @@ const BillingForm = ({ onSubmit }) => {
         </div>
 
         <div>
-          <label className="block text-white font-semibold mb-2 text-sm">
+          <label className="block text-[#333333] font-semibold mb-2 text-sm">
             Street Address *
           </label>
           <input
             type="text"
             {...register("address", { required: "Address is required" })}
-            className={`w-full px-4 py-3 bg-[#101010] border rounded-lg text-white placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors ${
-              errors.address ? "border-red-500" : "border-yellow-500/30"
+            className={`w-full px-4 py-3 bg-[#F5F7FA] border rounded-lg text-[#222222] placeholder-[#007BFF]/50 focus:outline-none focus:border-[#007BFF] transition-colors ${
+              errors.address ? "border-red-500" : "border-[#DDE5EE]"
             }`}
             placeholder="123 Main Street"
           />
@@ -136,14 +132,14 @@ const BillingForm = ({ onSubmit }) => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">
+            <label className="block text-[#333333] font-semibold mb-2 text-sm">
               City *
             </label>
             <input
               type="text"
               {...register("city", { required: "City is required" })}
-              className={`w-full px-4 py-3 bg-[#101010] border rounded-lg text-white placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors ${
-                errors.city ? "border-red-500" : "border-yellow-500/30"
+              className={`w-full px-4 py-3 bg-[#F5F7FA] border rounded-lg text-[#222222] placeholder-[#007BFF]/50 focus:outline-none focus:border-[#007BFF] transition-colors ${
+                errors.city ? "border-red-500" : "border-[#DDE5EE]"
               }`}
               placeholder="New York"
             />
@@ -153,14 +149,14 @@ const BillingForm = ({ onSubmit }) => {
           </div>
 
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">
+            <label className="block text-[#333333] font-semibold mb-2 text-sm">
               State *
             </label>
             <input
               type="text"
               {...register("state", { required: "State is required" })}
-              className={`w-full px-4 py-3 bg-[#101010] border rounded-lg text-white placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors ${
-                errors.state ? "border-red-500" : "border-yellow-500/30"
+              className={`w-full px-4 py-3 bg-[#F5F7FA] border rounded-lg text-[#222222] placeholder-[#007BFF]/50 focus:outline-none focus:border-[#007BFF] transition-colors ${
+                errors.state ? "border-red-500" : "border-[#DDE5EE]"
               }`}
               placeholder="NY"
             />
@@ -172,14 +168,14 @@ const BillingForm = ({ onSubmit }) => {
           </div>
 
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">
+            <label className="block text-[#333333] font-semibold mb-2 text-sm">
               ZIP Code *
             </label>
             <input
               type="text"
               {...register("zipCode", { required: "ZIP Code is required" })}
-              className={`w-full px-4 py-3 bg-[#101010] border rounded-lg text-white placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors ${
-                errors.zipCode ? "border-red-500" : "border-yellow-500/30"
+              className={`w-full px-4 py-3 bg-[#F5F7FA] border rounded-lg text-[#222222] placeholder-[#007BFF]/50 focus:outline-none focus:border-[#007BFF] transition-colors ${
+                errors.zipCode ? "border-red-500" : "border-[#DDE5EE]"
               }`}
               placeholder="10001"
             />
@@ -192,13 +188,13 @@ const BillingForm = ({ onSubmit }) => {
         </div>
 
         <div>
-          <label className="block text-white font-semibold mb-2 text-sm">
+          <label className="block text-[#333333] font-semibold mb-2 text-sm">
             Country *
           </label>
           <select
             {...register("country", { required: "Country is required" })}
-            className={`w-full px-4 py-3 bg-[#101010] border rounded-lg text-white placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors ${
-              errors.country ? "border-red-500" : "border-yellow-500/30"
+            className={`w-full px-4 py-3 bg-[#F5F7FA] border rounded-lg text-[#222222] placeholder-[#007BFF]/50 focus:outline-none focus:border-[#007BFF] transition-colors ${
+              errors.country ? "border-red-500" : "border-[#DDE5EE]"
             }`}
           >
             <option value="">Select Country</option>
@@ -230,7 +226,7 @@ const BillingForm = ({ onSubmit }) => {
 
         <button
           type="submit"
-          className="w-full px-8 py-4 bg-yellow-600 text-[#101010] rounded-lg font-bold text-lg hover:bg-white transition-all duration-300 transform hover:scale-105 shadow-lg shadow-yellow-600/30"
+          className="w-full px-8 py-4 bg-[#007BFF] text-white rounded-lg font-bold text-lg hover:bg-[#0066CC] transition-all duration-300 transform hover:scale-105 shadow-lg shadow-[#007BFF]/30"
         >
           {isSubmitted ? "Processing..." : "Continue To Payment"}
         </button>

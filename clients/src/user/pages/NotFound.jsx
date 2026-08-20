@@ -1,269 +1,121 @@
-import React, { useState, useEffect } from "react";
+import { Home, Grid3X3, Headphones, ArrowRight, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import {
-  Home,
-  Search,
-  ShoppingBag,
-  Package,
-  ArrowRight,
-  Compass,
-  AlertTriangle,
-  Sparkles,
-} from "lucide-react";
 
 const NotFound = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  const quickLinks = [
-    { icon: Home, label: "Back to Home", href: "/", color: "#D4AF37" },
-    {
-      icon: ShoppingBag,
-      label: "Shop Products",
-      href: "/store",
-      color: "#4169E1",
-    },
-    {
-      icon: Package,
-      label: "View Collections",
-      href: "/collections",
-      color: "#32CD32",
-    },
-    { icon: Search, label: "Search Site", href: "/search", color: "#FF6347" },
-  ];
-
-  const popularPages = [
-    { name: "Custom Patches", href: "/products/patches" },
-    { name: "Services", href: "/services" },
-    { name: "Get a Quote", href: "/quote" },
-    { name: "Contact Us", href: "/contact" },
-  ];
-
   return (
-    <div className="min-h-screen bg-[#101010] flex items-center justify-center px-4 py-30 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="absolute w-96 h-96 bg-[#D4AF37] rounded-full blur-3xl animate-pulse"
-          style={{
-            left: `${mousePosition.x / 10}px`,
-            top: `${mousePosition.y / 10}px`,
-            transition: "all 0.3s ease-out",
-          }}
-        ></div>
-        <div
-          className="absolute w-96 h-96 bg-[#D4AF37] rounded-full blur-3xl animate-pulse"
-          style={{
-            right: `${mousePosition.x / 15}px`,
-            bottom: `${mousePosition.y / 15}px`,
-            animationDelay: "1s",
-            transition: "all 0.3s ease-out",
-          }}
-        ></div>
-      </div>
-
-      {/* Floating Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-20 left-10 animate-float"
-          style={{ animationDelay: "0s" }}
-        >
-          <Sparkles className="w-8 h-8 text-[#D4AF37]/30" />
-        </div>
-        <div
-          className="absolute top-40 right-20 animate-float"
-          style={{ animationDelay: "0.5s" }}
-        >
-          <Sparkles className="w-6 h-6 text-[#D4AF37]/20" />
-        </div>
-        <div
-          className="absolute bottom-32 left-1/4 animate-float"
-          style={{ animationDelay: "1s" }}
-        >
-          <Sparkles className="w-7 h-7 text-[#D4AF37]/25" />
-        </div>
-        <div
-          className="absolute bottom-20 right-1/3 animate-float"
-          style={{ animationDelay: "1.5s" }}
-        >
-          <Sparkles className="w-5 h-5 text-[#D4AF37]/30" />
+    <section className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-[#F5F7FA] to-white">
+      {/* Decorative Dots */}
+      <div className="absolute top-16 left-8 opacity-20">
+        <div className="grid grid-cols-4 gap-3">
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="w-2 h-2 rounded-full bg-[#007BFF]" />
+          ))}
         </div>
       </div>
 
-      <div className="max-w-6xl w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Side - Error Message */}
-          <div className="text-center lg:text-left space-y-6 animate-fade-in">
-            {/* 404 Number */}
-            <div className="relative">
-              <h1 className="text-[150px] sm:text-[200px] lg:text-[250px] font-bold text-[#D4AF37]/10 leading-none select-none">
-                404
-              </h1>
-              <div className="absolute to-25% inset-0 flex items-center justify-center lg:justify-start">
-                <div className="relative">
-                  <div className="w-32 h-32 sm:w-40 sm:h-40 bg-[#1A1A1A] border-4 border-[#D4AF37] rounded-full flex items-center justify-center animate-pulse-slow">
-                    <AlertTriangle
-                      className="w-16 h-16 sm:w-20 sm:h-20 text-[#D4AF37]"
-                      strokeWidth={1.5}
-                    />
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#D4AF37] rounded-full animate-ping"></div>
-                </div>
+      <div className="absolute top-52 right-8 opacity-20">
+        <div className="grid grid-cols-4 gap-3">
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="w-2 h-2 rounded-full bg-[#007BFF]" />
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-20">
+        {/* 404 */}
+        <button
+          onClick={() => window.history.back()}
+          className="hidden md:flex items-center gap-2 px-6 py-3 border border-[#007BFF]/20 rounded-full text-[#007BFF] font-semibold hover:bg-[#007BFF] hover:text-white transition-all"
+        >
+          <ArrowLeft size={18} />
+          Go Back
+        </button>
+        <div className="text-center">
+          <div className="relative inline-flex items-center justify-center">
+            <h1 className="text-[120px] md:text-[220px] font-black leading-none tracking-tight text-[#007BFF] drop-shadow-lg">
+              404
+            </h1>
+
+            {/* Needle */}
+            <div className="absolute left-1/2 top-6 md:top-10 -translate-x-1/2">
+              <div className="w-1 h-36 md:h-52 bg-slate-300 rounded-full relative">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 border-2 border-slate-400 rounded-full"></div>
               </div>
-            </div>
 
-            {/* Message */}
-            <div className="space-y-4 pt-8">
-              <h2 className="text-4xl sm:text-5xl font-bold text-[#E8D7B5]">
-                Oops! Lost in the
-                <span className="block text-[#D4AF37] mt-2">Thread Maze</span>
-              </h2>
-              <p className="text-lg text-[#D4AF37]/80 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Looks like this page has been stitched out of existence. The
-                page you're looking for doesn't exist or has been moved.
-              </p>
-            </div>
-
-            {/* Search Box */}
-            <div className="pt-4">
-              <div className="relative max-w-md mx-auto lg:mx-0">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D4AF37]/60" />
-                <input
-                  type="text"
-                  placeholder="Search for products, services..."
-                  className="w-full pl-12 pr-4 py-4 bg-[#1A1A1A] border border-[#D4AF37]/30 rounded-lg text-[#E8D7B5] placeholder-[#D4AF37]/50 focus:outline-none focus:border-[#D4AF37] transition-colors"
+              <svg className="absolute top-20 -left-8" width="80" height="120">
+                <path
+                  d="M40 0 C80 40 0 60 40 120"
+                  stroke="#007BFF"
+                  strokeWidth="3"
+                  fill="none"
                 />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-[#D4AF37] text-[#101010] rounded-lg font-semibold hover:bg-[#E8D7B5] transition-all">
-                  Search
-                </button>
-              </div>
-            </div>
-
-            {/* Error Code */}
-            <div className="pt-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-full">
-                <Compass className="w-4 h-4 text-[#D4AF37]" />
-                <span className="text-[#D4AF37]/80 text-sm">
-                  Error Code: 404 - Page Not Found
-                </span>
-              </div>
+              </svg>
             </div>
           </div>
 
-          {/* Right Side - Quick Links */}
-          <div
-            className="space-y-6 animate-fade-in"
-            style={{ animationDelay: "0.2s" }}
-          >
-            {/* Quick Actions */}
-            <div className="bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-2xl p-6 sm:p-8">
-              <h3 className="text-2xl font-bold text-[#E8D7B5] mb-6">
-                Quick Navigation
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {quickLinks.map((link, idx) => {
-                  const Icon = link.icon;
-                  return (
-                    <Link
-                      key={idx}
-                      to={link.href}
-                      className="group flex items-center gap-4 p-4 bg-[#101010] border border-[#D4AF37]/20 rounded-xl hover:border-[#D4AF37] transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#D4AF37]/10"
-                      style={{
-                        animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s both`,
-                      }}
-                    >
-                      <div
-                        className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: `${link.color}20` }}
-                      >
-                        <Icon
-                          className="w-6 h-6"
-                          style={{ color: link.color }}
-                        />
-                      </div>
-                      <span className="text-[#E8D7B5] font-semibold group-hover:text-[#D4AF37] transition-colors">
-                        {link.label}
-                      </span>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+          {/* Heading */}
+          <h2 className="mt-4 text-4xl md:text-6xl font-bold text-[#0F172A]">
+            Oops! <span className="text-[#007BFF]">Page Not Found</span>
+          </h2>
 
-            {/* Popular Pages */}
-            <div className="bg-[#1A1A1A] border border-[#D4AF37]/20 rounded-2xl p-6 sm:p-8">
-              <h3 className="text-xl font-bold text-[#E8D7B5] mb-4">
-                Popular Pages
-              </h3>
-              <div className="space-y-2">
-                {popularPages.map((page, idx) => (
-                  <Link
-                    key={idx}
-                    to={page.href}
-                    className="flex items-center justify-between p-3 rounded-lg hover:bg-[#101010] transition-all duration-300 group"
-                  >
-                    <span className="text-[#D4AF37]/80 group-hover:text-[#D4AF37] transition-colors">
-                      {page.name}
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-[#D4AF37]/60 group-hover:text-[#D4AF37] group-hover:translate-x-2 transition-all" />
-                  </Link>
-                ))}
-              </div>
-            </div>
+          <p className="mt-6 text-xl text-slate-600 max-w-2xl mx-auto">
+            The page you're looking for seems to have gone off the stitch path.
+          </p>
 
-            {/* Help Card */}
-            <div className="bg-gradient-to-br from-[#D4AF37]/10 to-[#D4AF37]/5 border border-[#D4AF37]/30 rounded-2xl p-6 sm:p-8">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-[#D4AF37] rounded-full flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-6 h-6 text-[#101010]" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="text-lg font-bold text-[#E8D7B5] mb-2">
-                    Need Help?
-                  </h4>
-                  <p className="text-[#D4AF37]/80 text-sm mb-4">
-                    Can't find what you're looking for? Our team is here to help
-                    you navigate.
-                  </p>
-                  <Link
-                    to="/contact"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-[#101010] rounded-lg font-semibold hover:bg-[#E8D7B5] transition-all duration-300 transform hover:scale-105"
-                  >
-                    Contact Support
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            </div>
+          {/* Decorative Line */}
+          <div className="flex justify-center my-10">
+            <div className="w-72 border-t-2 border-dashed border-[#007BFF]/40"></div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row justify-center gap-5">
+            <Link
+              to="/"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#007BFF] text-white rounded-xl font-bold hover:bg-[#0066CC] transition-all"
+            >
+              <Home size={20} />
+              Go to Homepage
+            </Link>
+
+            <Link
+              to="/category"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-[#007BFF]/20 text-[#007BFF] rounded-xl font-bold hover:bg-[#007BFF]/5 transition-all"
+            >
+              <Grid3X3 size={20} />
+              Browse Categories
+            </Link>
           </div>
         </div>
 
-        {/* Bottom Message */}
-        <div
-          className="text-center mt-12 animate-fade-in"
-          style={{ animationDelay: "0.4s" }}
-        >
-          <p className="text-[#D4AF37]/60 text-sm">
-            If you believe this is an error, please{" "}
+        {/* Bottom Support Card */}
+        <div className="mt-20">
+          <div className="bg-white border border-slate-100 rounded-[30px] p-8 shadow-lg flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-center gap-5">
+              <div className="w-16 h-16 rounded-full bg-[#007BFF] text-white flex items-center justify-center">
+                <Headphones size={28} />
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-bold text-[#0F172A]">
+                  Need Help?
+                </h3>
+                <p className="text-slate-500">
+                  Our support team is here for you 24/7.
+                </p>
+              </div>
+            </div>
+
             <Link
               to="/contact"
-              className="text-[#D4AF37] font-semibold hover:underline"
+              className="inline-flex items-center gap-3 px-8 py-4 border border-[#007BFF]/20 rounded-full text-[#007BFF] font-semibold hover:bg-[#007BFF] hover:text-white transition-all"
             >
-              contact us
-            </Link>{" "}
-            and let us know.
-          </p>
+              Contact Support
+              <ArrowRight size={18} />
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

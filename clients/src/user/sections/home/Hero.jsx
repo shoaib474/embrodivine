@@ -4,9 +4,9 @@ import { ArrowRight } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="h-screen relative bg-[#0b0b0f] overflow-hidden flex items-center justify-center px-4">
+    <section className="h-screen relative overflow-hidden flex items-center justify-center px-4 border-b border-gray-300">
       {/* Background Video */}
-      <div className="absolute inset-0 opacity-25">
+      <div className="absolute inset-0 ">
         <video
           autoPlay
           loop
@@ -16,7 +16,7 @@ const Hero = () => {
         >
           <source src="/hnn.webm" type="video/webm" />
         </video>
-        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="absolute inset-0 bg-white/70"></div>
       </div>
 
       {/* Content */}
@@ -27,17 +27,17 @@ const Hero = () => {
         className="relative max-w-3xl text-center"
       >
         {/* Badge */}
-        <div className="inline-block border border-yellow-500/40 text-yellow-500 px-5 py-2 rounded-full text-sm font-semibold mb-6 bg-[#111827]/40 backdrop-blur-md">
+        <div className="inline-block border border-[#007BFF]/40 text-[#0066CC] px-5 py-2 rounded-full text-sm font-semibold mb-6 bg-white/70 backdrop-blur-md">
           ✨ Trusted by 1000+ Businesses
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-yellow-500 mb-6 leading-tight ">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#222222] mb-6 leading-tight">
           Where Detail Comes True
         </h1>
 
         {/* Sub text */}
-        <p className="text-lg md:text-xl text-white mb-10 leading-relaxed">
+        <p className="text-lg md:text-xl text-[#333333] mb-10 leading-relaxed">
           Because extraordinary brands are remembered by the details others
           overlook. Crafted with precision, built to elevate every stitch, edge,
           and impression.
@@ -47,7 +47,7 @@ const Hero = () => {
         <div className="flex flex-col sm:flex-row justify-center gap-5">
           <Link
             to="/quote"
-            className="inline-flex items-center justify-center bg-yellow-500 text-black px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:scale-105 transition-all shadow-lg shadow-yellow-500/20"
+            className="inline-flex items-center justify-center bg-[#007BFF] text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-[#0066CC] hover:scale-105 transition-all shadow-lg shadow-blue-500/20"
           >
             Get a Free Quote
             <ArrowRight className="ml-2" size={20} />
@@ -55,7 +55,7 @@ const Hero = () => {
 
           <Link
             to="/store"
-            className="inline-flex items-center justify-center border border-yellow-500 text-yellow-500 px-8 py-4 rounded-full font-semibold text-lg hover:bg-yellow-500 hover:text-black transition-all"
+            className="inline-flex items-center justify-center border border-[#007BFF] text-[#0066CC] px-8 py-4 rounded-full font-semibold text-lg hover:bg-[#007BFF] hover:text-white transition-all"
           >
             View Products
           </Link>

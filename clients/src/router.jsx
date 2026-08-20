@@ -26,7 +26,21 @@ const Checkout = React.lazy(() => import("./user/pages/Checkout"));
 const UserProductView = React.lazy(
   () => import("./user/pages/UserProductView"),
 );
-const EmbroideryDigitizing = React.lazy(() => import("./user/pages/EmbroideryDigitizing"));
+const EmbroideryDigitizing = React.lazy(
+  () => import("./user/pages/EmbroideryDigitizing"),
+);
+const VectorConversion = React.lazy(
+  () => import("./user/pages/VectorConversion"),
+);
+const CustomDigitizing = React.lazy(
+  () => import("./user/pages/CustomEmbroidery"),
+);
+const ForgotPassword = React.lazy(() => import("./user/pages/ForgotPassword"));
+const ResetPassword = React.lazy(() => import("./user/pages/ResetPassword"));
+const VerifyEmail = React.lazy(() => import("./user/pages/VerifyEmail"));
+const UploadArtwork = React.lazy(() => import("./user/pages/UploadArtwork"));
+const TermConditions = React.lazy(() => import("./user/pages/TermConditions"));
+const PrivacyPolicy = React.lazy(() => import("./user/pages/PrivacyPolicy"));
 
 // ADMIN
 const AdminLayout = React.lazy(() => import("./layouts/AdminLayout"));
@@ -38,12 +52,14 @@ const Login = React.lazy(() => import("./admin/pages/Login"));
 const ProductView = React.lazy(() => import("./admin/pages/ProductView"));
 const NotifyEmails = React.lazy(() => import("./admin/pages/NotifyEmails"));
 const QuoteRequests = React.lazy(() => import("./admin/pages/QuoteRequests"));
+const AdminArtwork = React.lazy(() => import("./admin/pages/AdminArtwork"));
 const AdminUsers = React.lazy(() => import("./admin/pages/User"));
 const Coupons = React.lazy(() => import("./admin/pages/Coupon"));
 const AdminCategory = React.lazy(() => import("./admin/pages/Category"));
 const AdminContact = React.lazy(() => import("./admin/pages/Contact"));
 
 import SpinnerLoader from "./user/components/SpinnerLoader";
+import CustomEmbroidery from "./user/pages/CustomEmbroidery";
 
 const wrap = (element) => (
   <Suspense fallback={<SpinnerLoader />}>{element}</Suspense>
@@ -64,7 +80,18 @@ export const router = createBrowserRouter([
       { path: "quote", element: wrap(<Quotes />) },
       { path: "contact", element: wrap(<Contact />) },
       { path: "store/:id", element: wrap(<UserProductView />) },
-      { path: "embroidery-digitizing", element: wrap(<EmbroideryDigitizing />) },
+      {
+        path: "embroidery-digitizing",
+        element: wrap(<EmbroideryDigitizing />),
+      },
+      { path: "vector-art", element: wrap(<VectorConversion />) },
+      { path: "custom-embroidery", element: wrap(<CustomEmbroidery />) },
+      { path: "forgot-password", element: wrap(<ForgotPassword />) },
+      { path: "reset-password/:token", element: wrap(<ResetPassword />) },
+      { path: "verify-email/:token", element: wrap(<VerifyEmail />) },
+      { path: "upload-artwork", element: wrap(<UploadArtwork />) },
+      { path: "term-conditions", element: wrap(<TermConditions />) },
+      { path: "privacy-policy", element: wrap(<PrivacyPolicy />) },
 
       {
         path: "auth",
@@ -135,6 +162,7 @@ export const router = createBrowserRouter([
       { path: "notify", element: wrap(<NotifyEmails />) },
       { path: "users", element: wrap(<AdminUsers />) },
       { path: "quote", element: wrap(<QuoteRequests />) },
+      { path: "artwork", element: wrap(<AdminArtwork />) },
       { path: "contact", element: wrap(<AdminContact />) },
       { path: "categories", element: wrap(<AdminCategory />) },
       { path: "coupon", element: wrap(<Coupons />) },

@@ -305,3 +305,14 @@ export const sendReplyToContact = async ({
 
   await transporter.sendMail(replyUser);
 };
+
+const sendResetToken = async ({ to, subject, html }) => {
+  await transporter.sendMail({
+    from: `"EmbroDivine" <${process.env.SMTP_EMAIL}>`,
+    to,
+    subject,
+    html,
+  });
+};
+
+export default sendResetToken;

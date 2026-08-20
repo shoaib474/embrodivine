@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
         validator: function (v) {
           return /^[A-Za-z ]+$/.test(v); // Only letters and spaces
         },
-        message: props => `${props.value} is not a valid name!`,
+        message: (props) => `${props.value} is not a valid name!`,
       },
     },
 
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
         validator: function (v) {
           return validator.isEmail(v);
         },
-        message: props => `${props.value} is not a valid email!`,
+        message: (props) => `${props.value} is not a valid email!`,
       },
     },
 
@@ -42,13 +42,34 @@ const userSchema = new mongoose.Schema(
       },
     },
 
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    verificationToken: {
+      type: String,
+    },
+
+    verificationTokenExpire: {
+      type: Date,
+    },
+
+    resetPasswordToken: {
+      type: String,
+    },
+
+    resetPasswordExpire: {
+      type: Date,
+    },
+
     role: {
       type: String,
       enum: ["user", "admin"],
       default: "user",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const User = mongoose.model("User", userSchema);

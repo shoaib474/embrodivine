@@ -21,6 +21,7 @@ import userRouter from "./routes/user.routes.js";
 import contactRouter from "./routes/contact.routes.js";
 import couponRouter from "./routes/coupon.routes.js";
 import categoryRouter from "./routes/category.routes.js";
+import artworkRouter from "./routes/artwork.routes.js";
 
 const app = express();
 
@@ -52,7 +53,7 @@ app.use(
 );
 
 app.use(cookieParser());
-app.use(express.json({ limit: "70mb" }));
+app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(hpp());
@@ -70,5 +71,6 @@ app.use("/api/profile", profileRouter);
 app.use("/api/contact", contactRouter);
 app.use("/api/coupons", couponRouter);
 app.use("/api/categories", categoryRouter);
+app.use("/api/artworks", artworkRouter);
 
 export default app;

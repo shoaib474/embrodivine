@@ -45,15 +45,15 @@ const Dashboard = () => {
   if (isLoading) return <SpinnerLoader />;
 
   return (
-    <div className="min-h-screen bg-[#101010] pt-28">
+    <div className="min-h-screen bg-[#F5F7FA] pt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <aside className="lg:col-span-1">
-            <div className="bg-[#1A1A1A] border border-yellow-500/20 rounded-xl p-6 space-y-6 sticky top-24">
+            <div className="bg-white border border-[#E5E7EB] rounded-xl p-6 space-y-6 sticky top-24 shadow-sm">
               {/* Profile */}
-              <div className="text-center pb-6 border-b border-yellow-500/20">
-                <div className="w-20 h-20 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-[#101010]">
+              <div className="text-center pb-6 border-b border-[#E5E7EB]">
+                <div className="w-20 h-20 bg-[#007BFF] rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-white">
                   {userData.name
                     ? userData.name
                         .split(" ")
@@ -62,11 +62,11 @@ const Dashboard = () => {
                     : "U"}
                 </div>
 
-                <h3 className="text-lg font-bold text-white">
+                <h3 className="text-lg font-bold text-[#222222]">
                   {isAdmin ? (
                     <Link
                       to="/admin"
-                      className="hover:text-yellow-500 transition-colors"
+                      className="hover:text-[#007BFF] transition-colors"
                     >
                       {userData.name} (Admin)
                     </Link>
@@ -75,10 +75,10 @@ const Dashboard = () => {
                   )}
                 </h3>
 
-                <p className="text-sm text-yellow-500/70">
+                <p className="text-sm text-[#007BFF]/80">
                   {userData.email || "user@example.com"}
                 </p>
-                <p className="text-xs text-yellow-500/50 mt-2">
+                <p className="text-xs text-[#6B7280] mt-2">
                   Member since{" "}
                   {userData.createdAt
                     ? new Date(userData.createdAt).toLocaleDateString()
@@ -88,17 +88,15 @@ const Dashboard = () => {
 
               {/* Stats */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-[#101010] rounded-lg">
-                  <span className="text-yellow-500/70 text-sm">
-                    Total Orders
-                  </span>
-                  <span className="text-white font-bold">
+                <div className="flex items-center justify-between p-3 bg-[#F5F7FA] rounded-lg">
+                  <span className="text-[#6B7280] text-sm">Total Orders</span>
+                  <span className="text-[#222222] font-bold">
                     {userData.totalOrders || 0}
                   </span>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-[#101010] rounded-lg">
-                  <span className="text-yellow-500/70 text-sm">Total Spent</span>
-                  <span className="text-white font-bold">
+                <div className="flex items-center justify-between p-3 bg-[#F5F7FA] rounded-lg">
+                  <span className="text-[#6B7280] text-sm">Total Spent</span>
+                  <span className="text-[#222222] font-bold">
                     ${userData.totalSpent || 0}
                   </span>
                 </div>
@@ -114,8 +112,8 @@ const Dashboard = () => {
                       onClick={() => setActiveTab(tab.id)}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${
                         activeTab === tab.id
-                          ? "bg-yellow-500 text-[#101010]"
-                          : "text-yellow-500 hover:bg-yellow-500/10"
+                          ? "bg-[#007BFF] text-white"
+                          : "text-[#222222] hover:bg-[#007BFF]/10 hover:text-[#007BFF]"
                       }`}
                     >
                       <Icon className="w-5 h-5" />

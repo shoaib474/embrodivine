@@ -73,7 +73,7 @@ const PayPalButton = ({ amount, onSuccess, cartItems, customer }) => {
           toast.error("Payment failed. Please try again or contact support.");
         }}
         onCancel={() => {
-          toast("Payment cancelled.", { icon: "ℹ️" }); // ✅ cancel bhi handle karo
+          toast("Payment cancelled.", { icon: "ℹ️" });
         }}
       />
     </div>

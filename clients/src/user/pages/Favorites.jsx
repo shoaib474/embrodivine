@@ -39,8 +39,9 @@ const Favorites = () => {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <h2 className="text-2xl font-bold text-white">My Favorites</h2>
+    <div className="space-y-6 animate-fade-in border border-slate-200 rounded-3xl p-6 sm:p-8 bg-[#ffffff]">
+      <h2 className="text-2xl font-bold text-[#222222]">My Favorites</h2>
+
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -49,12 +50,12 @@ const Favorites = () => {
         </div>
       ) : favorites.length === 0 ? (
         <div className="flex flex-col items-center justify-center mt-10">
-          <div className="bg-[#2A2A2A] border border-yellow-500/30 rounded-xl p-8 flex flex-col items-center space-y-4 shadow-lg animate-fade-in">
-            <Heart className="w-12 h-12 text-yellow-500 animate-pulse" />
-            <h3 className="text-white text-xl font-semibold">
+          <div className="bg-[#F5F7FA] border border-[#E5E7EB] rounded-xl p-8 flex flex-col items-center space-y-4 shadow-lg animate-fade-in">
+            <Heart className="w-12 h-12 text-[#007BFF] animate-pulse" />
+            <h3 className="text-[#222222] text-xl font-semibold">
               No Favorites Yet
             </h3>
-            <p className="text-white/70 text-center max-w-xs">
+            <p className="text-[#6B7280] text-center max-w-xs">
               You haven't added any products to your favorites. Click the heart
               icon on any product to save it here.
             </p>
@@ -65,7 +66,7 @@ const Favorites = () => {
           {favorites.map((item, idx) => (
             <div
               key={item._id}
-              className="bg-[#1A1A1A] border border-yellow-500/20 rounded-xl overflow-hidden hover:border-yellow-500 transition-all duration-300 transform hover:-translate-y-2"
+              className="bg-[#F5F7FA] border border-[#E5E7EB] rounded-xl overflow-hidden hover:border-[#007BFF] hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2"
               style={{
                 animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s both`,
               }}
@@ -82,17 +83,18 @@ const Favorites = () => {
                   disabled={isPending}
                   className={`absolute top-3 right-3 w-6 h-6 cursor-pointer drop-shadow-md transition-all ${
                     isFavorite(item._id)
-                      ? "text-yellow-500 scale-110"
-                      : "text-white/70 hover:text-yellow-500"
+                      ? "text-[#007BFF] scale-110"
+                      : "text-white/80 hover:text-[#007BFF]"
                   }`}
-                  fill={isFavorite(item._id) ? "#D4AF37" : "transparent"}
+                  fill={isFavorite(item._id) ? "#007BFF" : "transparent"}
                 />
               </div>
 
               <div className="p-4">
-                <h3 className="text-white font-bold mb-2">{item.name}</h3>
+                <h3 className="text-[#222222] font-bold mb-2">{item.name}</h3>
+
                 <div>
-                  <span className="text-gray-300 font-bold text-xl block">
+                  <span className="text-[#222222] font-bold text-xl block">
                     ${item.price}
                   </span>
 
@@ -104,15 +106,15 @@ const Favorites = () => {
                           key={i}
                           className={`w-4 h-4 ${
                             i < item.rating
-                              ? "text-yellow-500"
-                              : "text-yellow-500/30"
+                              ? "text-[#ff9d00]"
+                              : "text-[#ff9d00]/30"
                           }`}
-                          fill={i < item.rating ? "#D4AF37" : "transparent"}
+                          fill={i < item.rating ? "#ff9d00" : "transparent"}
                         />
                       ))}
                     </div>
 
-                    <span className="text-sm text-yellow-500/70">
+                    <span className="text-sm text-[#6B7280]">
                       {item.rating ? item.rating.toFixed(1) : "0.0"}
                     </span>
                   </div>

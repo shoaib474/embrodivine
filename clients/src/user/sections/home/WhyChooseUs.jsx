@@ -24,20 +24,21 @@ const WhyChooseUs = () => {
       desc: "Fast and accurate embroidery digitizing quotes at no cost.",
     },
   ];
+
   return (
-    <section className="bg-[#101010] py-24">
+    <section className="bg-[#ffffff] py-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Heading */}
         <div className="text-center mb-16">
-          <span className="uppercase tracking-[4px] text-yellow-500 text-sm font-semibold">
+          <span className="uppercase tracking-[4px] text-[#007BFF] text-sm font-semibold">
             Why Choose Us
           </span>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-white mt-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#222222] mt-4">
             Built For Quality
           </h2>
 
-          <p className="text-gray-400 max-w-2xl mx-auto mt-5">
+          <p className="text-[#333333] max-w-2xl mx-auto mt-5">
             We provide premium embroidery digitizing services with fast
             turnaround, secure file storage, unlimited support, and
             production-ready results.
@@ -46,7 +47,7 @@ const WhyChooseUs = () => {
 
         {/* Top Cards */}
         <div className="md:flex items-center justify-around text-center gap-8 space-y-8 md:space-y-0 mb-10">
-          <div className="bg-[#1A1A1A] rounded-lg overflow-hidden p-4 w-full md:w-1/3">
+          <div className="bg-white rounded-lg overflow-hidden p-4 w-full md:w-1/3 shadow-sm border border-gray-100">
             <img
               src="/images/resewout.webp"
               alt="Real Sewouts"
@@ -54,19 +55,21 @@ const WhyChooseUs = () => {
             />
 
             <div className="pt-8 pb-2">
-              <span className="inline-block bg-yellow-500 text-black text-xs font-bold px-4 py-2 rounded-full mb-2">
+              <span className="inline-block text-[#007BFF] text-xs font-bold px-4 py-2 rounded-full mb-2">
                 FREE
               </span>
 
-              <h3 className="text-2xl font-bold text-white">Real Sewouts</h3>
+              <h3 className="text-2xl font-bold text-[#222222]">
+                Real Sewouts
+              </h3>
 
-              <p className="text-gray-400 mt-2">
+              <p className="text-[#333333] mt-2">
                 Preview exactly how your design will look before production.
               </p>
             </div>
           </div>
 
-          <div className="bg-[#1A1A1A] rounded-lg overflow-hidden p-4 w-full md:w-1/3">
+          <div className="bg-white rounded-lg overflow-hidden p-4 w-full md:w-1/3 shadow-sm border border-gray-100">
             <img
               src="/images/high-quality.webp"
               alt="High Quality Service"
@@ -74,15 +77,15 @@ const WhyChooseUs = () => {
             />
 
             <div className="pt-8 pb-2">
-              <span className="inline-block bg-yellow-500 text-black text-xs font-bold px-4 py-2 rounded-full mb-2">
+              <span className="inline-block text[#007BFF] text-xs font-bold px-4 py-2 rounded-full mb-2">
                 PREMIUM
               </span>
 
-              <h3 className="text-2xl font-bold text-white">
+              <h3 className="text-2xl font-bold text-[#222222]">
                 High Quality Service
               </h3>
 
-              <p className="text-gray-400 mt-2">
+              <p className="text-[#333333] mt-2">
                 Professional digitizing optimized for clean stitching and
                 perfect embroidery results.
               </p>
@@ -100,22 +103,19 @@ const WhyChooseUs = () => {
               return (
                 <div
                   key={index}
-                  className="
-                bg-[#1A1A1A]
-                rounded-lg
-                px-4 py-6
-                text-center
-              "
+                  className="bg-white rounded-lg px-4 py-6 text-center shadow-sm border border-gray-100"
                 >
-                  <div className="w-12 h-12 m-auto rounded-full bg-yellow-500/10 flex items-center justify-center mb-5">
-                    <Icon size={24} className="text-yellow-500" />
+                  <div className="w-12 h-12 m-auto rounded-full bg-[#007BFF]/10 flex items-center justify-center mb-5">
+                    <Icon size={24} className="text-[#007BFF]" />
                   </div>
 
-                  <h3 className="text-white font-bold text-lg mb-3">
+                  <h3 className="text-[#222222] font-bold text-lg mb-3">
                     {item.title}
                   </h3>
 
-                  <p className="text-gray-400 leading-7 text-sm">{item.desc}</p>
+                  <p className="text-[#333333] leading-7 text-sm">
+                    {item.desc}
+                  </p>
                 </div>
               );
             })}
@@ -126,12 +126,7 @@ const WhyChooseUs = () => {
             <img
               src="/images/why-choose-us.webp"
               alt="Embroidery Process"
-              className="
-            max-w-full
-            w-[420px]
-            object-contain
-            drop-shadow-[0_0_40px_rgba(234,179,8,0.15)]
-          "
+              className="max-w-full w-[420px] object-contain drop-shadow-[0_0_40px_rgba(0,123,255,0.15)]"
             />
           </div>
         </div>

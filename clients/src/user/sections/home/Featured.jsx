@@ -5,13 +5,9 @@ const FeaturedProducts = ({ products }) => {
   const [active, setActive] = useState(2);
   const [showAll, setShowAll] = useState(false);
 
-  // ⏳ Loader condition (data not loaded yet)
   const isLoading = !products;
-
-  // Empty safe array fallback
   const safeProducts = products || [];
 
-  // Only premium products
   const featuredProducts = safeProducts.filter(
     (item) => item.badge?.toLowerCase() === "premium",
   );
@@ -21,33 +17,33 @@ const FeaturedProducts = ({ products }) => {
     : featuredProducts.slice(0, 4);
 
   return (
-    <section className="bg-[#1A1A1A] py-20">
+    <section className="bg-[#F5F7FA] py-20">
       <div className="max-w-7xl mx-auto px-6">
         {/* Heading */}
         <div className="text-center mb-14">
-          <h2 className="text-5xl font-bold text-white mb-4">
+          <h2 className="text-5xl font-bold text-[#222222] mb-4">
             Featured Designs
           </h2>
 
-          <p className="text-yellow-500 uppercase tracking-[4px]">
+          <p className="text-[#007BFF] uppercase tracking-[4px]">
             Premium Collection Only
           </p>
         </div>
 
         {/* ================= LOADER ================= */}
         {isLoading ? (
-          <div className="flex justify-center items-center text-white">
-            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-yellow-500"></div>
-            <span className="ml-3 text-yellow-500">Loading products...</span>
+          <div className="flex justify-center items-center">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-[#007BFF]"></div>
+            <span className="ml-3 text-[#007BFF]">Loading products...</span>
           </div>
         ) : featuredProducts.length === 0 ? (
           /* ============ NO PRODUCTS ============ */
-          <div className="flex justify-center items-center text-white">
-            <p className="text-gray-400 text-lg">No premium products found.</p>
+          <div className="flex justify-center items-center">
+            <p className="text-[#333333] text-lg">No premium products found.</p>
           </div>
         ) : (
-          /* ============ PRODUCTS GRID ============ */
           <>
+            {/* ============ PRODUCTS GRID ============ */}
             <div className="flex h-[500px] overflow-hidden rounded-3xl">
               {displayedProducts.map((item, index) => (
                 <div
@@ -77,7 +73,7 @@ const FeaturedProducts = ({ products }) => {
                   />
 
                   {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-white/10 to-transparent" />
 
                   {/* Title */}
                   <div
@@ -85,7 +81,6 @@ const FeaturedProducts = ({ products }) => {
                       absolute
                       bottom-8
                       left-8
-                      text-white
                       transition-all
                       duration-500
                       ${
@@ -95,17 +90,19 @@ const FeaturedProducts = ({ products }) => {
                       }
                     `}
                   >
-                    <h3 className="text-2xl font-bold">{item.name}</h3>
+                    <h3 className="text-2xl font-bold text-[#222222]">
+                      {item.name}
+                    </h3>
 
                     {/* PREMIUM badge */}
-                    <span className="inline-block mt-2 text-xs px-3 py-1 bg-yellow-500 text-black rounded-full font-bold">
+                    <span className="inline-block mt-2 text-xs px-3 py-1 bg-[#007BFF] text-white rounded-full font-bold">
                       PREMIUM
                     </span>
 
                     <div className="mt-3">
                       <Link
                         to={`/store/${item._id}`}
-                        className="text-yellow-500 font-medium"
+                        className="text-[#007BFF] font-medium"
                       >
                         View Design →
                       </Link>
@@ -119,7 +116,7 @@ const FeaturedProducts = ({ products }) => {
             <div className="text-center mt-10">
               <Link
                 to="/store"
-                className="text-black bg-yellow-500 px-6 py-3 rounded-lg font-bold hover:bg-yellow-400 transition"
+                className="text-white bg-[#007BFF] px-6 py-3 rounded-lg font-bold hover:bg-[#0066CC] transition"
               >
                 Show More
               </Link>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import {
   CreditCard,
@@ -67,23 +66,6 @@ const Payment = () => {
       description: p.productId?.description,
       downloadUrl: p.productId?.zipUrl || null,
     })) || [];
-
-  const savedCards = [
-    {
-      id: 1,
-      type: "Visa",
-      last4: "4242",
-      expiry: "12/25",
-      isDefault: true,
-    },
-    {
-      id: 2,
-      type: "Mastercard",
-      last4: "8888",
-      expiry: "08/26",
-      isDefault: false,
-    },
-  ];
 
   let discount = 0;
 
@@ -194,138 +176,32 @@ const Payment = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#101010] pt-24 pb-16">
+    <div className="min-h-screen bg-[#F5F7FA] pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+        <div className="mb-8 pt-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-[#222222] mb-2">
             Payment Details
           </h1>
-          <p className="text-yellow-500/70">Complete your purchase</p>
-        </motion.div>
+          <p className="text-[#007BFF]/70">Complete your purchase</p>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Payment & Shipping */}
           <div className="lg:col-span-2 space-y-6">
             {/* Payment Method */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-[#1A1A1A] border border-yellow-500/20 rounded-xl p-6"
-            >
-              <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-yellow-500" />
+            <div className="bg-white border border-[#007BFF]/20 rounded-xl p-6 shadow-sm">
+              <h2 className="text-xl font-bold text-[#222222] mb-4 flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-[#007BFF]" />
                 Payment Method
               </h2>
-
-              {/* Payment Method Tabs */}
-              {/* <div className="flex gap-2 mb-6">
-                {[
-                  // { id: "card", label: "Credit Card", icon: CreditCard },
-                  { id: "paypal", label: "PayPal", icon: DollarSign },
-                ].map((method) => {
-                  const Icon = method.icon;
-                  return (
-                    <button
-                      key={method.id}
-                      onClick={() => setPaymentMethod(method.id)}
-                      className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
-                        paymentMethod === method.id
-                          ? "bg-yellow-500 text-[#101010]"
-                          : "bg-[#101010] border border-yellow-500/30 text-yellow-500 hover:border-yellow-500"
-                      }`}
-                    >
-                      <Icon className="w-5 h-5" />
-                      {method.label}
-                    </button>
-                  );
-                })}
-              </div> */}
-              {/* 
-              {paymentMethod === "card" && (
-                <>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-yellow-500/70 text-sm mb-2">
-                        Card Number
-                      </label>
-                      <div className="relative">
-                        <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-yellow-500/50" />
-                        <input
-                          type="text"
-                          name="cardNumber"
-                          value={formData.cardNumber}
-                          onChange={handleCardNumberChange}
-                          placeholder="1234 5678 9012 3456"
-                          maxLength="19"
-                          className="w-full pl-11 pr-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 transition-all"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-yellow-500/70 text-sm mb-2">
-                        Cardholder Name
-                      </label>
-                      <input
-                        type="text"
-                        name="cardName"
-                        value={formData.cardName}
-                        onChange={handleInputChange}
-                        placeholder="John Doe"
-                        className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 transition-all"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-yellow-500/70 text-sm mb-2">
-                          Expiry Date
-                        </label>
-                        <input
-                          type="text"
-                          name="expiryDate"
-                          value={formData.expiryDate}
-                          onChange={handleExpiryChange}
-                          placeholder="MM/YY"
-                          maxLength="5"
-                          className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 transition-all"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-yellow-500/70 text-sm mb-2">
-                          CVV
-                        </label>
-                        <input
-                          type="text"
-                          name="cvv"
-                          value={formData.cvv}
-                          onChange={handleInputChange}
-                          placeholder="123"
-                          maxLength="4"
-                          className="w-full px-4 py-3 bg-[#101010] border border-yellow-500/30 rounded-lg text-white focus:outline-none focus:border-yellow-500 transition-all"
-                        />
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setShowNewCardForm(false)}
-                      className="text-yellow-500 text-sm hover:text-white transition-colors"
-                    >
-                      Use saved card instead
-                    </button>
-                  </div>
-                </>
-              )} */}
 
               {paymentMethod === "paypal" && (
                 <div className="text-center py-8">
                   <div className="mt-6 md:mx-8">
                     <PayPalButton
-                      cartItems={cartItems} // ✅ cart items pass karo
-                      amount={total.toFixed(2)} // ✅ already calculated hai
+                      cartItems={cartItems}
+                      amount={total.toFixed(2)}
                       customer={checkoutData}
                       onSuccess={(paymentData) => {
                         handlePaymentSuccess(paymentData);
@@ -336,30 +212,25 @@ const Payment = () => {
               )}
 
               {/* Security Notice */}
-              <div className="flex items-center gap-2 p-3 bg-[#101010] rounded-lg border border-yellow-500/20">
+              <div className="flex items-center gap-2 p-3 bg-[#F5F7FA] rounded-lg border border-[#007BFF]/20">
                 <Lock className="w-5 h-5 text-green-500" />
-                <span className="text-yellow-500/70 text-sm">
+                <span className="text-[#333333] text-sm">
                   Your payment information is encrypted and secure
                 </span>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* Right Column - Order Summary */}
           <div className="lg:col-span-1">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-[#1A1A1A] border border-yellow-500/20 rounded-xl p-6 sticky top-24"
-            >
-              <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <ShoppingBag className="w-5 h-5 text-yellow-500" />
+            <div className="bg-white border border-[#007BFF]/20 rounded-xl p-6 sticky top-24 shadow-sm">
+              <h2 className="text-xl font-bold text-[#222222] mb-4 flex items-center gap-2">
+                <ShoppingBag className="w-5 h-5 text-[#007BFF]" />
                 Order Summary
               </h2>
 
               {/* Cart Items */}
-              <div className="space-y-3 mb-6 pb-6 border-b border-yellow-500/20">
+              <div className="space-y-3 mb-6 pb-6 border-b border-[#007BFF]/20">
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex gap-3">
                     <img
@@ -369,13 +240,13 @@ const Payment = () => {
                       className="w-16 h-16 rounded-lg object-cover"
                     />
                     <div className="flex-1">
-                      <h4 className="text-white font-semibold text-sm">
+                      <h4 className="text-[#222222] font-semibold text-sm">
                         {item.name}
                       </h4>
-                      <p className="text-yellow-500/70 text-xs">
+                      <p className="text-[#333333] text-xs">
                         Qty: {item.quantity}
                       </p>
-                      <p className="text-gray-300 font-bold text-sm">
+                      <p className="text-[#007BFF] font-bold text-sm">
                         ${(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
@@ -385,7 +256,7 @@ const Payment = () => {
 
               {/* Promo Code */}
               <div className="mb-6">
-                <label className="block text-yellow-500/70 text-sm mb-2">
+                <label className="block text-[#333333] text-sm mb-2">
                   Promo Code
                 </label>
                 {!appliedPromo && (
@@ -396,12 +267,12 @@ const Payment = () => {
                         value={promoCode}
                         onChange={(e) => setPromoCode(e.target.value)}
                         placeholder="Promo code"
-                        className="flex-1 px-4 py-2 bg-[#101010] border border-yellow-500/30 rounded-lg text-white placeholder-yellow-500/50 focus:outline-none focus:border-yellow-500 transition-colors"
+                        className="flex-1 px-4 py-2 bg-[#F5F7FA] border border-[#007BFF]/30 rounded-lg text-[#222222] placeholder-[#333333]/50 focus:outline-none focus:border-[#007BFF] transition-colors"
                       />
                       <button
                         onClick={applyPromo}
                         disabled={!promoCode.trim() || isPending}
-                        className="px-4 py-2 bg-yellow-600 text-[#101010] rounded-lg font-semibold hover:bg-white transition-all"
+                        className="px-4 py-2 bg-[#007BFF] text-white rounded-lg font-semibold hover:bg-[#0066CC] transition-all"
                       >
                         {isPending ? "Applying..." : "Apply"}
                       </button>
@@ -420,10 +291,10 @@ const Payment = () => {
               </div>
 
               {/* Price Breakdown */}
-              <div className="space-y-3 mb-6 pb-6 border-b border-yellow-500/20">
-                <div className="flex items-center justify-between text-yellow-500/70">
+              <div className="space-y-3 mb-6 pb-6 border-b border-[#007BFF]/20">
+                <div className="flex items-center justify-between text-[#333333]">
                   <span>Subtotal</span>
-                  <span className="text-white">${subtotal.toFixed(2)}</span>
+                  <span className="text-[#222222]">${subtotal.toFixed(2)}</span>
                 </div>
                 {discount > 0 && (
                   <div className="flex items-center justify-between text-green-500">
@@ -435,12 +306,12 @@ const Payment = () => {
 
               {/* Total */}
               <div className="flex items-center justify-between mb-6">
-                <span className="text-white font-bold text-lg">Total</span>
-                <span className="text-yellow-500 font-bold text-2xl">
+                <span className="text-[#222222] font-bold text-lg">Total</span>
+                <span className="text-[#007BFF] font-bold text-2xl">
                   ${total.toFixed(2)}
                 </span>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

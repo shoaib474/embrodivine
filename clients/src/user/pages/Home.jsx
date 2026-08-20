@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Zap, Award, DollarSign, Check, ArrowRight } from "lucide-react";
 
-import Hero from "../components/Hero";
-import ServicesSection from "../components/ServicesSection";
-import FeaturedProducts from "../components/Featured";
-import ReviewSection from "../components/ReviewSection";
-import HowItWorks from "../components/HowItWorks";
-import WhyChooseUs from "../components/WhyChooseUs";
+import Hero from "../sections/home/Hero";
+import ServicesSection from "../sections/home/ServicesSection";
+import HowItWorks from "../sections/home/HowItWorks";
+import FeaturedProducts from "../sections/home/Featured";
+import WhyChooseUs from "../sections/home/WhyChooseUs";
+import PremiumEmbroiderySection from "../sections/home/PremiumEmbroiderySection";
+import ReviewSection from "../sections/home/ReviewSection";
 
 import { useProducts } from "../../hooks/useProduct";
 
@@ -77,57 +78,7 @@ const Home = () => {
       <WhyChooseUs />
 
       {/* CTA Section */}
-      <section className="bg-[#1A1A1A] overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 py-20">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Mobile Images */}
-            <div className="flex justify-center">
-              <img
-                src="/images/website-mobile-mockup.webp"
-                alt="EmbroDivine Mobile"
-                className="max-w-full"
-              />
-            </div>
-
-            {/* Content */}
-            <div className="text-center lg:text-left">
-              <h2 className="mt-4 text-5xl font-bold text-white leading-tight ">
-                Premium Embroidery Designs
-                <br />
-                Ready To Download
-              </h2>
-
-              <p className="mt-6 text-gray-300 text-lg leading-relaxed">
-                Discover thousands of professionally crafted embroidery designs
-                compatible with DST, PES, JEF and more.
-              </p>
-
-              <ul className="mt-8 space-y-4 text-gray-300">
-                <li>✓ Instant Digital Downloads</li>
-                <li>✓ Commercial Use Designs</li>
-                <li>✓ Premium Stitch Quality</li>
-                <li>✓ Multiple Machine Formats</li>
-              </ul>
-
-              <div className="flex flex-wrap gap-4 mt-10 justify-center lg:justify-start">
-                <Link
-                  to="/store"
-                  className="px-8 py-4 bg-yellow-500 text-black font-semibold rounded-lg"
-                >
-                  Browse Designs
-                </Link>
-
-                <Link
-                  to="/quote"
-                  className="px-8 py-4 border border-yellow-500 text-yellow-500 rounded-lg"
-                >
-                  Get A Quote
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PremiumEmbroiderySection />
 
       <ReviewSection />
     </>

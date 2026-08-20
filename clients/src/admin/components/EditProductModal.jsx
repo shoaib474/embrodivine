@@ -12,11 +12,14 @@ const EditProductModal = ({ setShowEditModal, product, categories }) => {
     register,
     handleSubmit,
     reset,
-
     formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
       ...product,
+      category:
+        typeof product?.category === "object"
+          ? product.category._id
+          : product?.category,
     },
   });
 
@@ -32,11 +35,19 @@ const EditProductModal = ({ setShowEditModal, product, categories }) => {
   }, [pdfPreview]);
 
   useEffect(() => {
-    // Reset form whenever a new product is passed
+    if (!product) return;
+
     reset({
       ...product,
+
+      category:
+        typeof product.category === "object"
+          ? product.category._id
+          : product.category,
     });
+
     setImagePreview(product.image?.url || "");
+    setPdfPreview(product.pdf?.url || "");
   }, [product, reset]);
 
   const onSubmit = async (data) => {

@@ -7,6 +7,10 @@ import {
   loginUser,
   logoutUser,
   getCurrentUser,
+  forgotPassword,
+  resetPassword,
+  verifyEmail,
+  updatePassword,
 } from "../API/authApi";
 
 // GET CURRENT USER
@@ -22,16 +26,11 @@ export const useCurrentUser = () => {
 
 // REGISTER
 export const useRegister = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: registerUser,
 
-    onSuccess: async () => {
-      toast.success("Registered successfully 🎉");
-
-      // 🔥 immediately refetch current user
-      await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+    onSuccess: () => {
+      toast.success("Registration successful ✅");
     },
 
     onError: (error) => {
@@ -61,9 +60,6 @@ export const useLogin = () => {
       await queryClient.invalidateQueries({
         queryKey: ["cart"],
       });
-
-      // redirect
-      window.location.replace("/dashboard");
     },
 
     onError: (error) => {
@@ -98,6 +94,92 @@ export const useLogout = () => {
 
     onError: () => {
       toast.error("Logout failed");
+    },
+  });
+};
+
+export const useForgotPassword = () => {
+  return useMutation({
+    mutationFn: forgotPassword,
+
+    onSuccess: () => {
+      toast.success("Reset link sent to your email 📩");
+    },
+
+    onError: (error) => {
+      toast.error(
+        error?.response?.data?.message || "Failed to send reset link",
+      );
+    },
+  });
+};
+
+export const useResetPassword = () => {
+  return useMutation({
+    mutationFn: resetPassword,
+
+    onSuccess: () => {
+      toast.success("Password reset successful 🔐");
+
+      // redirect to login
+      window.location.replace("/auth");
+    },
+
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Password reset failed");
+    },
+  });
+};
+
+export const useVerifyEmail = () => {
+  return useMutation({
+    mutationFn: verifyEmail,
+
+    onSuccess: () => {
+      toast.success("Email verified successfully 🎉");
+
+      setTimeout(() => {
+        window.location.replace("/dashboard");
+      }, 1500);
+    },
+
+    onError: (error) => {
+      toast.error(
+        error?.response?.data?.message || "Email verification failed",
+      );
+    },
+  });
+};
+
+export const useUpdatePassword = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updatePassword,
+
+    onSuccess: () => {
+      toast.success("Password updated successfully. Please login again 🔐");
+
+      // Clear React Query cache
+      queryClient.clear();
+
+      // Clear Browser Storage
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Remove Authorization Header
+      delete axios.defaults.headers.common["Authorization"];
+
+      // Redirect to Login
+      setTimeout(() => {
+        window.location.replace("/auth");
+      }, 1200);
+    },
+
+    onError: (error) => {
+      toast.error(
+        error?.response?.data?.message || "Failed to update password",
+      );
     },
   });
 };

@@ -10,6 +10,7 @@ import {
   Ticket,
   Contact,
   LayoutGrid,
+  Image,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -24,6 +25,7 @@ const menuItems = [
   { id: "notify", icon: Bell, label: "Notify", badge: null },
   { id: "users", icon: User, label: "Users", badge: null },
   { id: "quote", icon: FileText, label: "Quote Requests", badge: null },
+  { id: "artwork", icon: Image, label: "Artwork Requests", badge: null },
   { id: "contact", icon: Contact, label: "Contact", badge: null },
   { id: "coupon", icon: Ticket, label: "Coupon Code", badge: null },
 ];
@@ -70,7 +72,7 @@ const AdminSidebar = ({
         </div>
 
         {/* MENU */}
-        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto hide-scrollbar">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeMenu === item.id;

@@ -66,7 +66,6 @@ const AdminProducts = () => {
   } = useCategories();
 
   const categories = categoriesData?.categories || categoriesData || [];
-  console.log("Categories:", categories);
 
   const filteredProducts = products.filter((product) => {
     const name = product.name || ""; // fallback to empty string

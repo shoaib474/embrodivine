@@ -10,10 +10,32 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const fileFilter = (req, file, cb) => {
+  const allowed = [
+    "image/png",
+    "image/jpeg",
+    "image/jpg",
+    "application/pdf",
+    "application/zip",
+    "application/x-zip-compressed",
+    "application/illustrator",
+  ];
+
+  if (allowed.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("File type not supported"));
+  }
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fieldSize: 100 * 1024 * 1024 },
+});
 
 export default upload;
- 
+
 // import multer from "multer";
 // import multerS3 from "multer-s3";
 // import s3 from "./s3.js";
